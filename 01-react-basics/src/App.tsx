@@ -38,7 +38,7 @@ const App = () => {
 			<h2>Posts</h2>
 
 			<ul>
-				{posts.map(post => <li key={post.id}>{post.title} ({post.likes} likes)</li>)}
+				{posts.map((post, index) => <li key={index}>{post.title} ({post.likes} likes)</li>)}
 			</ul>
 		</div>
 	)
