@@ -12,6 +12,7 @@ const Posts = () => {
 		{ id: 2, title: 'TypeScript is lit!', likes: 1337 },
 		{ id: 3, title: 'CSS?...', likes: 69 },
 	])
+	const [newPostTitle, setNewPostTitle] = useState('')
 
 	const handleAddLike = (post: Post) => {
 		post.likes++
@@ -22,9 +23,43 @@ const Posts = () => {
 		setPosts(posts.filter(post => post !== clickedPost))
 	}
 
+	const handleFormSubmit = (e: React.FormEvent) => {
+		e.preventDefault()
+
+		e.target.input
+
+		const newPost: Post = {
+			id: 4,
+			title: newPostTitle,
+			likes: 0,
+		}
+
+		setPosts([...posts, newPost])
+		setNewPostTitle('')
+	}
+
 	return (
 		<>
 			<h2>Posts</h2>
+
+			<form onSubmit={handleFormSubmit} className="mb-3">
+				<div className="input-group mb-3">
+					<input
+						required
+						type="text"
+						className="form-control"
+						placeholder="Post title"
+						onChange={e => setNewPostTitle(e.target.value)}
+						value={newPostTitle}
+					/>
+
+					<button type="submit" className="btn btn-primary">Create</button>
+				</div>
+
+				{newPostTitle.length > 0 && newPostTitle.length < 5 && (
+					<div className="form-text text-warning">Title has to be at least 5 chars.</div>
+				)}
+			</form>
 
 			{
 				posts.length > 0
