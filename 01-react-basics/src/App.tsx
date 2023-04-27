@@ -18,6 +18,13 @@ const App = () => {
 	const [salary, setSalary] = useState(10)
 	const [showSalary, setShowSalary] = useState(false)
 
+
+
+	const handleAddLike = (post: Post) => {
+		post.likes++
+		setPosts([...posts])
+	}
+
 	const handleButtonClick = () => {
 		setMsg('Bye mom')
 		setClicks(clicks + 1)
@@ -71,8 +78,12 @@ const App = () => {
 
 			<ul>
 				{posts.map((post, index) => (
-					<li key={index}>
+					<li key={index} className='my-2'>
 						{post.title} ({post.likes} likes)
+						<button
+							onClick={() => handleAddLike(post)}
+							className="btn btn-success btn-sm ms-1"
+						>❤️</button>
 					</li>
 				))}
 			</ul>
