@@ -26,8 +26,6 @@ const Posts = () => {
 	const handleFormSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
 
-		e.target.input
-
 		const newPost: Post = {
 			id: 4,
 			title: newPostTitle,
