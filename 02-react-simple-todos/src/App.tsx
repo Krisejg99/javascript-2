@@ -91,7 +91,10 @@ function App() {
 				</div>
 			</div>
 
-			<form onSubmit={handleSubmitForm}>
+			<form
+				className='todo-form'
+				onSubmit={handleSubmitForm}
+			>
 				<input
 					type="text"
 					placeholder='Create a todo...'
