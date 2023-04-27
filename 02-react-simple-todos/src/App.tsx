@@ -38,40 +38,79 @@ function App() {
 
 	return (
 		<div className="App">
-			<h1>Todos</h1>
+			<div className='container'>
+				<div>
+					<h1>Todos</h1>
 
-			{todos.length > 0
-				? (<ul>
-					{todos.map(todo => (
-						<li
-							key={todo.id}
-						>
-							<button
-								className='check-mark'
-								onClick={() => handleToggleTodo(todo)}
-							>
-								{todo.completed ? '☑' : '☐'}
-							</button>
+					{todos.length > 0
+						? (<ul>
+							{todos.map(todo => (
+								<li
+									key={todo.id}
+								>
+									<button
+										className='check-mark'
+										onClick={() => handleToggleTodo(todo)}
+									>
+										{todo.completed ? '☑' : '☐'}
+									</button>
 
-							<p
-								className={todo.completed ? 'completed' : ''}
-								onClick={() => handleToggleTodo(todo)}
-							>
-								{todo.title}
-							</p>
+									<p
+										className={todo.completed ? 'completed' : ''}
+										onClick={() => handleToggleTodo(todo)}
+									>
+										{todo.title}
+									</p>
 
-							<button
-								className='deleteBtn'
-								onClick={() => handleDeleteTodo(todo)}
-							>
-								❌
-							</button>
-						</li>
-					))}
-				</ul>)
-				: <p>Create your first todo!</p>
-			}
+									<button
+										className='deleteBtn'
+										onClick={() => handleDeleteTodo(todo)}
+									>
+										❌
+									</button>
+								</li>
+							))}
+						</ul>)
+						: <p>Create your first todo!</p>
+					}
+				</div>
 
+				<div>
+					<h1>Completed</h1>
+
+					{todos.length > 0
+						? (<ul>
+							{todos.map(todo => (
+								<li
+									key={todo.id}
+								>
+									<button
+										className='check-mark'
+										onClick={() => handleToggleTodo(todo)}
+									>
+										{todo.completed ? '☑' : '☐'}
+									</button>
+
+									<p
+										className={todo.completed ? 'completed' : ''}
+										onClick={() => handleToggleTodo(todo)}
+									>
+										{todo.title}
+									</p>
+
+									<button
+										className='deleteBtn'
+										onClick={() => handleDeleteTodo(todo)}
+									>
+										❌
+									</button>
+								</li>
+							))}
+						</ul>)
+						: <p>Create your first todo!</p>
+					}
+				</div>
+			</div>
 
 			<form onSubmit={handleSubmitForm}>
 				<input
