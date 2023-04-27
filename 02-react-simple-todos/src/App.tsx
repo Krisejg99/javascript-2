@@ -18,6 +18,39 @@ function App() {
 
 	const handleDeleteTodo = (ClickedTodo: Todo) => setTodos(todos.filter(todo => todo !== ClickedTodo))
 
+	const handleRenderList = (completed: boolean) => {
+		return (
+			<ul>
+				{todos
+					.filter(todo => todo.completed === completed)
+					.map(todo => (
+						<li key={todo.id}>
+							<button
+								className='check-mark'
+								onClick={() => handleToggleTodo(todo)}
+							>
+								{todo.completed ? '☑' : '☐'}
+							</button>
+
+							<p
+								className={todo.completed ? 'completed' : ''}
+								onClick={() => handleToggleTodo(todo)}
+							>
+								{todo.title}
+							</p>
+
+							<button
+								className='deleteBtn'
+								onClick={() => handleDeleteTodo(todo)}
+							>
+								❌
+							</button>
+						</li>
+					))}
+			</ul>
+		)
+	}
+
 	const handleSubmitForm = (e: React.FormEvent) => {
 		e.preventDefault()
 
@@ -42,72 +75,18 @@ function App() {
 				<div>
 					<h1>Todos</h1>
 
-					{todos.length > 0
-						? (<ul>
-							{todos.map(todo => (
-								<li
-									key={todo.id}
-								>
-									<button
-										className='check-mark'
-										onClick={() => handleToggleTodo(todo)}
-									>
-										{todo.completed ? '☑' : '☐'}
-									</button>
-
-									<p
-										className={todo.completed ? 'completed' : ''}
-										onClick={() => handleToggleTodo(todo)}
-									>
-										{todo.title}
-									</p>
-
-									<button
-										className='deleteBtn'
-										onClick={() => handleDeleteTodo(todo)}
-									>
-										❌
-									</button>
-								</li>
-							))}
-						</ul>)
-						: <p>Create your first todo!</p>
+					{todos.filter(todo => !todo.completed).length > 0
+						? handleRenderList(false)
+						: <p>Nothing to see here...</p>
 					}
 				</div>
 
 				<div>
 					<h1>Completed</h1>
 
-					{todos.length > 0
-						? (<ul>
-							{todos.map(todo => (
-								<li
-									key={todo.id}
-								>
-									<button
-										className='check-mark'
-										onClick={() => handleToggleTodo(todo)}
-									>
-										{todo.completed ? '☑' : '☐'}
-									</button>
-
-									<p
-										className={todo.completed ? 'completed' : ''}
-										onClick={() => handleToggleTodo(todo)}
-									>
-										{todo.title}
-									</p>
-
-									<button
-										className='deleteBtn'
-										onClick={() => handleDeleteTodo(todo)}
-									>
-										❌
-									</button>
-								</li>
-							))}
-						</ul>)
-						: <p>Create your first todo!</p>
+					{todos.filter(todo => todo.completed).length > 0
+						? handleRenderList(true)
+						: <p>I'm too good!</p>
 					}
 				</div>
 			</div>

@@ -9,7 +9,6 @@ ul {
 	list-style-type: none;
 	padding-left: 0;
 	text-align: start;
-	margin-bottom: 2rem;
 }
 
 li {
@@ -24,6 +23,10 @@ li {
 li > p {
 	margin: 0;
 	width: 100%;
+}
+
+form {
+	margin-top: 2rem;
 }
 
 .completed {
@@ -65,7 +68,7 @@ li > p {
 	align-items: center;
 }
 
-.container > div {
+.container>div {
 	width: 100%;
 	min-width: 200px;
 	max-width: 450px;
@@ -73,10 +76,12 @@ li > p {
 	flex-direction: column;
 	justify-content: space-between;
 
+
 }
 
 @media screen and (min-width: 768px) {
 	.container {
 		flex-direction: row;
+		align-items: flex-start;
 	}
 }
