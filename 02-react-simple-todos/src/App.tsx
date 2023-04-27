@@ -16,10 +16,7 @@ function App() {
 	])
 	const [newTodoTitle, setNewTodoTitle] = useState('')
 
-	const handleToggleTodo = (todo: Todo) => {
-		todo.completed = !todo.completed
-		setTodos([...todos])
-	}
+	const handleDeleteTodo = (ClickedTodo: Todo) => setTodos(todos.filter(todo => todo !== ClickedTodo))
 
 	const handleSubmitForm = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -34,6 +31,11 @@ function App() {
 		setNewTodoTitle('')
 	}
 
+	const handleToggleTodo = (todo: Todo) => {
+		todo.completed = !todo.completed
+		setTodos([...todos])
+	}
+
 	return (
 		<div className="App">
 			<h1>Todos</h1>
@@ -42,7 +44,6 @@ function App() {
 				{todos.map(todo => (
 					<li
 						key={todo.id}
-						className={todo.completed ? 'completed' : ''}
 					>
 						<button
 							className='check-mark'
@@ -51,7 +52,19 @@ function App() {
 							{todo.completed ? '☑' : '☐'}
 						</button>
 
-						{todo.title}
+						<p
+							className={todo.completed ? 'completed' : ''}
+							onClick={() => handleToggleTodo(todo)}
+						>
+							{todo.title}
+						</p>
+
+						<button
+							className='deleteBtn'
+							onClick={() => handleDeleteTodo(todo)}
+						>
+							❌
+						</button>
 					</li>
 				))}
 			</ul>
@@ -69,7 +82,7 @@ function App() {
 			</form>
 
 			<p>{todos.filter(todo => todo.completed).length} / {todos.length} COMPLETED</p>
-		</div>
+		</div >
 	)
 }
 

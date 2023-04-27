@@ -14,6 +14,14 @@ ul {
 li {
 	margin: 0.5rem 0;
 	font-size: 1.2rem;
+	display: flex;
+	flex-direction: row;
+	position: relative;
+}
+
+li > p {
+	margin: 0;
+	width: 100%;
 }
 
 .completed {
@@ -24,8 +32,19 @@ li {
 .check-mark {
 	border: none;
 	background: none;
-	padding: 0 0.5rem;
-	margin: 0;
-	font-size: 1.3rem;
 	cursor: pointer;
+	padding: 0 0.5rem;
+	font-size: 1.3rem;
 }
+
+.deleteBtn {
+	border: none;
+	background: none;
+	cursor: pointer;
+	padding: 0.2rem;
+	position: absolute;
+	height: 100%;
+	right: 0;
+	font-size: 1rem;
+}
+
