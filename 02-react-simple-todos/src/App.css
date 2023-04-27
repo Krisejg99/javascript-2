@@ -10,6 +10,11 @@ ul {
 	padding-left: 0;
 }
 
+li {
+	cursor: pointer;
+	margin: 0.5rem 0;
+}
+
 .completed {
 	text-decoration: line-through;
 	color: rgb(0, 165, 0);
