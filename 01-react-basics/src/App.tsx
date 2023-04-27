@@ -16,17 +16,18 @@ const App = () => {
 		{ id: 3, title: 'CSS?...', likes: 69 },
 	])
 	const [salary, setSalary] = useState(10)
+	const [showSalary, setShowSalary] = useState(false)
 
 	const handleButtonClick = () => {
 		setMsg('Bye mom')
 		setClicks(clicks + 1)
+		setClicks(prevClicks => prevClicks + 1)
+
 	}
 
 	const handleSalaryFlucuation = (amount: number) => {
 		const newSalary = salary + amount
-
 		setSalary(newSalary)
-
 		if (newSalary < 5) setSalary(5)
 	}
 
@@ -40,26 +41,40 @@ const App = () => {
 
 			<hr />
 
-			<p>Salary per hour: {salary} &euro;</p>
+			<button className="btn btn-primary" onClick={() => setShowSalary(!showSalary)}>
+				{showSalary ? "Hide salary" : "Show salary"}
+			</button>
 
-			{salary < 10 && <div>GET A NEW JOB BRO!</div>}
+			{showSalary && (
+				<>
+					<p>Salary per hour: {salary} &euro;</p>
 
-			<div className="buttons">
-				<div className="mb-1">
-					<button onClick={() => handleSalaryFlucuation(-1)} className="btn btn-warning btn-lg">Decrease 1 &euro; 😢</button>
-					<button onClick={() => handleSalaryFlucuation(1)} className="btn btn-primary btn-lg">Raise 1 &euro; 🤑</button>
-				</div>
+					{salary < 10 && <div>GET A NEW JOB BRO!</div>}
 
-				<div className="mb-1">
-					<button onClick={() => handleSalaryFlucuation(-5)} className="btn btn-danger btn-lg">Decrease 5 &euro; 😢😢😢</button>
-					<button onClick={() => handleSalaryFlucuation(5)} className="btn btn-success btn-lg">Raise 5 &euro; 🤑🤑🤑</button>
-				</div>
-			</div>
+					<div className="buttons">
+						<div className="mb-1">
+							<button onClick={() => handleSalaryFlucuation(-1)} className="btn btn-warning btn-lg">Decrease 1 &euro; 😢</button>
+							<button onClick={() => handleSalaryFlucuation(1)} className="btn btn-primary btn-lg">Raise 1 &euro; 🤑</button>
+						</div>
+
+						<div className="mb-1">
+							<button onClick={() => handleSalaryFlucuation(-5)} className="btn btn-danger btn-lg">Decrease 5 &euro; 😢😢😢</button>
+							<button onClick={() => handleSalaryFlucuation(5)} className="btn btn-success btn-lg">Raise 5 &euro; 🤑🤑🤑</button>
+						</div>
+					</div>
+				</>
+			)}
+
+			<hr />
 
 			<h2>Posts</h2>
 
 			<ul>
-				{posts.map((post, index) => <li key={index}>{post.title} ({post.likes} likes)</li>)}
+				{posts.map((post, index) => (
+					<li key={index}>
+						{post.title} ({post.likes} likes)
+					</li>
+				))}
 			</ul>
 		</div>
 	)
