@@ -40,34 +40,38 @@ function App() {
 		<div className="App">
 			<h1>Todos</h1>
 
-			<ul>
-				{todos.map(todo => (
-					<li
-						key={todo.id}
-					>
-						<button
-							className='check-mark'
-							onClick={() => handleToggleTodo(todo)}
+			{todos.length > 0
+				? (<ul>
+					{todos.map(todo => (
+						<li
+							key={todo.id}
 						>
-							{todo.completed ? '☑' : '☐'}
-						</button>
+							<button
+								className='check-mark'
+								onClick={() => handleToggleTodo(todo)}
+							>
+								{todo.completed ? '☑' : '☐'}
+							</button>
 
-						<p
-							className={todo.completed ? 'completed' : ''}
-							onClick={() => handleToggleTodo(todo)}
-						>
-							{todo.title}
-						</p>
+							<p
+								className={todo.completed ? 'completed' : ''}
+								onClick={() => handleToggleTodo(todo)}
+							>
+								{todo.title}
+							</p>
 
-						<button
-							className='deleteBtn'
-							onClick={() => handleDeleteTodo(todo)}
-						>
-							❌
-						</button>
-					</li>
-				))}
-			</ul>
+							<button
+								className='deleteBtn'
+								onClick={() => handleDeleteTodo(todo)}
+							>
+								❌
+							</button>
+						</li>
+					))}
+				</ul>)
+				: <p>Create your first todo!</p>
+			}
+
 
 			<form onSubmit={handleSubmitForm}>
 				<input
@@ -81,7 +85,7 @@ function App() {
 				<button>Create</button>
 			</form>
 
-			<p>{todos.filter(todo => todo.completed).length} / {todos.length} COMPLETED</p>
+			{todos.length > 0 && <p>{todos.filter(todo => todo.completed).length} / {todos.length} COMPLETED</p>}
 		</div >
 	)
 }
