@@ -24,15 +24,13 @@ function App() {
 	const handleSubmitForm = (e: React.FormEvent) => {
 		e.preventDefault()
 
-		const newTodoId = todos.reduce((maxId, todo) => (todo.id > maxId) ? todo.id : maxId, 0) + 1
-
 		const newTodo: Todo = {
 			title: newTodoTitle,
 			completed: false,
-			id: newTodoId,
+			id: todos.reduce((maxId, todo) => todo.id > maxId ? todo.id : maxId, 0) + 1,
 		}
 
-		setTodos([...todos, newTodo])
+		setTodos(prevTodos => [...prevTodos, newTodo])
 		setNewTodoTitle('')
 	}
 
@@ -45,8 +43,14 @@ function App() {
 					<li
 						key={todo.id}
 						className={todo.completed ? 'completed' : ''}
-						onClick={() => handleToggleTodo(todo)}
 					>
+						<button
+							className='check-mark'
+							onClick={() => handleToggleTodo(todo)}
+						>
+							{todo.completed ? '☑' : '☐'}
+						</button>
+
 						{todo.title}
 					</li>
 				))}
@@ -63,6 +67,8 @@ function App() {
 
 				<button>Create</button>
 			</form>
+
+			<p>{todos.filter(todo => todo.completed).length} / {todos.length} COMPLETED</p>
 		</div>
 	)
 }

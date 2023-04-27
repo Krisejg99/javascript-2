@@ -1,5 +1,5 @@
 #root {
-	max-width: 1280px;
+	max-width: 300px;
 	margin: 0 auto;
 	padding: 2rem;
 	text-align: center;
@@ -8,14 +8,24 @@
 ul {
 	list-style-type: none;
 	padding-left: 0;
+	text-align: start;
 }
 
 li {
-	cursor: pointer;
 	margin: 0.5rem 0;
+	font-size: 1.2rem;
 }
 
 .completed {
 	text-decoration: line-through;
 	color: rgb(0, 165, 0);
+}
+
+.check-mark {
+	border: none;
+	background: none;
+	padding: 0 0.5rem;
+	margin: 0;
+	font-size: 1.3rem;
+	cursor: pointer;
 }
