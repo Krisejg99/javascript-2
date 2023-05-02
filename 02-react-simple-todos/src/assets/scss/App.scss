@@ -1,0 +1,110 @@
+:root {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+	color-scheme: light dark;
+	color: rgba(255, 255, 255, 0.87);
+	background-color: #242424;
+}
+
+
+#root {
+	margin: 0 auto;
+	padding: 2rem;
+	text-align: center;
+
+	.App {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		.list-container {
+			width: 100%;
+			max-width: 1268px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-evenly;
+			align-items: center;
+
+			div {
+				width: 100%;
+				min-width: 200px;
+				max-width: 450px;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+
+				ul {
+					list-style-type: none;
+					padding-left: 0;
+					text-align: start;
+
+					li {
+						margin: 0.5rem 0;
+						font-size: 1.2rem;
+						display: flex;
+						flex-direction: row;
+						position: relative;
+						padding-right: 2rem;
+
+						p {
+							margin: 0;
+							width: 100%;
+						}
+
+						.completed {
+							text-decoration: line-through;
+							color: rgb(0, 165, 0);
+						}
+
+						.check-mark {
+							border: none;
+							background: none;
+							cursor: pointer;
+							padding: 0 0.5rem;
+							font-size: 1.3rem;
+						}
+
+						.deleteBtn {
+							border: none;
+							background: none;
+							cursor: pointer;
+							padding: 0.2rem;
+							position: absolute;
+							height: 100%;
+							right: 0;
+							font-size: 1rem;
+						}
+					}
+				}
+			}
+		}
+
+		.todo-form {
+			margin-top: 2rem;
+
+			input {
+				padding: 0.5rem 1rem;
+				border: 1px white solid;
+				border-radius: 50px 0 0 50px;
+			}
+
+			button {
+				padding: 0.5rem 1rem;
+				border: 1px white solid;
+				border-radius: 0 50px 50px 0;
+			}
+		}
+	}
+}
+
+@media screen and (min-width: 768px) {
+	#root {
+		.App {
+			.list-container {
+				flex-direction: row;
+				align-items: flex-start;
+			}
+		}
+	}
+}

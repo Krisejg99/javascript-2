@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import './App.css'
+import './assets/scss/App.scss'
 
 type Todo = {
 	title: string
@@ -34,7 +34,6 @@ function App() {
 
 							<p
 								className={todo.completed ? 'completed' : ''}
-								onClick={() => handleToggleTodo(todo)}
 							>
 								{todo.title}
 							</p>
@@ -71,7 +70,7 @@ function App() {
 
 	return (
 		<div className="App">
-			<div className='container'>
+			<div className='list-container'>
 				<div>
 					<h1>Todos</h1>
 
