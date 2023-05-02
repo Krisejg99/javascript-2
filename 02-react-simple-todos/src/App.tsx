@@ -11,7 +11,7 @@ const App = () => {
 	])
 	const [newTodoTitle, setNewTodoTitle] = useState('')
 
-	const handleDeleteTodo = (ClickedTodo: Todo) => setTodos(todos.filter(todo => todo !== ClickedTodo))
+	const handleDeleteTodo = (clickedTodo: Todo) => setTodos(todos.filter(todo => todo !== clickedTodo))
 
 	const handleRenderList = (completed: boolean) => {
 		return (
@@ -26,6 +26,7 @@ const App = () => {
 							<span
 								className='check-mark'
 								onClick={() => handleToggleTodo(todo)}
+								role='button'
 							>
 								{todo.completed ? '☑' : '☐'}
 							</span>
@@ -39,6 +40,8 @@ const App = () => {
 							<span
 								className='delete-item'
 								onClick={() => handleDeleteTodo(todo)}
+								role='button'
+
 							>
 								❌
 							</span>
@@ -57,7 +60,7 @@ const App = () => {
 			id: todos.reduce((maxId, todo) => todo.id > maxId ? todo.id : maxId, 0) + 1,
 		}
 
-		setTodos(prevTodos => [...prevTodos, newTodo])
+		setTodos(todos => [...todos, newTodo])
 		setNewTodoTitle('')
 	}
 
@@ -101,10 +104,12 @@ const App = () => {
 					className='new-todo-input'
 				/>
 
-				<button className='create-todo-btn'>Create</button>
+				<button className='create-todo-btn' type='submit'>Create</button>
 			</form>
 
-			{todos.length > 0 && <p>{todos.filter(todo => todo.completed).length} / {todos.length} COMPLETED</p>}
+			{todos.length > 0 && (
+				<p>{todos.filter(todo => todo.completed).length} / {todos.length} COMPLETED</p>
+			)}
 		</div>
 	)
 }
