@@ -20,30 +20,33 @@ function App() {
 
 	const handleRenderList = (completed: boolean) => {
 		return (
-			<ul>
+			<ul className='list'>
 				{todos
 					.filter(todo => todo.completed === completed)
 					.map(todo => (
-						<li key={todo.id}>
-							<button
+						<li
+							key={todo.id}
+							className='list-item'
+						>
+							<span
 								className='check-mark'
 								onClick={() => handleToggleTodo(todo)}
 							>
 								{todo.completed ? '☑' : '☐'}
-							</button>
+							</span>
 
 							<p
-								className={todo.completed ? 'completed' : ''}
+								className={todo.completed ? 'todo-title completed' : 'todo-title'}
 							>
 								{todo.title}
 							</p>
 
-							<button
-								className='deleteBtn'
+							<span
+								className='delete-item'
 								onClick={() => handleDeleteTodo(todo)}
 							>
 								❌
-							</button>
+							</span>
 						</li>
 					))}
 			</ul>
@@ -70,8 +73,8 @@ function App() {
 
 	return (
 		<div className="App">
-			<div className='list-container'>
-				<div>
+			<div className='lists-container'>
+				<div className='list-wrapper'>
 					<h1>Todos</h1>
 
 					{todos.filter(todo => !todo.completed).length > 0
@@ -80,7 +83,7 @@ function App() {
 					}
 				</div>
 
-				<div>
+				<div className='list-wrapper'>
 					<h1>Completed</h1>
 
 					{todos.filter(todo => todo.completed).length > 0
@@ -100,9 +103,10 @@ function App() {
 					required
 					onChange={e => setNewTodoTitle(e.target.value)}
 					value={newTodoTitle}
+					className='new-todo-input'
 				/>
 
-				<button>Create</button>
+				<button className='create-todo-btn'>Create</button>
 			</form>
 
 			{todos.length > 0 && <p>{todos.filter(todo => todo.completed).length} / {todos.length} COMPLETED</p>}
