@@ -1,15 +1,23 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Todo } from './types'
 import './assets/scss/App.scss'
 
 const App = () => {
-	const [todos, setTodos] = useState([
+	const [todos, setTodos] = useState<Todo[]>([
 		{ title: 'Eat', completed: true, id: 1 },
 		{ title: 'Sleep', completed: true, id: 2 },
 		{ title: 'Game', completed: false, id: 3 },
 		{ title: 'Repeat', completed: false, id: 4 },
 	])
 	const [newTodoTitle, setNewTodoTitle] = useState('')
+
+	const completeTodos = todos.filter(todo => todo.completed)
+	const incompleteTodos = todos.filter(todo => !todo.completed)
+	const todoCount = `${completeTodos.length} / ${todos.length} COMPLETED`
+
+	useEffect(() => {
+		document.title = todoCount
+	}, [completeTodos.length, todos.length])
 
 	const handleDeleteTodo = (clickedTodo: Todo) => setTodos(todos.filter(todo => todo !== clickedTodo))
 
@@ -75,7 +83,7 @@ const App = () => {
 				<div className='list-wrapper'>
 					<h1>Todos</h1>
 
-					{todos.filter(todo => !todo.completed).length > 0
+					{incompleteTodos.length > 0
 						? handleRenderList(false)
 						: <p>Nothing to see here...</p>
 					}
@@ -84,7 +92,7 @@ const App = () => {
 				<div className='list-wrapper'>
 					<h1>Completed</h1>
 
-					{todos.filter(todo => todo.completed).length > 0
+					{completeTodos.length > 0
 						? handleRenderList(true)
 						: <p>I'm too good!</p>
 					}
@@ -108,7 +116,7 @@ const App = () => {
 			</form>
 
 			{todos.length > 0 && (
-				<p>{todos.filter(todo => todo.completed).length} / {todos.length} COMPLETED</p>
+				<p>{todoCount}</p>
 			)}
 		</div>
 	)
