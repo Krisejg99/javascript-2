@@ -1,13 +1,8 @@
 import { useState } from 'react'
+import { Todo } from './types'
 import './assets/scss/App.scss'
 
-type Todo = {
-	title: string
-	completed: boolean
-	id: number
-}
-
-function App() {
+const App = () => {
 	const [todos, setTodos] = useState([
 		{ title: 'Eat', completed: true, id: 1 },
 		{ title: 'Sleep', completed: true, id: 2 },
@@ -110,7 +105,7 @@ function App() {
 			</form>
 
 			{todos.length > 0 && <p>{todos.filter(todo => todo.completed).length} / {todos.length} COMPLETED</p>}
-		</div >
+		</div>
 	)
 }
 
