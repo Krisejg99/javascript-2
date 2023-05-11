@@ -1,11 +1,12 @@
 import React from 'react'
 
 interface IProps {
-	todoCount: string
+	todos: number
+	completeTodos: number
 }
 
-const TodoCounter: React.FC<IProps> = ({ todoCount }) => {
-	return <p>{todoCount}</p>
+const TodoCounter: React.FC<IProps> = ({ todos, completeTodos }) => {
+	return <p>{`${completeTodos} / ${todos} COMPLETED`}</p>
 }
 
 export default TodoCounter

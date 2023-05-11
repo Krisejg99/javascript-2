@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Todo } from './types'
-import TodoListItem from './components/TodoListItem'
 import './assets/scss/App.scss'
 import TodoCounter from './components/TodoCounter'
 import TodoList from './components/TodoList'
-// import TodoList from './components/TodoList'
 
 const App = () => {
 	const [todos, setTodos] = useState<Todo[]>([
@@ -17,10 +15,9 @@ const App = () => {
 
 	const completeTodos = todos.filter(todo => todo.completed)
 	const incompleteTodos = todos.filter(todo => !todo.completed)
-	const todoCount = `${completeTodos.length} / ${todos.length} COMPLETED`
 
 	useEffect(() => {
-		document.title = todoCount
+		document.title = `${completeTodos.length} / ${todos.length}`
 	}, [completeTodos.length, todos.length])
 
 	const handleDeleteTodo = (clickedTodo: Todo) => setTodos(todos.filter(todo => todo !== clickedTodo))
@@ -94,7 +91,10 @@ const App = () => {
 			</form>
 
 			{todos.length > 0 &&
-				<TodoCounter todoCount={todoCount} />}
+				<TodoCounter
+					todos={todos.length}
+					completeTodos={completeTodos.length}
+				/>}
 		</div>
 	)
 }
