@@ -36,7 +36,13 @@ const AddTodoForm: React.FC<IProps> = ({ todoId, handleAddTodo }) => {
 				className='new-todo-input'
 			/>
 
-			<button className='create-todo-btn' type='submit'>Create</button>
+			<button
+				className='create-todo-btn'
+				type='submit'
+				disabled={!newTodoTitle.trim()}
+			>
+				Create
+			</button>
 		</form>
 	)
 }
