@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Todo } from './types'
 import TodoListItem from './components/TodoListItem'
 import './assets/scss/App.scss'
+import TodoCounter from './components/TodoCounter'
 
 const App = () => {
 	const [todos, setTodos] = useState<Todo[]>([
@@ -54,6 +55,8 @@ const App = () => {
 									.map(todo => (
 										<TodoListItem
 											todo={todo}
+											handleToggleTodo={handleToggleTodo}
+											handleDeleteTodo={handleDeleteTodo}
 											key={todo.id}
 										/>
 									))}
@@ -74,6 +77,8 @@ const App = () => {
 									.map(todo => (
 										<TodoListItem
 											todo={todo}
+											handleToggleTodo={handleToggleTodo}
+											handleDeleteTodo={handleDeleteTodo}
 											key={todo.id}
 										/>
 									))}
@@ -100,9 +105,7 @@ const App = () => {
 				<button className='create-todo-btn' type='submit'>Create</button>
 			</form>
 
-			{todos.length > 0 && (
-				<p>{todoCount}</p>
-			)}
+			<TodoCounter todoCount={todoCount} />
 		</div>
 	)
 }
