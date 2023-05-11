@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Todo } from './types'
+import TodoListItem from './components/TodoListItem'
 import './assets/scss/App.scss'
 
 const App = () => {
@@ -20,44 +21,6 @@ const App = () => {
 	}, [completeTodos.length, todos.length])
 
 	const handleDeleteTodo = (clickedTodo: Todo) => setTodos(todos.filter(todo => todo !== clickedTodo))
-
-	const handleRenderList = (completed: boolean) => {
-		return (
-			<ul className='list'>
-				{todos
-					.filter(todo => todo.completed === completed)
-					.map(todo => (
-						<li
-							key={todo.id}
-							className='list-item'
-						>
-							<span
-								className='check-mark'
-								onClick={() => handleToggleTodo(todo)}
-								role='button'
-							>
-								{todo.completed ? '☑' : '☐'}
-							</span>
-
-							<p
-								className={todo.completed ? 'todo-title completed' : 'todo-title'}
-							>
-								{todo.title}
-							</p>
-
-							<span
-								className='delete-item'
-								onClick={() => handleDeleteTodo(todo)}
-								role='button'
-
-							>
-								❌
-							</span>
-						</li>
-					))}
-			</ul>
-		)
-	}
 
 	const handleSubmitForm = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -84,7 +47,18 @@ const App = () => {
 					<h1>Todos</h1>
 
 					{incompleteTodos.length > 0
-						? handleRenderList(false)
+						? (
+							<ul className='list'>
+								{todos
+									.filter(todo => todo.completed === false)
+									.map(todo => (
+										<TodoListItem
+											todo={todo}
+											key={todo.id}
+										/>
+									))}
+							</ul>
+						)
 						: <p>Nothing to see here...</p>
 					}
 				</div>
@@ -93,7 +67,18 @@ const App = () => {
 					<h1>Completed</h1>
 
 					{completeTodos.length > 0
-						? handleRenderList(true)
+						? (
+							<ul className='list'>
+								{todos
+									.filter(todo => todo.completed === true)
+									.map(todo => (
+										<TodoListItem
+											todo={todo}
+											key={todo.id}
+										/>
+									))}
+							</ul>
+						)
 						: <p>I'm too good!</p>
 					}
 				</div>
