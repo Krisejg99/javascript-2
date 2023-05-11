@@ -3,6 +3,7 @@ import { Todo } from './types'
 import './assets/scss/App.scss'
 import TodoCounter from './components/TodoCounter'
 import TodoList from './components/TodoList'
+import AddTodoForm from './components/AddTodoForm'
 
 const App = () => {
 	const [todos, setTodos] = useState<Todo[]>([
@@ -11,7 +12,6 @@ const App = () => {
 		{ title: 'Game', completed: false, id: 3 },
 		{ title: 'Repeat', completed: false, id: 4 },
 	])
-	const [newTodoTitle, setNewTodoTitle] = useState('')
 
 	const completeTodos = todos.filter(todo => todo.completed)
 	const incompleteTodos = todos.filter(todo => !todo.completed)
@@ -20,20 +20,13 @@ const App = () => {
 		document.title = `${completeTodos.length} / ${todos.length}`
 	}, [completeTodos.length, todos.length])
 
-	const handleDeleteTodo = (clickedTodo: Todo) => setTodos(todos.filter(todo => todo !== clickedTodo))
+	const newTodoId = todos.reduce((maxId, todo) => todo.id > maxId ? todo.id : maxId, 0) + 1
 
-	const handleSubmitForm = (e: React.FormEvent) => {
-		e.preventDefault()
-
-		const newTodo: Todo = {
-			title: newTodoTitle,
-			completed: false,
-			id: todos.reduce((maxId, todo) => todo.id > maxId ? todo.id : maxId, 0) + 1,
-		}
-
+	const handleAddTodo = (newTodo: Todo) => {
 		setTodos(todos => [...todos, newTodo])
-		setNewTodoTitle('')
 	}
+
+	const handleDeleteTodo = (clickedTodo: Todo) => setTodos(todos.filter(todo => todo !== clickedTodo))
 
 	const handleToggleTodo = (todo: Todo) => {
 		todo.completed = !todo.completed
@@ -74,21 +67,10 @@ const App = () => {
 				</div>
 			</div>
 
-			<form
-				className='todo-form'
-				onSubmit={handleSubmitForm}
-			>
-				<input
-					type="text"
-					placeholder='Create a todo...'
-					required
-					onChange={e => setNewTodoTitle(e.target.value)}
-					value={newTodoTitle}
-					className='new-todo-input'
-				/>
-
-				<button className='create-todo-btn' type='submit'>Create</button>
-			</form>
+			<AddTodoForm
+				todoId={newTodoId}
+				handleAddTodo={handleAddTodo}
+			/>
 
 			{todos.length > 0 &&
 				<TodoCounter
