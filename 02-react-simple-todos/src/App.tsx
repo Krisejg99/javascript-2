@@ -3,6 +3,8 @@ import { Todo } from './types'
 import TodoListItem from './components/TodoListItem'
 import './assets/scss/App.scss'
 import TodoCounter from './components/TodoCounter'
+import TodoList from './components/TodoList'
+// import TodoList from './components/TodoList'
 
 const App = () => {
 	const [todos, setTodos] = useState<Todo[]>([
@@ -48,20 +50,13 @@ const App = () => {
 					<h1>Todos</h1>
 
 					{incompleteTodos.length > 0
-						? (
-							<ul className='list'>
-								{todos
-									.filter(todo => todo.completed === false)
-									.map(todo => (
-										<TodoListItem
-											todo={todo}
-											handleToggleTodo={handleToggleTodo}
-											handleDeleteTodo={handleDeleteTodo}
-											key={todo.id}
-										/>
-									))}
-							</ul>
-						)
+						? <TodoList
+							todos={todos}
+							handleToggleTodo={handleToggleTodo}
+							handleDeleteTodo={handleDeleteTodo}
+							completed={false}
+						/>
+
 						: <p>Nothing to see here...</p>
 					}
 				</div>
@@ -70,20 +65,13 @@ const App = () => {
 					<h1>Completed</h1>
 
 					{completeTodos.length > 0
-						? (
-							<ul className='list'>
-								{todos
-									.filter(todo => todo.completed === true)
-									.map(todo => (
-										<TodoListItem
-											todo={todo}
-											handleToggleTodo={handleToggleTodo}
-											handleDeleteTodo={handleDeleteTodo}
-											key={todo.id}
-										/>
-									))}
-							</ul>
-						)
+						? <TodoList
+							todos={todos}
+							handleToggleTodo={handleToggleTodo}
+							handleDeleteTodo={handleDeleteTodo}
+							completed={true}
+						/>
+
 						: <p>I'm too good!</p>
 					}
 				</div>
@@ -105,7 +93,8 @@ const App = () => {
 				<button className='create-todo-btn' type='submit'>Create</button>
 			</form>
 
-			<TodoCounter todoCount={todoCount} />
+			{todos.length > 0 &&
+				<TodoCounter todoCount={todoCount} />}
 		</div>
 	)
 }
