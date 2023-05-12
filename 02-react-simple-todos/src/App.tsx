@@ -4,32 +4,35 @@ import './assets/scss/App.scss'
 import TodoCounter from './components/TodoCounter'
 import TodoList from './components/TodoList'
 import AddTodoForm from './components/AddTodoForm'
+import * as TodosAPI from './services/TodosAPI'
 
 const App = () => {
-	const [todos, setTodos] = useState<Todo[]>([
-		{ title: 'Eat', completed: true, id: 1 },
-		{ title: 'Sleep', completed: true, id: 2 },
-		{ title: 'Game', completed: false, id: 3 },
-		{ title: 'Repeat', completed: false, id: 4 },
-	])
+	const [todos, setTodos] = useState<Todo[]>([])
+
+	const getTodos = async () => {
+		const data = await TodosAPI.getTodos()
+		setTodos(data)
+	}
 
 	const completeTodos = todos.filter(todo => todo.completed)
 	const incompleteTodos = todos.filter(todo => !todo.completed)
+
+	const newTodoId = todos.reduce((maxId, todo) => todo.id > maxId ? todo.id : maxId, 0) + 1
+
+	const handleAddTodo = (newTodo: Todo) => setTodos(todos => [...todos, newTodo])
+	const handleDeleteTodo = (clickedTodo: Todo) => setTodos(todos.filter(todo => todo !== clickedTodo))
+	const handleToggleTodo = (todo: Todo) => {
+		todo.completed = !todo.completed
+		setTodos([...todos])
+	}
 
 	useEffect(() => {
 		document.title = `${completeTodos.length} / ${todos.length}`
 	}, [completeTodos.length, todos.length])
 
-	const newTodoId = todos.reduce((maxId, todo) => todo.id > maxId ? todo.id : maxId, 0) + 1
-
-	const handleAddTodo = (newTodo: Todo) => setTodos(todos => [...todos, newTodo])
-
-	const handleDeleteTodo = (clickedTodo: Todo) => setTodos(todos.filter(todo => todo !== clickedTodo))
-
-	const handleToggleTodo = (todo: Todo) => {
-		todo.completed = !todo.completed
-		setTodos([...todos])
-	}
+	useEffect(() => {
+		getTodos()
+	}, [])
 
 	return (
 		<div className="App">
