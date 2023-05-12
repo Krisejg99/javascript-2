@@ -4,21 +4,21 @@ import { Todo } from '../types'
 
 interface IProps {
 	todos: Todo[]
-	handleToggleTodo: (todo: Todo) => void
-	handleDeleteTodo: (clickedTodo: Todo) => void
-	completed: boolean
+	onToggle: (todo: Todo) => void
+	onDelete: (clickedTodo: Todo) => void
+	completedStatus: boolean
 }
 
-const TodoList: React.FC<IProps> = ({ todos, handleToggleTodo, handleDeleteTodo, completed }) => {
+const TodoList: React.FC<IProps> = ({ todos, onToggle, onDelete, completedStatus }) => {
 	return (
 		<ul className='list'>
 			{todos
-				.filter(todo => todo.completed === completed)
+				.filter(todo => todo.completed === completedStatus)
 				.map(todo => (
 					<TodoListItem
 						todo={todo}
-						handleToggleTodo={handleToggleTodo}
-						handleDeleteTodo={handleDeleteTodo}
+						onToggle={onToggle}
+						onDelete={onDelete}
 						key={todo.id}
 					/>
 				))}

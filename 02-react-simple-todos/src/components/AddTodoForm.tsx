@@ -3,10 +3,10 @@ import { Todo } from "../types"
 
 interface IProps {
 	todoId: number
-	handleAddTodo: (newTodo: Todo) => void
+	onAddTodo: (newTodo: Todo) => void
 }
 
-const AddTodoForm: React.FC<IProps> = ({ todoId, handleAddTodo }) => {
+const AddTodoForm: React.FC<IProps> = ({ todoId, onAddTodo }) => {
 	const [newTodoTitle, setNewTodoTitle] = useState('')
 
 	const handleSubmitForm = (e: React.FormEvent) => {
@@ -18,7 +18,7 @@ const AddTodoForm: React.FC<IProps> = ({ todoId, handleAddTodo }) => {
 			id: todoId,
 		}
 
-		handleAddTodo(newTodo)
+		onAddTodo(newTodo)
 		setNewTodoTitle('')
 	}
 

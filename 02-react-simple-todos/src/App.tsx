@@ -22,9 +22,7 @@ const App = () => {
 
 	const newTodoId = todos.reduce((maxId, todo) => todo.id > maxId ? todo.id : maxId, 0) + 1
 
-	const handleAddTodo = (newTodo: Todo) => {
-		setTodos(todos => [...todos, newTodo])
-	}
+	const handleAddTodo = (newTodo: Todo) => setTodos(todos => [...todos, newTodo])
 
 	const handleDeleteTodo = (clickedTodo: Todo) => setTodos(todos.filter(todo => todo !== clickedTodo))
 
@@ -42,9 +40,9 @@ const App = () => {
 					{incompleteTodos.length > 0
 						? <TodoList
 							todos={todos}
-							handleToggleTodo={handleToggleTodo}
-							handleDeleteTodo={handleDeleteTodo}
-							completed={false}
+							onToggle={handleToggleTodo}
+							onDelete={handleDeleteTodo}
+							completedStatus={false}
 						/>
 
 						: <p>Nothing to see here...</p>
@@ -57,9 +55,9 @@ const App = () => {
 					{completeTodos.length > 0
 						? <TodoList
 							todos={todos}
-							handleToggleTodo={handleToggleTodo}
-							handleDeleteTodo={handleDeleteTodo}
-							completed={true}
+							onToggle={handleToggleTodo}
+							onDelete={handleDeleteTodo}
+							completedStatus={true}
 						/>
 
 						: <p>I'm too good!</p>
@@ -69,7 +67,7 @@ const App = () => {
 
 			<AddTodoForm
 				todoId={newTodoId}
-				handleAddTodo={handleAddTodo}
+				onAddTodo={handleAddTodo}
 			/>
 
 			{todos.length > 0 &&

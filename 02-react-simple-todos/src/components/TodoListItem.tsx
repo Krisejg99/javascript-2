@@ -3,18 +3,18 @@ import { Todo } from '../types'
 
 interface IProps {
 	todo: Todo
-	handleToggleTodo: (todo: Todo) => void
-	handleDeleteTodo: (clickedTodo: Todo) => void
+	onToggle: (todo: Todo) => void
+	onDelete: (clickedTodo: Todo) => void
 }
 
-const TodoListItem: React.FC<IProps> = ({ todo, handleToggleTodo, handleDeleteTodo }) => {
+const TodoListItem: React.FC<IProps> = ({ todo, onToggle, onDelete }) => {
 	return (
 		<li
 			className='list-item'
 		>
 			<span
 				className='check-mark'
-				onClick={() => handleToggleTodo(todo)}
+				onClick={() => onToggle(todo)}
 				role='button'
 			>
 				{todo.completed ? '☑' : '☐'}
@@ -28,7 +28,7 @@ const TodoListItem: React.FC<IProps> = ({ todo, handleToggleTodo, handleDeleteTo
 
 			<span
 				className='delete-item'
-				onClick={() => handleDeleteTodo(todo)}
+				onClick={() => onDelete(todo)}
 				role='button'
 
 			>
