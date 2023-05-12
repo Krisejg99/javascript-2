@@ -39,10 +39,9 @@ const App = () => {
 
 					{incompleteTodos.length > 0
 						? <TodoList
-							todos={todos}
+							todos={incompleteTodos}
 							onToggle={handleToggleTodo}
 							onDelete={handleDeleteTodo}
-							completedStatus={false}
 						/>
 
 						: <p>Nothing to see here...</p>
@@ -54,10 +53,9 @@ const App = () => {
 
 					{completeTodos.length > 0
 						? <TodoList
-							todos={todos}
+							todos={completeTodos}
 							onToggle={handleToggleTodo}
 							onDelete={handleDeleteTodo}
-							completedStatus={true}
 						/>
 
 						: <p>I'm too good!</p>

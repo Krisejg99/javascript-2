@@ -6,22 +6,19 @@ interface IProps {
 	todos: Todo[]
 	onToggle: (todo: Todo) => void
 	onDelete: (clickedTodo: Todo) => void
-	completedStatus: boolean
 }
 
-const TodoList: React.FC<IProps> = ({ todos, onToggle, onDelete, completedStatus }) => {
+const TodoList: React.FC<IProps> = ({ todos, onToggle, onDelete }) => {
 	return (
 		<ul className='list'>
-			{todos
-				.filter(todo => todo.completed === completedStatus)
-				.map(todo => (
-					<TodoListItem
-						todo={todo}
-						onToggle={onToggle}
-						onDelete={onDelete}
-						key={todo.id}
-					/>
-				))}
+			{todos.map(todo => (
+				<TodoListItem
+					todo={todo}
+					onToggle={onToggle}
+					onDelete={onDelete}
+					key={todo.id}
+				/>
+			))}
 		</ul>
 	)
 }
