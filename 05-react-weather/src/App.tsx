@@ -9,15 +9,20 @@ import './assets/scss/App.scss'
 const App = () => {
 	const [currentWeather, setCurrentWeather] = useState<ICurrentWeather>()
 
-	const handleCity = async (city: string) => {
-		setCurrentWeather(await getCurrentWeather(city))
+	const handleSearch = async (city: string) => {
+		const weather = await getCurrentWeather(city)
+		if (!weather) {
+
+		}
+
+		setCurrentWeather(weather)
 	}
 
 
 	return (
 		<div id="app" className="container">
 			<SearchCity
-				onSearch={handleCity}
+				onSearch={handleSearch}
 			/>
 
 			{currentWeather && <Forecast
