@@ -19,6 +19,10 @@ export const getTodos = async () => {
  *
  * @param data Object with properties and values for the new todo
  */
+export const createTodo = async (todo: Todo) => {
+	const res = await axios.post(`${BASE_URL}/todos`, todo)
+	return res.data as Todo
+}
 
 /**
  * Update a todo
@@ -26,9 +30,17 @@ export const getTodos = async () => {
  * @param todo_id Todo to update
  * @param data Data to update todo with
  */
+export const updateTodo = async (todo: Todo) => {
+	const res = await axios.patch(`${BASE_URL}/todos/${todo.id}`, todo)
+	return res.data as Todo
+}
 
 /**
  * Delete a todo
  *
  * @param todo_id Todo to delete
  */
+export const deleteTodo = async (todoId: number) => {
+	const res = await axios.delete(`${BASE_URL}/todos/${todoId}`)
+	return res.data as Todo
+}

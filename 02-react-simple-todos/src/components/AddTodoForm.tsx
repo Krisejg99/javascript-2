@@ -2,11 +2,10 @@ import { useState } from "react"
 import { Todo } from "../types"
 
 interface IProps {
-	todoId: number
 	onAddTodo: (newTodo: Todo) => void
 }
 
-const AddTodoForm: React.FC<IProps> = ({ todoId, onAddTodo }) => {
+const AddTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
 	const [newTodoTitle, setNewTodoTitle] = useState('')
 
 	const handleSubmitForm = (e: React.FormEvent) => {
@@ -15,7 +14,6 @@ const AddTodoForm: React.FC<IProps> = ({ todoId, onAddTodo }) => {
 		const newTodo: Todo = {
 			title: newTodoTitle,
 			completed: false,
-			id: todoId,
 		}
 
 		onAddTodo(newTodo)
