@@ -17,21 +17,25 @@ const App = () => {
 	const completeTodos = todos.filter(todo => todo.completed)
 	const incompleteTodos = todos.filter(todo => !todo.completed)
 
-	// const newTodoId = todos.reduce((maxId, todo) => todo.id > maxId ? todo.id : maxId, 0) + 1
-
-	const handleAddTodo = async (newTodo: Todo) => {
-		const todo = await TodosAPI.createTodo(newTodo)
-		setTodos([...todos, todo])
+	const handleAddTodo = (newTodo: Todo) => {
+		TodosAPI.createTodo(newTodo)
+		getTodos()
 	}
 
-	const handleDeleteTodo = (clickedTodo: Todo) => {
-		setTodos(todos.filter(todo => todo !== clickedTodo))
+	const handleDeleteTodo = (todo: Todo) => {
+		if (!todo.id) return
+
+		TodosAPI.deleteTodo(todo.id)
+		getTodos()
 	}
 
-	const handleToggleTodo = async (todo: Todo) => {
-		todo.completed = !todo.completed
-		await TodosAPI.updateTodo(todo)
-		setTodos([...todos])
+	const handleToggleTodo = (todo: Todo) => {
+		if (!todo.id) return
+
+		TodosAPI.updateTodo(todo.id, {
+			completed: !todo.completed
+		})
+		getTodos()
 	}
 
 	useEffect(() => {
