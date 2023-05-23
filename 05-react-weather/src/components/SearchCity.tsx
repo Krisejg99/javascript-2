@@ -5,14 +5,14 @@ interface IProps {
 }
 
 const SearchCity: React.FC<IProps> = ({ onSearch }) => {
-	const [inputValue, setInputValue] = useState('')
+	const [inputCity, setInputCity] = useState('')
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
 
-		onSearch(inputValue)
+		onSearch(inputCity)
 
-		setInputValue('')
+		setInputCity('')
 	}
 
 	return (
@@ -26,8 +26,8 @@ const SearchCity: React.FC<IProps> = ({ onSearch }) => {
 						type="text"
 						className="form-control"
 						placeholder="Enter city to search for" aria-label="City" aria-details="Search for city to show current weather for."
-						onChange={(e) => setInputValue(e.target.value)}
-						value={inputValue}
+						onChange={e => setInputCity(e.target.value)}
+						value={inputCity}
 					/>
 
 					<button
