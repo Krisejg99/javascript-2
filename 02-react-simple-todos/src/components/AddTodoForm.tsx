@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Todo } from "../types"
 
 interface IProps {
@@ -7,6 +7,7 @@ interface IProps {
 
 const AddTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
 	const [newTodoTitle, setNewTodoTitle] = useState('')
+	const newTodoTitleRef = useRef<HTMLInputElement>(null)
 
 	const handleSubmitForm = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -20,6 +21,10 @@ const AddTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
 		setNewTodoTitle('')
 	}
 
+	useEffect(() => {
+		newTodoTitleRef.current?.focus()
+	}, [])
+
 	return (
 		<form
 			className='todo-form'
@@ -27,11 +32,12 @@ const AddTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
 		>
 			<input
 				type="text"
+				className='new-todo-input'
 				placeholder='Create a todo...'
 				required
 				onChange={e => setNewTodoTitle(e.target.value)}
 				value={newTodoTitle}
-				className='new-todo-input'
+				ref={newTodoTitleRef}
 			/>
 
 			<button

@@ -17,22 +17,22 @@ const App = () => {
 	const completeTodos = todos.filter(todo => todo.completed)
 	const incompleteTodos = todos.filter(todo => !todo.completed)
 
-	const handleAddTodo = (newTodo: Todo) => {
-		TodosAPI.createTodo(newTodo)
+	const handleAddTodo = async (newTodo: Todo) => {
+		await TodosAPI.createTodo(newTodo)
 		getTodos()
 	}
 
-	const handleDeleteTodo = (todo: Todo) => {
+	const handleDeleteTodo = async (todo: Todo) => {
 		if (!todo.id) return
 
-		TodosAPI.deleteTodo(todo.id)
+		await TodosAPI.deleteTodo(todo.id)
 		getTodos()
 	}
 
-	const handleToggleTodo = (todo: Todo) => {
+	const handleToggleTodo = async (todo: Todo) => {
 		if (!todo.id) return
 
-		TodosAPI.updateTodo(todo.id, {
+		await TodosAPI.updateTodo(todo.id, {
 			completed: !todo.completed
 		})
 		getTodos()
