@@ -5,6 +5,8 @@ import { getCurrentWeather } from './services/owmapi'
 import { ICurrentWeather } from './types'
 import Airplane from './assets/images/747.svg'
 import './assets/scss/App.scss'
+import Loading from './components/Loading'
+import Error from './components/Error'
 
 const App = () => {
 	const [currentWeather, setCurrentWeather] = useState<ICurrentWeather | null>(null)
@@ -32,9 +34,10 @@ const App = () => {
 		<div id="app" className="container">
 			<SearchCity onSearch={handleSearch} />
 
-			{loading && <img src={Airplane} alt="Airplane animation" className='img-fluid py-5 w-100' />}
+			{loading && <Loading />}
 
-			{error && <div className="alert alert-warning">{error}</div>}
+			{error &&
+				<Error errorMsg={error} />}
 
 			{currentWeather &&
 				<Forecast currentWeather={currentWeather} />}
