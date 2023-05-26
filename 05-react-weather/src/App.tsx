@@ -36,11 +36,9 @@ const App = () => {
 
 			{loading && <Loading img={Airplane} />}
 
-			{error &&
-				<Error errorMsg={error} />}
+			{error && <Error errorMsg={error} />}
 
-			{currentWeather &&
-				<Forecast currentWeather={currentWeather} />}
+			{currentWeather && <Forecast currentWeather={currentWeather} />}
 		</div>
 	)
 }
