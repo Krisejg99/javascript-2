@@ -31,11 +31,22 @@ const Forecast: React.FC<IProps> = ({ currentWeather }) => {
 						<span id="windspeed">{currentWeather.wind.speed}</span> m/s
 					</p>
 
-					{/*
 					<ul className="conditions">
-						<li><img src="" title="CONDITION_MAIN" alt="CONDITION_MAIN">CONDITION_DESCRIPTION</li>
+						{currentWeather.weather.map(condition => {
+							return (
+								<li key={condition.id}>
+									<img
+										src={`https://openweathermap.org/img/wn/${condition.icon}@2x.png`}
+										title={condition.main}
+										alt={condition.main}
+									/>
+									{condition.description}
+								</li>
+							)
+						})}
 					</ul>
 
+					{/*
 					<p className="text-muted small">
 						<span>
 							1970-01-01 13:37:00
