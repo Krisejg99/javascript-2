@@ -9,14 +9,22 @@ import './assets/scss/App.scss'
 const App = () => {
 	const [currentWeather, setCurrentWeather] = useState<ICurrentWeather | null>(null)
 	const [loading, setLoading] = useState(false)
+	const [error, setError] = useState<string | false>(false)
 
 	const handleSearch = async (city: string) => {
 		setCurrentWeather(null)
+		setError(false)
 		setLoading(true)
 
-		const weather = await getCurrentWeather(city)
+		try {
+			const weather = await getCurrentWeather(city)
 
-		setCurrentWeather(weather)
+			setCurrentWeather(weather)
+		}
+		catch (err: any) {
+			setError(err.message)
+		}
+
 		setLoading(false)
 	}
 
@@ -25,6 +33,8 @@ const App = () => {
 			<SearchCity onSearch={handleSearch} />
 
 			{loading && <img src={Airplane} alt="Airplane animation" className='img-fluid py-5 w-100' />}
+
+			{error && <div className="alert alert-warning">{error}</div>}
 
 			{currentWeather &&
 				<Forecast currentWeather={currentWeather} />}
