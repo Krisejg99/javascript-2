@@ -46,13 +46,11 @@ const Forecast: React.FC<IProps> = ({ currentWeather }) => {
 						})}
 					</ul>
 
-					{/*
 					<p className="text-muted small">
 						<span>
-							1970-01-01 13:37:00
+							{new Date(currentWeather.dt * 1000).toLocaleString()}
 						</span>
 					</p>
-					*/}
 				</div>
 
 			</div>
