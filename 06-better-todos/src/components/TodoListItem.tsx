@@ -17,7 +17,7 @@ const TodoListItem: React.FC<IProps> = ({ todo, onToggle, onDelete }) => {
 				onClick={() => onToggle(todo)}
 				role='button'
 			>
-				{todo.completed ? '☑' : '☐'}
+				{todo.completed ? '✅' : '☑'}
 			</span>
 
 			<p

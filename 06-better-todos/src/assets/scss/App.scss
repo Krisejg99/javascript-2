@@ -1,3 +1,5 @@
+@import "bootstrap/scss/bootstrap";
+
 :root {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
@@ -10,8 +12,10 @@
 
 #root {
 	margin: 0 auto;
-	padding: 2rem;
 	text-align: center;
+	color-scheme: light dark;
+	color: rgba(255, 255, 255, 0.87);
+	background-color: #242424;
 
 	.App {
 		display: flex;
