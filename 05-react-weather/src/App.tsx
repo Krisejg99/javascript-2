@@ -34,7 +34,7 @@ const App = () => {
 		<div id="app" className="container">
 			<SearchCity onSearch={handleSearch} />
 
-			{loading && <Loading />}
+			{loading && <Loading img={Airplane} />}
 
 			{error &&
 				<Error errorMsg={error} />}

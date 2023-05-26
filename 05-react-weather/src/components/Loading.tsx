@@ -1,8 +1,10 @@
-import Airplane from '../assets/images/747.svg'
+interface IProps {
+	img: string
+}
 
-const Loading = () => {
+const Loading: React.FC<IProps> = ({ img }) => {
 	return (
-		<img src={Airplane} alt="Airplane animation" className='img-fluid py-5 w-100' />
+		<img src={img} alt="Airplane animation" className='img-fluid py-5 w-100' />
 	)
 }
 
