@@ -1,5 +1,8 @@
 import React from 'react'
 import forecastBanner from '../assets/images/forecast-banner.png'
+import dayBanner from '../assets/images/day.svg'
+import nightBanner from '../assets/images/night.svg'
+
 import { ICurrentWeather } from '../types'
 
 interface IProps {
@@ -7,13 +10,15 @@ interface IProps {
 }
 
 const Forecast: React.FC<IProps> = ({ currentWeather }) => {
-	console.log(currentWeather)
+	const banner = currentWeather.dt > currentWeather.sys.sunrise && currentWeather.dt < currentWeather.sys.sunset
+		? dayBanner
+		: nightBanner
 
 	return (
 		<div id="forecast">
 			<div className="card">
 
-				<img src={forecastBanner} className="card-img-top" alt="Daytime, nighttime, daytime, nighttime" />
+				<img src={banner} className="card-img-top" alt="Daytime, nighttime, daytime, nighttime" />
 
 				<div className="card-body">
 					<h5 className="card-title" id="location">
