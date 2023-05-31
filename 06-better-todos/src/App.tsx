@@ -6,6 +6,8 @@ import TodosPage from './pages/TodosPage'
 import TodoPage from './pages/TodoPage'
 import Navigation from './components/Navigation'
 import NotFound from './pages/NotFound'
+import CreateTodoPage from './pages/CreateTodoPage'
+
 
 const App = () => {
 	return (
@@ -17,9 +19,9 @@ const App = () => {
 					<Route path="/" element={<HomePage />} />
 					<Route path="/todos" element={<TodosPage />} />
 					<Route path="/todos/:id" element={<TodoPage />} />
+					<Route path="/todos/create" element={<CreateTodoPage />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
-
 			</Container>
 		</div>
 	)

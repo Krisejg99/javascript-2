@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 import { Todo } from '../types'
 import { Link } from 'react-router-dom'
 import TodoCounter from '../components/TodoCounter'
-import TodoList from '../components/TodoList'
-import AddTodoForm from '../components/AddTodoForm'
 import * as TodosAPI from '../services/TodosAPI'
 import ListGroup from 'react-bootstrap/ListGroup'
 
@@ -17,11 +15,6 @@ const TodosPage = () => {
 
 	const completeTodos = todos.filter(todo => todo.completed)
 	const incompleteTodos = todos.filter(todo => !todo.completed)
-
-	const handleAddTodo = async (newTodo: Todo) => {
-		await TodosAPI.createTodo(newTodo)
-		getTodos()
-	}
 
 	// const handleDeleteTodo = async (todo: Todo) => {
 	// 	if (!todo.id) return
@@ -92,10 +85,6 @@ const TodosPage = () => {
 					}
 				</div>
 			</div>
-
-			<AddTodoForm
-				onAddTodo={handleAddTodo}
-			/>
 
 			{todos.length > 0 &&
 				<TodoCounter
