@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react'
 import { Todo } from '../types'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import TodoCounter from '../components/TodoCounter'
 import * as TodosAPI from '../services/TodosAPI'
 import ListGroup from 'react-bootstrap/ListGroup'
+import Success from '../components/Sucess'
 
 const TodosPage = () => {
 	const [todos, setTodos] = useState<Todo[]>([])
+	const [deletedTodo, setDeletedTodo] = useState<Todo | null>(null)
+
+
+	const location = useLocation()
+	const navigate = useNavigate()
 
 	const getTodos = async () => {
 		const data = await TodosAPI.getTodos()
@@ -16,32 +22,30 @@ const TodosPage = () => {
 	const completeTodos = todos.filter(todo => todo.completed)
 	const incompleteTodos = todos.filter(todo => !todo.completed)
 
-	// const handleDeleteTodo = async (todo: Todo) => {
-	// 	if (!todo.id) return
-
-	// 	await TodosAPI.deleteTodo(todo.id)
-	// 	getTodos()
-	// }
-
-	// const handleToggleTodo = async (todo: Todo) => {
-	// 	if (!todo.id) return
-
-	// 	await TodosAPI.updateTodo(todo.id, {
-	// 		completed: !todo.completed
-	// 	})
-	// 	getTodos()
-	// }
-
 	useEffect(() => {
 		document.title = `${completeTodos.length} / ${todos.length}`
 	}, [completeTodos.length, todos.length])
 
 	useEffect(() => {
 		getTodos()
+
+		if (location.state) {
+			setDeletedTodo(location.state)
+
+			navigate(location.pathname, { state: null })
+
+			setTimeout(() => {
+				setDeletedTodo(null)
+			}, 5000)
+		}
 	}, [])
 
 	return (
 		<>
+			{deletedTodo &&
+				<Success successMsg={`Deleted todo: ${deletedTodo.title}`} />
+			}
+
 			<div className='lists-container'>
 				<div className='list-wrapper'>
 					<h1>Todos</h1>

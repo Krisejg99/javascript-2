@@ -9,7 +9,6 @@ const TodoPage = () => {
 	const todoId = Number(id)
 	const [todo, setTodo] = useState<Todo | null>(null)
 
-
 	const navigate = useNavigate()
 
 	const getTodo = async (id: number) => {
@@ -21,7 +20,7 @@ const TodoPage = () => {
 		if (!todo.id) return
 		TodosAPI.deleteTodo(todo.id)
 
-		navigate('/todos')
+		navigate('/todos', { state: todo })
 	}
 
 	const handleToggleTodo = async (todo: Todo) => {
