@@ -14,12 +14,10 @@ const CreateTodoPage = () => {
 
 	const navigate = useNavigate()
 
-	const handleAddTodo = async (todo: Todo) => {
+	const handleAddTodo = (todo: Todo) => {
 		try {
-			const newTodo = await TodosAPI.createTodo(todo)
-			if (!newTodo) return
-
-			setSuccess('SUCCESS!')
+			TodosAPI.createTodo(todo)
+			setSuccess('Success')
 		}
 		catch (err: any) {
 			setError(err.message)
