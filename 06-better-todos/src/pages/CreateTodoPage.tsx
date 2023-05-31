@@ -1,10 +1,10 @@
-import { useState } from "react"
-import AddTodoForm from "../components/AddTodoForm"
+import { useState } from 'react'
+import AddTodoForm from '../components/AddTodoForm'
 import * as TodosAPI from '../services/TodosAPI'
-import { Todo } from "../types"
+import { Todo } from '../types'
 import { useNavigate } from 'react-router-dom'
 import Error from '../components/Error'
-import Success from "../components/Sucess"
+import Success from '../components/Sucess'
 
 
 
@@ -23,18 +23,14 @@ const CreateTodoPage = () => {
 			setError(err.message)
 		}
 
-
-
 		setTimeout(() => {
 			navigate('/todos')
-		}, 2000)
+		}, 1500)
 	}
 
 	return (
 		<>
-			<AddTodoForm
-				onAddTodo={handleAddTodo}
-			/>
+			{!success && <AddTodoForm onAddTodo={handleAddTodo} />}
 
 			{error && <Error errorMsg={error} />}
 			{success && <Success successMsg={success} />}
