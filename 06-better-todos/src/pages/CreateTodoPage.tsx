@@ -1,20 +1,25 @@
+import { useState } from "react"
 import AddTodoForm from "../components/AddTodoForm"
 import * as TodosAPI from '../services/TodosAPI'
 import { Todo } from "../types"
 import { useNavigate } from 'react-router-dom'
 import Error from '../components/Error'
-import { useState } from "react"
+import Success from "../components/Sucess"
+
+
 
 const CreateTodoPage = () => {
 	const [error, setError] = useState<string | false>(false)
+	const [success, setSuccess] = useState<string | false>(false)
+
 	const navigate = useNavigate()
 
 	const handleAddTodo = async (todo: Todo) => {
 		try {
 			const newTodo = await TodosAPI.createTodo(todo)
-			if (newTodo) {
+			if (!newTodo) return
 
-			}
+			setSuccess('SUCCESS!')
 		}
 		catch (err: any) {
 			setError(err.message)
@@ -34,6 +39,7 @@ const CreateTodoPage = () => {
 			/>
 
 			{error && <Error errorMsg={error} />}
+			{success && <Success successMsg={success} />}
 		</>
 
 	)
