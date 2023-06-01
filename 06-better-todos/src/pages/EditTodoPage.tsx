@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Todo } from '../types'
 import * as TodosAPI from '../services/TodosAPI'
 import Alert from 'react-bootstrap/Alert'
@@ -9,10 +9,13 @@ const EditTodoPage = () => {
 	const [todo, setTodo] = useState<Todo | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<String | null>(null)
+
 	const todoTitleRef = useRef<HTMLInputElement>(null)
 
 	const { id } = useParams()
 	const todoId = Number(id)
+
+	const navigate = useNavigate()
 
 	const getTodo = async (id: number) => {
 		setError(null)
@@ -27,6 +30,30 @@ const EditTodoPage = () => {
 		}
 
 		setLoading(false)
+	}
+
+	const handleSubmitForm = async (e: React.FormEvent) => {
+		e.preventDefault()
+
+		if (!todo || !todo.id) return
+
+		try {
+			const updatedTodo = await TodosAPI.updateTodo(todo.id, {
+				title: todo.title
+			})
+
+			setTodo(updatedTodo)
+
+			navigate(`/todos/${todoId}`, {
+				replace: true,
+				state: {
+					message: `Successfully changed to "${todo.title}"`
+				},
+			})
+		}
+		catch (err: any) {
+			setError(err.message)
+		}
 	}
 
 	useEffect(() => {
@@ -55,7 +82,10 @@ const EditTodoPage = () => {
 	return (
 		<>
 			<h1>Edit</h1>
-			<form className='todo-form'>
+			<form
+				className='todo-form'
+				onSubmit={handleSubmitForm}
+			>
 				<input
 					className='new-todo-input'
 					type="text"
@@ -63,6 +93,7 @@ const EditTodoPage = () => {
 					onChange={e => setTodo({ ...todo, title: e.target.value })}
 					ref={todoTitleRef}
 				/>
+
 				<button className='create-todo-btn'>Save</button>
 			</form>
 		</>

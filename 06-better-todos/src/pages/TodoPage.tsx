@@ -4,6 +4,7 @@ import { Todo } from "../types"
 import * as TodosAPI from '../services/TodosAPI'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
+import Popup from "../components/Popup"
 
 const TodoPage = () => {
 	const [todo, setTodo] = useState<Todo | null>(null)
@@ -65,6 +66,14 @@ const TodoPage = () => {
 		getTodo(todoId)
 	}, [todoId])
 
+	useEffect(() => {
+		if (location.state?.message) {
+			setTimeout(() => {
+				navigate(location.pathname, { state: null })
+			}, 3000)
+		}
+	}, [])
+
 	if (error) {
 		return (
 			<Alert variant="danger">
@@ -82,6 +91,10 @@ const TodoPage = () => {
 
 	return (
 		<>
+			{location.state?.message &&
+				<Popup type='success' msg={location.state.message} />
+			}
+
 			<div>{todo.title}</div>
 
 			<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>

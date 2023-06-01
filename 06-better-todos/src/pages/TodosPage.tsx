@@ -30,7 +30,7 @@ const TodosPage = () => {
 		if (location.state?.message) {
 			setTimeout(() => {
 				navigate(location.pathname, { state: null })
-			}, 2000)
+			}, 3000)
 		}
 	}, [])
 
