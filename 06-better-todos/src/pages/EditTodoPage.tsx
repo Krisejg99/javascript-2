@@ -96,6 +96,14 @@ const EditTodoPage = () => {
 
 				<button className='create-todo-btn'>Save</button>
 			</form>
+
+			<Button
+				variant='primary'
+				className='mt-3'
+				onClick={() => navigate(-1)}
+			>
+				&laquo; Back
+			</Button>
 		</>
 	)
 }
