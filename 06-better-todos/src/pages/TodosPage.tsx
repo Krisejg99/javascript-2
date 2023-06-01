@@ -8,8 +8,6 @@ import Popup from '../components/Popup'
 
 const TodosPage = () => {
 	const [todos, setTodos] = useState<Todo[]>([])
-	const [deletedTodo, setDeletedTodo] = useState<Todo | null>(null)
-
 
 	const location = useLocation()
 	const navigate = useNavigate()
@@ -29,21 +27,17 @@ const TodosPage = () => {
 	useEffect(() => {
 		getTodos()
 
-		if (location.state) {
-			setDeletedTodo(location.state)
-
-			navigate(location.pathname, { state: null })
-
+		if (location.state?.message) {
 			setTimeout(() => {
-				setDeletedTodo(null)
+				navigate(location.pathname, { state: null })
 			}, 2000)
 		}
 	}, [])
 
 	return (
 		<>
-			{deletedTodo &&
-				<Popup type='success' msg={`Deleted todo: ${deletedTodo.title}`} />
+			{location.state?.message &&
+				<Popup type='success' msg={location.state.message} />
 			}
 
 			<div className='lists-container'>
