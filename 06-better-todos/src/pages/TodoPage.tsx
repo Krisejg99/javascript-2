@@ -9,7 +9,7 @@ const TodoPage = () => {
 	const todoId = Number(id)
 	const [todo, setTodo] = useState<Todo | null>(null)
 
-	const navigate = useNavigate()
+	// const navigate = useNavigate()
 
 	const getTodo = async (id: number) => {
 		const todo = await TodosAPI.getTodo(id)
@@ -20,7 +20,7 @@ const TodoPage = () => {
 		if (!todo.id) return
 		TodosAPI.deleteTodo(todo.id)
 
-		navigate('/todos', { state: todo })
+		// navigate('/todos', { state: todo })
 	}
 
 	const handleToggleTodo = async (todo: Todo) => {
@@ -52,7 +52,10 @@ const TodoPage = () => {
 
 			<div>
 				<Button onClick={() => handleToggleTodo(todo)}>Toggle status</Button>
-				<Button onClick={() => handleDeleteTodo(todo)}>Delete</Button>
+
+				<Link to={'/todos'} state={todo}>
+					<Button onClick={() => handleDeleteTodo(todo)}>Delete</Button>
+				</Link>
 			</div>
 
 			<Link to={'/todos'}>
