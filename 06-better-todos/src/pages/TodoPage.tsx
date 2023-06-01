@@ -26,10 +26,11 @@ const TodoPage = () => {
 	const handleToggleTodo = async (todo: Todo) => {
 		if (!todo.id) return
 
-		await TodosAPI.updateTodo(todo.id, {
+		const updatedTodo = await TodosAPI.updateTodo(todo.id, {
 			completed: !todo.completed
 		})
-		getTodo(todoId)
+
+		setTodo(updatedTodo)
 	}
 
 	useEffect(() => {
@@ -50,11 +51,13 @@ const TodoPage = () => {
 
 			<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
 
-			<div>
-				<Button onClick={() => handleToggleTodo(todo)}>Toggle status</Button>
+			<div className="buttons mb-3">
+				<Button variant="success" onClick={() => handleToggleTodo(todo)}>Toggle</Button>
+
+				<Button variant="warning">Edit</Button>
 
 				<Link to={'/todos'} state={todo}>
-					<Button onClick={() => handleDeleteTodo(todo)}>Delete</Button>
+					<Button variant="danger" onClick={() => handleDeleteTodo(todo)}>Delete</Button>
 				</Link>
 			</div>
 
