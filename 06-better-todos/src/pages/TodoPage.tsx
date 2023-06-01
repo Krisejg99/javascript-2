@@ -1,26 +1,42 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import Button from 'react-bootstrap/Button'
 import { Todo } from "../types"
 import * as TodosAPI from '../services/TodosAPI'
+import Button from 'react-bootstrap/Button'
+import Alert from 'react-bootstrap/Alert'
 
 const TodoPage = () => {
+	const [todo, setTodo] = useState<Todo | null>(null)
+	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState<String | null>(null)
 	const { id } = useParams()
 	const todoId = Number(id)
-	const [todo, setTodo] = useState<Todo | null>(null)
 
-	// const navigate = useNavigate()
+	const navigate = useNavigate()
 
 	const getTodo = async (id: number) => {
-		const todo = await TodosAPI.getTodo(id)
-		setTodo(todo)
+		setError(null)
+		setLoading(true)
+
+		try {
+			const todo = await TodosAPI.getTodo(id)
+			setTodo(todo)
+		}
+		catch (err) {
+
+		}
+
+		setLoading(false)
 	}
 
 	const handleDeleteTodo = async (todo: Todo) => {
 		if (!todo.id) return
 		TodosAPI.deleteTodo(todo.id)
 
-		// navigate('/todos', { state: todo })
+		navigate('/todos', {
+			replace: true,
+			state: todo,
+		})
 	}
 
 	const handleToggleTodo = async (todo: Todo) => {
@@ -41,7 +57,18 @@ const TodoPage = () => {
 		getTodo(todoId)
 	}, [todoId])
 
-	if (!todo) {
+	if (error) {
+		return (
+			<Alert variant="danger">
+				<h1>Something went wrong!</h1>
+				<p>{error}</p>
+
+				<Button variant="primary" onClick={() => getTodo(todoId)}>Try again</Button>
+			</Alert >
+		)
+	}
+
+	if (loading || !todo) {
 		return (<p>Loading...</p>)
 	}
 
@@ -53,12 +80,8 @@ const TodoPage = () => {
 
 			<div className="buttons mb-3">
 				<Button variant="success" onClick={() => handleToggleTodo(todo)}>Toggle</Button>
-
 				<Button variant="warning">Edit</Button>
-
-				<Link to={'/todos'} state={todo}>
-					<Button variant="danger" onClick={() => handleDeleteTodo(todo)}>Delete</Button>
-				</Link>
+				<Button variant="danger" onClick={() => handleDeleteTodo(todo)}>Delete</Button>
 			</div>
 
 			<Link to={'/todos'}>
