@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import TodoCounter from '../components/TodoCounter'
 import * as TodosAPI from '../services/TodosAPI'
 import ListGroup from 'react-bootstrap/ListGroup'
-import Success from '../components/Sucess'
+import Popup from '../components/Popup'
 
 const TodosPage = () => {
 	const [todos, setTodos] = useState<Todo[]>([])
@@ -36,14 +36,14 @@ const TodosPage = () => {
 
 			setTimeout(() => {
 				setDeletedTodo(null)
-			}, 5000)
+			}, 2000)
 		}
 	}, [])
 
 	return (
 		<>
 			{deletedTodo &&
-				<Success successMsg={`Deleted todo: ${deletedTodo.title}`} />
+				<Popup type='success' msg={`Deleted todo: ${deletedTodo.title}`} />
 			}
 
 			<div className='lists-container'>

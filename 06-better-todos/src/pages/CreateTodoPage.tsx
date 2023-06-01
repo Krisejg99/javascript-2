@@ -3,24 +3,22 @@ import AddTodoForm from '../components/AddTodoForm'
 import * as TodosAPI from '../services/TodosAPI'
 import { Todo } from '../types'
 import { useNavigate } from 'react-router-dom'
-import Error from '../components/Error'
-import Success from '../components/Sucess'
+import Popup from '../components/Popup'
 
 
 
 const CreateTodoPage = () => {
-	const [error, setError] = useState<string | false>(false)
-	const [success, setSuccess] = useState<string | false>(false)
+	const [success, setSuccess] = useState<boolean | null>(null)
 
 	const navigate = useNavigate()
 
 	const handleAddTodo = (todo: Todo) => {
 		try {
 			TodosAPI.createTodo(todo)
-			setSuccess('Success')
+			setSuccess(true)
 		}
 		catch (err: any) {
-			setError(err.message)
+			setSuccess(false)
 		}
 
 		setTimeout(() => {
@@ -30,10 +28,9 @@ const CreateTodoPage = () => {
 
 	return (
 		<>
-			{!success && <AddTodoForm onAddTodo={handleAddTodo} />}
-
-			{error && <Error errorMsg={error} />}
-			{success && <Success successMsg={success} />}
+			{success === null && <AddTodoForm onAddTodo={handleAddTodo} />}
+			{success === true && <Popup type='success' msg={'Success'} />}
+			{success === false && <Popup type='danger' msg={'Failed to create todo'} />}
 		</>
 
 	)
