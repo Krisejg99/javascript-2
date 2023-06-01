@@ -7,6 +7,7 @@ import TodoPage from './pages/TodoPage'
 import Navigation from './components/Navigation'
 import NotFound from './pages/NotFound'
 import CreateTodoPage from './pages/CreateTodoPage'
+import EditTodoPage from './pages/EditTodoPage'
 
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
 					<Route path="/" element={<HomePage />} />
 					<Route path="/todos" element={<TodosPage />} />
 					<Route path="/todos/:id" element={<TodoPage />} />
+					<Route path="/todos/:id/edit" element={<EditTodoPage />} />
 					<Route path="/todos/create" element={<CreateTodoPage />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
