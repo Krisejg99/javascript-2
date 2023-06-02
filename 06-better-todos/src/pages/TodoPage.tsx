@@ -5,11 +5,13 @@ import * as TodosAPI from '../services/TodosAPI'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 import Popup from "../components/Popup"
+import ConfirmationModal from "../components/ConfirmationModal"
 
 const TodoPage = () => {
 	const [todo, setTodo] = useState<Todo | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<String | null>(null)
+	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 
 	const { id } = useParams()
 	const todoId = Number(id)
@@ -34,6 +36,7 @@ const TodoPage = () => {
 
 	const handleDeleteTodo = async (todo: Todo) => {
 		if (!todo.id) return
+
 		TodosAPI.deleteTodo(todo.id)
 
 		navigate('/todos', {
@@ -102,8 +105,20 @@ const TodoPage = () => {
 			<div className="buttons mb-3">
 				<Button variant="success" onClick={() => handleToggleTodo(todo)}>Toggle</Button>
 				<Button variant="warning" onClick={handleEditTodo}>Edit</Button>
-				<Button variant="danger" onClick={() => handleDeleteTodo(todo)}>Delete</Button>
+				<Button variant="danger" onClick={() => setShowConfirmDelete(true)}>Delete</Button>
 			</div>
+
+
+			<ConfirmationModal
+				show={showConfirmDelete}
+				onConfirm={() => handleDeleteTodo(todo)}
+				onCancel={() => setShowConfirmDelete(false)}
+			>
+				Delete this todo
+			</ConfirmationModal >
+
+
+
 
 			<Link to={'/todos'}>
 				<Button variant='secondary'>&laquo; All todos</Button>
