@@ -22,6 +22,48 @@ const SearchPage = () => {
 			</Form>
 
 			{false && <p>Loading...</p>}
+
+			{true && (
+				<div id="search-result">
+					<p>Showing HITS search results for QUERY...</p>
+
+					<ListGroup className='mb-3'>
+						{[{}, {}].map((HIT) => {
+							return (
+								<ListGroup.Item
+									action
+									href={''}
+									key={''}
+								>
+									<h2 className='h3'>TITLE</h2>
+									<p className="text-muted small mb-0">POINTS points by AUTHOR at CREATED_AT</p>
+								</ListGroup.Item>
+							)
+						})}
+					</ListGroup>
+
+					<div className="d-flex justify-content-between align-items-center">
+						<div className="prev">
+							<Button
+								variant='primary'
+							// onClick={}
+							>
+								Previous Page
+							</Button>
+						</div>
+
+						<div className="page">PAGE</div>
+
+						<div className="next">
+							<Button
+								variant='primary'
+							>
+								Next Page
+							</Button>
+						</div>
+					</div>
+				</div>
+			)}
 		</>
 	)
 }
