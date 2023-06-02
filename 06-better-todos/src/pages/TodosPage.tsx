@@ -10,10 +10,14 @@ const TodosPage = () => {
 	const [todos, setTodos] = useState<Todo[]>([])
 
 	const location = useLocation()
-	const navigate = useNavigate()
+	// const navigate = useNavigate()
 
 	const getTodos = async () => {
 		const data = await TodosAPI.getTodos()
+
+		data.sort((a, b) => a.title.localeCompare(b.title))
+		data.sort((a, b) => Number(a.completed) - Number(b.completed))
+
 		setTodos(data)
 	}
 
@@ -48,7 +52,7 @@ const TodosPage = () => {
 				<div className='list-wrapper'>
 					<h1>Todos</h1>
 
-					{todos.length > 0
+					{todos && todos.length > 0
 						? <ListGroup className="todolist">
 							{todos.map(todo => (
 								<ListGroup.Item
