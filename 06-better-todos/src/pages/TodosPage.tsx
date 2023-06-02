@@ -18,7 +18,6 @@ const TodosPage = () => {
 	}
 
 	const completeTodos = todos.filter(todo => todo.completed)
-	const incompleteTodos = todos.filter(todo => !todo.completed)
 
 	useEffect(() => {
 		document.title = `${completeTodos.length} / ${todos.length}`
@@ -44,14 +43,15 @@ const TodosPage = () => {
 				<div className='list-wrapper'>
 					<h1>Todos</h1>
 
-					{incompleteTodos.length > 0
+					{todos.length > 0
 						? <ListGroup className="todolist">
-							{incompleteTodos.map(todo => (
+							{todos.map(todo => (
 								<ListGroup.Item
 									action
 									as={Link}
 									key={todo.id}
 									to={`/todos/${todo.id}`}
+									className={todo.completed ? 'completed' : ''}
 								>
 									{todo.title}
 								</ListGroup.Item>
@@ -59,27 +59,6 @@ const TodosPage = () => {
 						</ListGroup>
 
 						: <p>Nothing to see here...</p>
-					}
-				</div>
-
-				<div className='list-wrapper'>
-					<h1>Completed</h1>
-
-					{completeTodos.length > 0
-						? <ListGroup className="todolist">
-							{completeTodos.map(todo => (
-								<ListGroup.Item
-									action
-									as={Link}
-									key={todo.id}
-									to={`/todos/${todo.id}`}
-								>
-									{todo.title}
-								</ListGroup.Item>
-							))}
-						</ListGroup>
-
-						: <p>I'm too good!</p>
 					}
 				</div>
 			</div>
