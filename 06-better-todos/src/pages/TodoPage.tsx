@@ -4,8 +4,8 @@ import { Todo } from "../types"
 import * as TodosAPI from '../services/TodosAPI'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
-import Popup from "../components/Popup"
 import ConfirmationModal from "../components/ConfirmationModal"
+import AutoDismissingAlert from "../components/AutoDismissingAlert"
 
 const TodoPage = () => {
 	const [todo, setTodo] = useState<Todo | null>(null)
@@ -69,13 +69,13 @@ const TodoPage = () => {
 		getTodo(todoId)
 	}, [todoId])
 
-	useEffect(() => {
-		if (location.state?.message) {
-			setTimeout(() => {
-				navigate(location.pathname, { state: null })
-			}, 3000)
-		}
-	}, [])
+	// useEffect(() => {
+	// 	if (location.state?.message) {
+	// 		setTimeout(() => {
+	// 			navigate(location.pathname, { state: null })
+	// 		}, 3000)
+	// 	}
+	// }, [])
 
 	if (error) {
 		return (
@@ -94,9 +94,14 @@ const TodoPage = () => {
 
 	return (
 		<>
-			{location.state?.message &&
-				<Popup type='success' msg={location.state.message} />
-			}
+			{location.state?.message && (
+				<AutoDismissingAlert
+					variant='success'
+					hideAfter={3}
+				>
+					{location.state.message}
+				</AutoDismissingAlert>
+			)}
 
 			<div>{todo.title}</div>
 

@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import TodoCounter from '../components/TodoCounter'
 import * as TodosAPI from '../services/TodosAPI'
 import ListGroup from 'react-bootstrap/ListGroup'
-import Popup from '../components/Popup'
+import AutoDismissingAlert from '../components/AutoDismissingAlert'
 
 const TodosPage = () => {
 	const [todos, setTodos] = useState<Todo[]>([])
@@ -26,18 +26,23 @@ const TodosPage = () => {
 	useEffect(() => {
 		getTodos()
 
-		if (location.state?.message) {
-			setTimeout(() => {
-				navigate(location.pathname, { state: null })
-			}, 3000)
-		}
+		// if (location.state?.message) {
+		// 	setTimeout(() => {
+		// 		navigate(location.pathname, { state: null })
+		// 	}, 3000)
+		// }
 	}, [])
 
 	return (
 		<>
-			{location.state?.message &&
-				<Popup type='success' msg={location.state.message} />
-			}
+			{location.state?.message && (
+				<AutoDismissingAlert
+					variant='success'
+					hideAfter={3}
+				>
+					{location.state.message}
+				</AutoDismissingAlert>
+			)}
 
 			<div className='lists-container'>
 				<div className='list-wrapper'>
