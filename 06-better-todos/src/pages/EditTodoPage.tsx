@@ -9,6 +9,9 @@ const EditTodoPage = () => {
 	const [todo, setTodo] = useState<Todo | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<String | null>(null)
+	const [newTodoTitle, setNewTodoTitle] = useState('')
+
+
 
 	const todoTitleRef = useRef<HTMLInputElement>(null)
 
@@ -22,8 +25,9 @@ const EditTodoPage = () => {
 		setLoading(true)
 
 		try {
-			const todo = await TodosAPI.getTodo(id)
-			setTodo(todo)
+			const data = await TodosAPI.getTodo(id)
+			setTodo(data)
+			setNewTodoTitle(data.title)
 		}
 		catch (err: any) {
 			setError(err.message)
@@ -38,16 +42,15 @@ const EditTodoPage = () => {
 		if (!todo || !todo.id) return
 
 		try {
-			const updatedTodo = await TodosAPI.updateTodo(todo.id, {
-				title: todo.title
+			await TodosAPI.updateTodo(todo.id, {
+				title: newTodoTitle
 			})
 
-			setTodo(updatedTodo)
 
 			navigate(`/todos/${todoId}`, {
 				replace: true,
 				state: {
-					message: `Successfully changed to "${todo.title}"`
+					message: `Successfully changed to "${newTodoTitle}"`
 				},
 			})
 		}
@@ -56,9 +59,23 @@ const EditTodoPage = () => {
 		}
 	}
 
+	// const handleToggleTodo = async (todo: Todo) => {
+	// 	if (!todo.id) return
+
+	// 	const updatedTodo = await TodosAPI.updateTodo(todo.id, {
+	// 		completed: !todo.completed
+	// 	})
+
+	// 	setTodo(updatedTodo)
+	// }
+
 	useEffect(() => {
+		if (typeof todoId !== "number") {
+			return
+		}
+
 		getTodo(todoId)
-	}, [])
+	}, [todoId])
 
 	useEffect(() => {
 		todoTitleRef.current?.focus()
@@ -81,7 +98,7 @@ const EditTodoPage = () => {
 
 	return (
 		<>
-			<h1>Edit</h1>
+			<h1>Edit '{todo.title}'</h1>
 			<form
 				className='todo-form'
 				onSubmit={handleSubmitForm}
@@ -89,8 +106,8 @@ const EditTodoPage = () => {
 				<input
 					className='new-todo-input'
 					type="text"
-					value={todo.title}
-					onChange={e => setTodo({ ...todo, title: e.target.value })}
+					value={newTodoTitle}
+					onChange={e => setNewTodoTitle(e.target.value)}
 					ref={todoTitleRef}
 				/>
 
