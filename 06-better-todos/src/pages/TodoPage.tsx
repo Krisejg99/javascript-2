@@ -47,10 +47,6 @@ const TodoPage = () => {
 		})
 	}
 
-	const handleEditTodo = () => {
-		navigate(`${location.pathname}/edit`)
-	}
-
 	const handleToggleTodo = async (todo: Todo) => {
 		if (!todo.id) return
 
@@ -109,7 +105,11 @@ const TodoPage = () => {
 
 			<div className="buttons mb-3">
 				<Button variant="success" onClick={() => handleToggleTodo(todo)}>Toggle</Button>
-				<Button variant="warning" onClick={handleEditTodo}>Edit</Button>
+
+				<Link to={`/todos/${todoId}/edit`}>
+					<Button variant="warning">Edit</Button>
+				</Link>
+
 				<Button variant="danger" onClick={() => setShowConfirmDelete(true)}>Delete</Button>
 			</div>
 
