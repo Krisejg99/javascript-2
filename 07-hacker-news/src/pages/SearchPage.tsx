@@ -82,7 +82,6 @@ const SearchPage = () => {
 
 					<ListGroup className='mb-3'>
 						{searchResult.hits.map(hit => {
-							console.log(hit)
 							return (
 								<ListGroup.Item
 									action
@@ -97,9 +96,12 @@ const SearchPage = () => {
 					</ListGroup>
 
 					<Pagination
-						currPage={page}
-						onPageChange={(page: number) => setPage(page)}
-						searchResult={searchResult}
+						page={page + 1}
+						totalPages={searchResult.nbPages}
+						hasPreviousPage={page > 0}
+						hasNextPage={page + 1 < searchResult.nbPages}
+						onPreviousPage={() => setPage(prevPage => prevPage - 1)}
+						onNextPage={() => setPage(prevPage => prevPage + 1)}
 					/>
 				</div>
 			)}

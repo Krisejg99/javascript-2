@@ -3,31 +3,34 @@ import Button from 'react-bootstrap/Button'
 import { HN_SearchResponse } from '../types'
 
 interface IProps {
-	currPage: number
-	onPageChange: (page: number) => void
-	searchResult: HN_SearchResponse
+	page: number
+	totalPages: number
+	hasPreviousPage: boolean
+	hasNextPage: boolean
+	onPreviousPage: () => void
+	onNextPage: () => void
 }
 
-const Pagination: React.FC<IProps> = ({ currPage, onPageChange, searchResult }) => {
+const Pagination: React.FC<IProps> = ({ page, totalPages, hasPreviousPage, hasNextPage, onPreviousPage, onNextPage }) => {
 	return (
 		<div className="d-flex justify-content-between align-items-center">
 			<div className="prev">
 				<Button
-					disabled={currPage <= 0}
+					disabled={!hasPreviousPage}
 					variant='primary'
-					onClick={() => onPageChange(currPage - 1)}
+					onClick={onPreviousPage}
 				>
 					Previous Page
 				</Button>
 			</div>
 
-			<div className="page">Page {searchResult.page + 1} / {searchResult.nbPages}</div>
+			<div className="page">Page {page} / {totalPages}</div>
 
 			<div className="next">
 				<Button
-					disabled={currPage + 1 >= searchResult.nbPages}
+					disabled={!hasNextPage}
 					variant='primary'
-					onClick={() => onPageChange(currPage + 1)}
+					onClick={onNextPage}
 				>
 					Next Page
 				</Button>
