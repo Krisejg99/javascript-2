@@ -6,6 +6,7 @@ import { searchByDate as HN_SearchByDate } from '../services/HackerNewsAPI'
 import { HN_SearchResponse } from '../types'
 import Alert from 'react-bootstrap/Alert'
 import Pagination from '../components/Pagination'
+import { useSearchParams } from 'react-router-dom'
 
 const SearchPage = () => {
 	const [loading, setLoading] = useState(false)
@@ -13,14 +14,14 @@ const SearchPage = () => {
 	const [page, setPage] = useState(0)
 	const [searchInput, setSearchInput] = useState('')
 	const [searchResult, setSearchResult] = useState<HN_SearchResponse | null>(null)
-	const queryRef = useRef('')
+	const [searchParams, setSearchParams] = useSearchParams()
+
+	const query = searchParams.get('query')
 
 	const searchHackerNews = async (searchQuery: string, searchPage = 0) => {
 		setError(null)
 		setSearchResult(null)
 		setLoading(true)
-
-		queryRef.current = searchQuery
 
 		try {
 			const res = await HN_SearchByDate(searchQuery, searchPage)
@@ -40,14 +41,14 @@ const SearchPage = () => {
 		if (!searchInput.trim().length) return
 
 		setPage(0)
-		searchHackerNews(searchInput)
+		setSearchParams({ query: searchInput, page: '1' })
 	}
 
 	useEffect(() => {
-		if (!queryRef.current) return
+		if (!query) return
 
-		searchHackerNews(queryRef.current, page)
-	}, [page])
+		searchHackerNews(query, page)
+	}, [page, query])
 
 	return (
 		<>
@@ -78,7 +79,7 @@ const SearchPage = () => {
 
 			{searchResult && (
 				<div id="search-result">
-					<p>Showing {searchResult.nbHits} search results for '{queryRef.current}'...</p>
+					<p>Showing {searchResult.nbHits} search results for '{query}'...</p>
 
 					<ListGroup className='mb-3'>
 						{searchResult.hits.map(hit => {
