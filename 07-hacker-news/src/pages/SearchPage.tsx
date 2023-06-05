@@ -4,20 +4,26 @@ import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { searchByDate as HN_SearchByDate } from '../services/HackerNewsAPI'
 import { HN_SearchResponse } from '../types'
+import Alert from 'react-bootstrap/Alert'
+import Pagination from '../components/Pagination'
 
 const SearchPage = () => {
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
+	const [page, setPage] = useState(0)
 	const [searchInput, setSearchInput] = useState('')
 	const [searchResult, setSearchResult] = useState<HN_SearchResponse | null>(null)
+	const queryRef = useRef('')
 
-	const searchHackerNews = async (searchQuery: string, page = 0) => {
+	const searchHackerNews = async (searchQuery: string, searchPage = 0) => {
 		setError(null)
 		setSearchResult(null)
 		setLoading(true)
 
+		queryRef.current = searchQuery
+
 		try {
-			const res = await HN_SearchByDate(searchQuery, page)
+			const res = await HN_SearchByDate(searchQuery, searchPage)
 			setSearchResult(res)
 			console.log(res)
 		}
@@ -33,8 +39,15 @@ const SearchPage = () => {
 
 		if (!searchInput.trim().length) return
 
+		setPage(0)
 		searchHackerNews(searchInput)
 	}
+
+	useEffect(() => {
+		if (!queryRef.current) return
+
+		searchHackerNews(queryRef.current, page)
+	}, [page])
 
 	return (
 		<>
@@ -61,11 +74,11 @@ const SearchPage = () => {
 
 			{loading && <p>Loading...</p>}
 
-			{error && <p>Error!</p>}
+			{error && <Alert variant='warning'>{error}</Alert>}
 
 			{searchResult && (
 				<div id="search-result">
-					<p>Showing {searchResult.nbHits} search results for {searchInput}...</p>
+					<p>Showing {searchResult.nbHits} search results for '{queryRef.current}'...</p>
 
 					<ListGroup className='mb-3'>
 						{searchResult.hits.map(hit => {
@@ -83,26 +96,11 @@ const SearchPage = () => {
 						})}
 					</ListGroup>
 
-					<div className="d-flex justify-content-between align-items-center">
-						<div className="prev">
-							<Button
-								variant='primary'
-							// onClick={}
-							>
-								Previous Page
-							</Button>
-						</div>
-
-						<div className="page">PAGE</div>
-
-						<div className="next">
-							<Button
-								variant='primary'
-							>
-								Next Page
-							</Button>
-						</div>
-					</div>
+					<Pagination
+						currPage={page}
+						onPageChange={(page: number) => setPage(page)}
+						searchResult={searchResult}
+					/>
 				</div>
 			)}
 		</>
