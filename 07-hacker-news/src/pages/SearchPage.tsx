@@ -2,28 +2,38 @@ import React, { useEffect, useRef, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
+import { searchByDate as HN_SearchByDate } from '../services/HackerNewsAPI'
+import { HN_SearchResponse } from '../types'
 
 const SearchPage = () => {
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 	const [searchInput, setSearchInput] = useState('')
+	const [searchResult, setSearchResult] = useState<HN_SearchResponse | null>(null)
 
-
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault()
-
-		if (!searchInput.trim().length) return
-
+	const searchHackerNews = async (searchQuery: string, page = 0) => {
+		setError(null)
+		setSearchResult(null)
 		setLoading(true)
 
 		try {
-
+			const res = await HN_SearchByDate(searchQuery, page)
+			setSearchResult(res)
+			console.log(res)
 		}
 		catch (err: any) {
 			setError(err.message)
 		}
 
 		setLoading(false)
+	}
+
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault()
+
+		if (!searchInput.trim().length) return
+
+		searchHackerNews(searchInput)
 	}
 
 	return (
@@ -49,24 +59,25 @@ const SearchPage = () => {
 				</div>
 			</Form>
 
-			{false && <p>Loading...</p>}
+			{loading && <p>Loading...</p>}
 
-			{false && <p>Error!</p>}
+			{error && <p>Error!</p>}
 
-			{true && (
+			{searchResult && (
 				<div id="search-result">
-					<p>Showing HITS search results for QUERY...</p>
+					<p>Showing {searchResult.nbHits} search results for {searchInput}...</p>
 
 					<ListGroup className='mb-3'>
-						{[{}, {}].map((HIT) => {
+						{searchResult.hits.map(hit => {
+							console.log(hit)
 							return (
 								<ListGroup.Item
 									action
-									href={''}
-									key={''}
+									href={hit.url}
+									key={hit.objectID}
 								>
-									<h2 className='h3'>TITLE</h2>
-									<p className="text-muted small mb-0">POINTS points by AUTHOR at CREATED_AT</p>
+									<h2 className='h3'>{hit.title}</h2>
+									<p className="text-muted small mb-0">{hit.points} points by {hit.author} at {hit.created_at}</p>
 								</ListGroup.Item>
 							)
 						})}
