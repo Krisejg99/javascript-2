@@ -21,3 +21,8 @@ export type HN_SearchHit = {
 	created_at_i: number
 	objectID: string
 }
+
+export type DogAPI_RandomImageResponse = {
+	message: string
+	status: string
+}
