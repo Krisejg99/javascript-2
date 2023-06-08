@@ -7,9 +7,10 @@ const useGetData = <T>(initialUrl: string | null = null) => {
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 
+	const setSameUrl = (resourceUrl: string) => getData(resourceUrl)
+
 	const getData = async (resourceUrl: string) => {
 		setData(null)
-		setUrl(null)
 		setError(null)
 		setLoading(true)
 
@@ -32,7 +33,9 @@ const useGetData = <T>(initialUrl: string | null = null) => {
 
 	return {
 		data,
+		url,
 		setUrl,
+		setSameUrl,
 		loading,
 		error,
 	}

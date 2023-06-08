@@ -1,35 +1,54 @@
 import Button from 'react-bootstrap/Button'
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Alert from 'react-bootstrap/Alert'
 import Image from 'react-bootstrap/Image'
 import useGetData from '../hooks/useGetData'
 import { DogAPI_RandomImageResponse } from '../types'
 
 const RandomDogPage = () => {
-	const { data, setUrl, loading, error } = useGetData<DogAPI_RandomImageResponse>('https://dog.ceo/api/breeds/image/random')
+	const { data, url, setUrl, setSameUrl, loading, error } = useGetData<DogAPI_RandomImageResponse>()
 
 	return (
 		<>
 			<h1>Random Dog Image</h1>
 
-			<Button
-				variant='primary'
-				onClick={() => setUrl('https://dog.ceo/api/breeds/image/random')}
-			>Random dog</Button>
-			<Button
-				variant='primary'
-				onClick={() => setUrl('https://dog.ceo/api/breed/boxer/images/random')}
-			>Random boxer dog</Button>
+			<div className="d-flex flex-column align-items-center">
+				<ButtonGroup className='mb-4'>
+					<Button
+						variant='primary'
+						onClick={() => setUrl('https://dog.ceo/api/breeds/image/random')}
+					>
+						Dog
+					</Button>
 
-			{loading && <p>Loading...</p>}
+					<Button
+						variant='success'
+						onClick={() => setUrl('https://dog.ceo/api/breed/boxer/images/random')}
+					>
+						Boxer Dog
+					</Button>
 
-			{error && <Alert variant='danger'>{error}</Alert>}
+					{url && (
+						<Button
+							variant='warning'
+							onClick={() => setSameUrl(url)}
+						>
+							Refresh
+						</Button>
+					)}
+				</ButtonGroup>
 
-			{data && data.status && (
-				<Image
-					src={data.message}
-					fluid
-				/>
-			)}
+				{data && data.status && (
+					<Image
+						src={data.message}
+						fluid
+					/>
+				)}
+
+				{loading && <p>Loading...</p>}
+
+				{error && <Alert variant='danger'>{error}</Alert>}
+			</div>
 		</>
 	)
 }
