@@ -4,11 +4,25 @@ import { useEffect, useState } from 'react'
 const useGetData = <T>(initialUrl: string | null = null) => {
 	const [data, setData] = useState<T | null>(null)
 	const [url, setUrl] = useState<string | null>(initialUrl)
+	const [loading, setLoading] = useState(false)
+	const [error, setError] = useState<string | null>(null)
 
 	const getData = async (resourceUrl: string) => {
-		const res = await axios.get<T>(resourceUrl)
+		setData(null)
+		setError(null)
+		setLoading(true)
 
-		setData(res.data)
+		try {
+			const res = await axios.get<T>(resourceUrl)
+			setData(res.data)
+
+		}
+		catch (err: any) {
+			setError(err.message)
+			setData(null)
+		}
+
+		setLoading(false)
 	}
 
 	useEffect(() => {
@@ -20,6 +34,8 @@ const useGetData = <T>(initialUrl: string | null = null) => {
 	return {
 		data,
 		setUrl,
+		loading,
+		error,
 	}
 }
 
