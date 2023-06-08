@@ -9,17 +9,16 @@ const useGetData = <T>(initialUrl: string | null = null) => {
 
 	const getData = async (resourceUrl: string) => {
 		setData(null)
+		setUrl(null)
 		setError(null)
 		setLoading(true)
 
 		try {
 			const res = await axios.get<T>(resourceUrl)
 			setData(res.data)
-
 		}
 		catch (err: any) {
 			setError(err.message)
-			setData(null)
 		}
 
 		setLoading(false)
