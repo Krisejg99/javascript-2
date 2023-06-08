@@ -3,7 +3,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import Button from 'react-bootstrap/Button'
 import { NavLink, Link } from 'react-router-dom'
-import { useThemeContext } from '../contexts/ThemeContextProvider'
+import useThemeContext from '../hooks/useThemeContext'
 
 
 const Navigation = () => {
