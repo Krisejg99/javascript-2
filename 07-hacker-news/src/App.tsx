@@ -5,11 +5,10 @@ import HomePage from './pages/HomePage'
 import SearchPage from './pages/SearchPage'
 import Navigation from './components/Navigation'
 import NotFound from './pages/NotFound'
-import { useContext } from 'react'
-import { ThemeContext } from './contexts/ThemeContextProvider'
+import { useThemeContext } from './contexts/ThemeContextProvider'
 
 const App = () => {
-	const { isDarkMode } = useContext(ThemeContext)
+	const { isDarkMode } = useThemeContext()
 
 	return (
 		<div id="App" className={isDarkMode ? 'bg-dark text-white' : ''}>
