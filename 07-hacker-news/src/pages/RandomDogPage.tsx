@@ -6,7 +6,7 @@ import useGetData from '../hooks/useGetData'
 import { DogAPI_RandomImageResponse } from '../types'
 
 const RandomDogPage = () => {
-	const { data, url, setUrl, setSameUrl, loading, error } = useGetData<DogAPI_RandomImageResponse>()
+	const { data, changeUrl, execute, loading, error } = useGetData<DogAPI_RandomImageResponse>()
 
 	return (
 		<>
@@ -16,26 +16,24 @@ const RandomDogPage = () => {
 				<ButtonGroup className='mb-4'>
 					<Button
 						variant='primary'
-						onClick={() => setUrl('https://dog.ceo/api/breeds/image/random')}
+						onClick={() => changeUrl('https://dog.ceo/api/breeds/image/random')}
 					>
 						Dog
 					</Button>
 
 					<Button
 						variant='success'
-						onClick={() => setUrl('https://dog.ceo/api/breed/boxer/images/random')}
+						onClick={() => changeUrl('https://dog.ceo/api/breed/boxer/images/random')}
 					>
 						Boxer Dog
 					</Button>
 
-					{url && (
-						<Button
-							variant='warning'
-							onClick={() => setSameUrl(url)}
-						>
-							Refresh
-						</Button>
-					)}
+					<Button
+						variant='warning'
+						onClick={execute}
+					>
+						Refresh
+					</Button>
 				</ButtonGroup>
 
 				{data && data.status && (

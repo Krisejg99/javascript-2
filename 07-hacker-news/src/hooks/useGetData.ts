@@ -7,10 +7,12 @@ const useGetData = <T>(initialUrl: string | null = null) => {
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 
-	const setSameUrl = (resourceUrl: string) => getData(resourceUrl)
+	const changeUrl = (_url: string) => {
+		const url = new URL(_url)
+		setUrl(url.toString())
+	}
 
 	const getData = async (resourceUrl: string) => {
-		setData(null)
 		setError(null)
 		setLoading(true)
 
@@ -25,6 +27,12 @@ const useGetData = <T>(initialUrl: string | null = null) => {
 		setLoading(false)
 	}
 
+	const execute = () => {
+		if (!url) return
+
+		getData(url)
+	}
+
 	useEffect(() => {
 		if (!url) return
 
@@ -33,9 +41,8 @@ const useGetData = <T>(initialUrl: string | null = null) => {
 
 	return {
 		data,
-		url,
-		setUrl,
-		setSameUrl,
+		changeUrl,
+		execute,
 		loading,
 		error,
 	}
