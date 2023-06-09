@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react'
 const useGetData = <T>(initialUrl: string | null = null) => {
 	const [data, setData] = useState<T | null>(null)
 	const [url, setUrl] = useState<string | null>(initialUrl)
-	const [loading, setLoading] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
+	const [isError, setIsError] = useState(false)
 
 	const changeUrl = (_url: string) => {
 		try {
@@ -14,13 +15,15 @@ const useGetData = <T>(initialUrl: string | null = null) => {
 		}
 		catch (err: any) {
 			setError("That's not a valid URL")
+			setIsError(true)
 		}
 	}
 
 	const getData = async (resourceUrl: string) => {
 		setData(null)
 		setError(null)
-		setLoading(true)
+		setIsError(false)
+		setIsLoading(true)
 
 		try {
 			const res = await axios.get<T>(resourceUrl)
@@ -28,9 +31,10 @@ const useGetData = <T>(initialUrl: string | null = null) => {
 		}
 		catch (err: any) {
 			setError(err.message)
+			setIsError(true)
 		}
 
-		setLoading(false)
+		setIsLoading(false)
 	}
 
 	const execute = () => {
@@ -49,8 +53,9 @@ const useGetData = <T>(initialUrl: string | null = null) => {
 		data,
 		changeUrl,
 		execute,
-		loading,
+		isLoading,
 		error,
+		isError,
 	}
 }
 

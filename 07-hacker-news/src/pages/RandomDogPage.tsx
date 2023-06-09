@@ -7,7 +7,7 @@ import useGetData from '../hooks/useGetData'
 import { DogAPI_RandomImageResponse } from '../types'
 
 const RandomDogPage = () => {
-	const { data, changeUrl, execute, loading, error } = useGetData<DogAPI_RandomImageResponse>()
+	const { data, changeUrl, execute, isLoading, error, isError } = useGetData<DogAPI_RandomImageResponse>()
 
 	return (
 		<>
@@ -44,13 +44,13 @@ const RandomDogPage = () => {
 					/>
 				)}
 
-				{loading && (
+				{isLoading === true && (
 					<Spinner animation="border" role="status">
 						<span className="visually-hidden">Loading...</span>
 					</Spinner>
 				)}
 
-				{error && <Alert variant='danger'>{error}</Alert>}
+				{isError === true && <Alert variant='danger'>{error}</Alert>}
 			</div>
 		</>
 	)
