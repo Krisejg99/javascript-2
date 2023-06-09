@@ -2,6 +2,7 @@ import Button from 'react-bootstrap/Button'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Alert from 'react-bootstrap/Alert'
 import Image from 'react-bootstrap/Image'
+import Spinner from 'react-bootstrap/Spinner';
 import useGetData from '../hooks/useGetData'
 import { DogAPI_RandomImageResponse } from '../types'
 
@@ -43,7 +44,11 @@ const RandomDogPage = () => {
 					/>
 				)}
 
-				{loading && <p>Loading...</p>}
+				{loading && (
+					<Spinner animation="border" role="status">
+						<span className="visually-hidden">Loading...</span>
+					</Spinner>
+				)}
 
 				{error && <Alert variant='danger'>{error}</Alert>}
 			</div>
