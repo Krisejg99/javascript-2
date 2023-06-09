@@ -8,11 +8,17 @@ const useGetData = <T>(initialUrl: string | null = null) => {
 	const [error, setError] = useState<string | null>(null)
 
 	const changeUrl = (_url: string) => {
-		const url = new URL(_url)
-		setUrl(url.toString())
+		try {
+			const url = new URL(_url)
+			setUrl(url.toString())
+		}
+		catch (err: any) {
+			setError("That's not a valid URL")
+		}
 	}
 
 	const getData = async (resourceUrl: string) => {
+		setData(null)
 		setError(null)
 		setLoading(true)
 
