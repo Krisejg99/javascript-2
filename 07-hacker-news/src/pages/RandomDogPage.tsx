@@ -2,7 +2,7 @@ import Button from 'react-bootstrap/Button'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Alert from 'react-bootstrap/Alert'
 import Image from 'react-bootstrap/Image'
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from 'react-bootstrap/Spinner'
 import useGetData from '../hooks/useGetData'
 import { DogAPI_RandomImageResponse } from '../types'
 

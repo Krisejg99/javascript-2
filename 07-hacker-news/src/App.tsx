@@ -8,6 +8,7 @@ import Navigation from './components/Navigation'
 import NotFound from './pages/NotFound'
 import useThemeContext from './hooks/useThemeContext'
 import RandomDogPage from './pages/RandomDogPage'
+import ChuckNorrisPage from './pages/ChuckNorrisPage'
 
 const App = () => {
 	const { isDarkMode } = useThemeContext()
@@ -25,6 +26,7 @@ const App = () => {
 					<Route path='/' element={<HomePage />} />
 					<Route path='/search' element={<SearchPage />} />
 					<Route path='/random-dog' element={<RandomDogPage />} />
+					<Route path='/chuck-norris' element={<ChuckNorrisPage />} />
 					<Route path='*' element={<NotFound />} />
 				</Routes>
 			</Container>

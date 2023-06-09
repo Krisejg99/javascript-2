@@ -19,6 +19,7 @@ const Navigation = () => {
 					<Nav className="ms-auto">
 						<Nav.Link as={NavLink} end to="/search">Search</Nav.Link>
 						<Nav.Link as={NavLink} end to="/random-dog">Random Dog</Nav.Link>
+						<Nav.Link as={NavLink} end to="/chuck-norris">Chuck Norris</Nav.Link>
 
 						<Button variant='primary' onClick={toggleTheme}>
 							{isDarkMode ? '☀️' : '🌙'}

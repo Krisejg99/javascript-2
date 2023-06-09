@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
-const useGetData = <T>(initialUrl: string | null = null) => {
+const useGetData = <T = any>(initialUrl: string | null = null) => {
 	const [data, setData] = useState<T | null>(null)
 	const [url, setUrl] = useState<string | null>(initialUrl)
 	const [isLoading, setIsLoading] = useState(false)
