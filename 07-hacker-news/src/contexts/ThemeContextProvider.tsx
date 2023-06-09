@@ -17,9 +17,14 @@ interface IProps {
 }
 
 const ThemeProvider: React.FC<IProps> = ({ children }) => {
-	const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
+	const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+		const hn_darkmode = localStorage.getItem('hn_darkmode' ?? '')
+
+		return hn_darkmode === 'true'
+	})
 
 	const toggleTheme = () => {
+		localStorage.setItem('hn_darkmode', String(!isDarkMode))
 		setIsDarkMode(!isDarkMode)
 	}
 
