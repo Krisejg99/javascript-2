@@ -1,4 +1,5 @@
 import { createContext, useState } from 'react'
+import useLocaleStorage from '../hooks/useLocaleStorage'
 
 type ThemeContextType = {
 	isDarkMode: boolean
@@ -17,14 +18,9 @@ interface IProps {
 }
 
 const ThemeProvider: React.FC<IProps> = ({ children }) => {
-	const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-		const hn_darkmode = localStorage.getItem('hn_darkmode' ?? '')
-
-		return hn_darkmode === 'true'
-	})
+	const [isDarkMode, setIsDarkMode] = useLocaleStorage<boolean>('hn_darkmode', false)
 
 	const toggleTheme = () => {
-		localStorage.setItem('hn_darkmode', String(!isDarkMode))
 		setIsDarkMode(!isDarkMode)
 	}
 
