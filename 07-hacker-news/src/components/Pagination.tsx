@@ -1,6 +1,5 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
-import { HN_SearchResponse } from '../types'
 
 interface IProps {
 	page: number
