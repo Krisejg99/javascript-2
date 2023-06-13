@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext } from 'react'
 import useLocaleStorage from '../hooks/useLocaleStorage'
 
 type ThemeContextType = {
@@ -6,12 +6,7 @@ type ThemeContextType = {
 	toggleTheme: () => void
 }
 
-export const ThemeContext = createContext<ThemeContextType>({
-	isDarkMode: false,
-	toggleTheme: () => {
-		throw new Error('Trying to use `toggleTheme` outside of context')
-	}
-})
+export const ThemeContext = createContext<ThemeContextType | null>(null)
 
 interface IProps {
 	children: React.ReactNode
