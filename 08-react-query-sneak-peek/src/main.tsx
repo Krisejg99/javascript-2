@@ -3,15 +3,28 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import ThemeContextProvider from './contexts/ThemeContextProvider.tsx'
 import App from './App.tsx'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+// Create a React Query Client and set default behaviour & options
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			refetchOnWindowFocus: false,
+			staleTime: 1000 * 15 // 15 sek
+		}
+	}
+})
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
 
-		<BrowserRouter>
-			<ThemeContextProvider>
-				<App />
-			</ThemeContextProvider>
-		</BrowserRouter>
+		<QueryClientProvider client={queryClient}>
+			<BrowserRouter>
+				<ThemeContextProvider>
+					<App />
+				</ThemeContextProvider>
+			</BrowserRouter>
+		</QueryClientProvider>
 
 	</React.StrictMode>,
 )

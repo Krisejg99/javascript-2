@@ -8,6 +8,7 @@ import ICanHazDadJokePage from './pages/ICanHazDadJokePage'
 import NotFound from './pages/NotFound'
 
 import './assets/scss/App.scss'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const App = () => {
 	const { isDarkMode } = useThemeContext()
@@ -28,6 +29,8 @@ const App = () => {
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</Container>
+
+			<ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
 		</div>
 	)
 }

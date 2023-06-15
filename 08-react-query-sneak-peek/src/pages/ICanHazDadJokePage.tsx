@@ -1,8 +1,12 @@
+import { useQuery } from '@tanstack/react-query'
 import Alert from "react-bootstrap/Alert"
 import Button from "react-bootstrap/Button"
-import Spinner from "react-bootstrap/Spinner"
+import { getRandomDadJoke } from '../services/ICanHazDadJokeAPI'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 const ICanHazDadJokePage = () => {
+	const { isError, isFetching, data, refetch } = useQuery(['random-dad-joke'], getRandomDadJoke)
+
 	return (
 		<>
 			<h1>Random Dad Joke</h1>
@@ -10,17 +14,15 @@ const ICanHazDadJokePage = () => {
 			<pre className="bg-light py-2 px-3">
 			</pre>
 
-			{false && <Spinner animation="border" variant="secondary" />}
+			{isFetching && <LoadingSpinner />}
 
-			{false && <Alert variant="warning">ERROR! ERROR! ERROR!</Alert>}
+			{isError && <Alert variant="warning">ERROR! ERROR! ERROR!</Alert>}
 
 			<div>
-				{true && (
-					<>
-						<p className="display-5 text-center my-5">
-							JOKE
-						</p>
-					</>
+				{data && (
+					<p className="display-5 text-center my-5">
+						{data.joke}
+					</p>
 				)}
 			</div>
 
@@ -28,6 +30,7 @@ const ICanHazDadJokePage = () => {
 				<Button
 					variant="primary"
 					disabled={false}
+					onClick={() => refetch()}
 				>
 					MOAR!
 				</Button>
