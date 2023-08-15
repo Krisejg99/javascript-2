@@ -5,13 +5,19 @@ import { getRandomDadJoke } from '../services/ICanHazDadJokeAPI'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 const ICanHazDadJokePage = () => {
-	const { isError, isFetching, data, refetch } = useQuery(['random-dad-joke'], getRandomDadJoke)
+	const { data, isError, isFetching, isLoading, isStale, isSuccess, status, refetch } = useQuery(['random-dad-joke'], getRandomDadJoke)
 
 	return (
 		<>
 			<h1>Random Dad Joke</h1>
 
-			<pre className="bg-light py-2 px-3">
+			<pre className="py-2 px-3">
+				isError: {isError ? 'true' : 'false'}<br />
+				isFetching: {isFetching ? 'true' : 'false'}<br />
+				isLoading: {isLoading ? 'true' : 'false'}<br />
+				isStale: {isStale ? 'true' : 'false'}<br />
+				isSuccess: {isSuccess ? 'true' : 'false'}<br />
+				status: {status}
 			</pre>
 
 			{isFetching && <LoadingSpinner />}
