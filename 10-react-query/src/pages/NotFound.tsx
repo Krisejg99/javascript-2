@@ -1,6 +1,11 @@
+import Alert from "react-bootstrap/Alert"
+
 const NotFound = () => {
 	return (
-		<div>NotFound</div>
+		<Alert variant="danger" className="text-center">
+			Page not found<br />
+			Error: 404
+		</Alert>
 	)
 }
 

@@ -7,7 +7,7 @@ const Navigation = () => {
 	return (
 		<Navbar expand="sm" bg="dark" data-bs-theme="dark">
 			<Container>
-				<Navbar.Brand href="#home">ReactQuery</Navbar.Brand>
+				<Navbar.Brand href="/">ReactQuery</Navbar.Brand>
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="ms-auto">
