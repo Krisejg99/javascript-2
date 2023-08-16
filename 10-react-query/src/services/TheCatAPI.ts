@@ -1,11 +1,11 @@
 import axios from 'axios'
 import { CatImageSearchResponse } from '../types/index.types'
 
-const FAKE_DELAY = 1000 * 2
+const FAKE_DELAY = 1000 * 0
 
 const instance = axios.create({
 	baseURL: 'https://api.thecatapi.com',
-	timeout: 1000 * 10,
+	// timeout: 1000 * 10,
 })
 
 const get = async <T>(endpoint: string) => {
@@ -17,7 +17,7 @@ const get = async <T>(endpoint: string) => {
 	return res.data
 }
 
-export const getRandomCatImage = async () => {
-	const data = await get<CatImageSearchResponse>('/v1/images/search')
+export const getRandomCatImage = async (breed_id?: string) => {
+	const data = await get<CatImageSearchResponse>(`/v1/images/search${breed_id ? `?breed_id=${breed_id}` : ''}`)
 	return data[0]
 }
