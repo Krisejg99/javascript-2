@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getRandomCatImage } from '../services/TheCatAPI'
 import { Image, Button, Alert } from 'react-bootstrap'
-import CatSpinner from '../components/CatSpinner'
 import { Breed } from '../types/cat.types'
 
 const breeds: Breed[] = [
@@ -43,8 +42,6 @@ const RandomCatPage = () => {
 					{isFetching ? 'Finding...' : b.name}
 				</Button>
 			))}
-
-			{isFetching && <CatSpinner />}
 
 			{data && (
 				<Image

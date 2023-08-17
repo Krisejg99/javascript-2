@@ -1,26 +1,6 @@
 @import 'bootstrap/scss/bootstrap';
+@import './cat_spinner';
 
 h1, h2, h3, h4, h5, h6 {
 	margin-bottom: 0.75rem;
-}
-
-#cat-spinner {
-	position: absolute;
-	top: 3rem;
-	right: 3rem;
-
-	.cat {
-		// animation: rotation 1s infinite linear;
-		animation: rotation 0.75s infinite ease;
-		font-size: 4rem;
-	}
-}
-
-@keyframes rotation {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(359deg);
-	}
 }

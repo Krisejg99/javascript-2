@@ -5,11 +5,14 @@ import { Routes, Route } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import NotFound from './pages/NotFound'
 import RandomCatPage from './pages/RandomCatPage'
+import GlobalFetchingSpinner from './components/GlobalFetchingSpinner'
 
 const App = () => {
 	return (
 		<div id='App'>
 			<Navigation />
+
+			<GlobalFetchingSpinner />
 
 			<Container className='py-3'>
 				<Routes>
