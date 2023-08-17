@@ -3,12 +3,20 @@ import { useQuery } from '@tanstack/react-query'
 import { getRandomCatImage } from '../services/TheCatAPI'
 import { Image, Button, Alert } from 'react-bootstrap'
 import CatSpinner from '../components/CatSpinner'
+import { Breed } from '../types/cat.types'
+
+const breeds: Breed[] = [
+	{ id: '', name: 'Random' },
+	{ id: 'sphy', name: 'Sphynx' },
+	{ id: 'ragd', name: 'Ragdoll' },
+]
 
 const RandomCatPage = () => {
-	const [breedId, setBreedId] = useState('')
+	const [breed, setBreed] = useState('')
 	const { data, isLoading, isError, error, isStale, isFetching, refetch } = useQuery({
-		queryKey: !breedId ? ['random-cat'] : ['random-cat', breedId],
-		queryFn: () => getRandomCatImage(breedId),
+		queryKey: !breed ? ['random-cat'] : ['random-cat', breed],
+		queryFn: () => getRandomCatImage(breed),
+		cacheTime: 0,
 	})
 
 	if (error) {
@@ -25,20 +33,16 @@ const RandomCatPage = () => {
 
 			<h1>Find your cat:</h1>
 
-			<Button
-				onClick={() => breedId === '' ? refetch() : setBreedId('')}
-				disabled={isFetching}
-				className='mb-3 me-3'
-			>
-				{isFetching ? 'Finding...' : 'Random'}
-			</Button>
-			<Button
-				onClick={() => breedId === 'sphy' ? refetch() : setBreedId('sphy')}
-				disabled={isFetching}
-				className='mb-3 me-3'
-			>
-				{isFetching ? 'Finding...' : 'Sphynx'}
-			</Button>
+			{breeds.map(b => (
+				<Button
+					key={b.id}
+					onClick={() => breed === b.id ? refetch() : setBreed(b.id)}
+					disabled={isFetching}
+					className='mb-3 me-3'
+				>
+					{isFetching ? 'Finding...' : b.name}
+				</Button>
+			))}
 
 			{isFetching && <CatSpinner />}
 
