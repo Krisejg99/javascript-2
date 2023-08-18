@@ -11,8 +11,9 @@ import { useQuery } from '@tanstack/react-query'
 const TodoPage = () => {
 	const { id } = useParams()
 	const todoId = Number(id)
+
 	const { data: todo, isError, refetch } = useQuery({
-		queryKey: ['todo', todoId],
+		queryKey: ['todo', { id: todoId }],
 		queryFn: () => TodosAPI.getTodo(todoId),
 	})
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
