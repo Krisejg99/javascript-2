@@ -20,10 +20,10 @@ const get = async <T>(endpoint: string) => {
 	return res.data as T
 }
 
-export const search = async (query: string, page = 0) => {
-	return await get<HN_SearchResponse>(`/api/v1/search?query=${query}&tags=story&page=${page}`)
+export const search = (query: string, page = 0) => {
+	return get<HN_SearchResponse>(`/api/v1/search?query=${query}&tags=story&page=${page}`)
 }
 
-export const searchByDate = async (query: string, page = 0) => {
-	return await get<HN_SearchResponse>(`/api/v1/search_by_date?query=${query}&tags=story&page=${page}`)
+export const searchByDate = (query: string, page = 0) => {
+	return get<HN_SearchResponse>(`/api/v1/search_by_date?query=${query}&tags=story&page=${page}`)
 }
