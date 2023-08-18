@@ -4,21 +4,23 @@ import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { searchByDate as HN_SearchByDate } from '../services/HackerNewsAPI'
 import Alert from 'react-bootstrap/Alert'
-// import Pagination from '../components/Pagination'
+import Pagination from '../components/Pagination'
 import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 
 const SearchHNPage = () => {
-	// const [page, setPage] = useState(0)
+	const [page, setPage] = useState(0)
 	const [searchInput, setSearchInput] = useState('')
 	const [searchParams, setSearchParams] = useSearchParams()
 
 	const query = searchParams.get('query') ?? ''
 
 	const { data: searchResult, isError } = useQuery({
-		queryKey: ['search-hn', query],
-		queryFn: (() => HN_SearchByDate(query)),
+		queryKey: ['search-hn', { query, page }],
+		queryFn: (() => HN_SearchByDate(query, page)),
 		enabled: !!query,
+		cacheTime: 1000 * 60,
+		keepPreviousData: true,
 	})
 
 	const handleSubmit = (e: React.FormEvent) => {
@@ -26,8 +28,8 @@ const SearchHNPage = () => {
 
 		if (!searchInput.trim().length) return
 
-		// setPage(0)
-		setSearchParams({ query: searchInput, page: '1' })
+		setPage(0)
+		setSearchParams({ query: searchInput, page: '0' })
 	}
 
 	return (
@@ -59,6 +61,15 @@ const SearchHNPage = () => {
 				<div id="search-result">
 					<p>Showing {new Intl.NumberFormat().format(searchResult.nbHits)} search results for '{query}'...</p>
 
+					<Pagination
+						page={searchResult.page + 1}
+						totalPages={searchResult.nbPages}
+						hasPreviousPage={page > 0}
+						hasNextPage={page + 1 < searchResult.nbPages}
+						onPreviousPage={() => setPage(prevPage => prevPage - 1)}
+						onNextPage={() => setPage(prevPage => prevPage + 1)}
+					/>
+
 					<ListGroup className='mb-3'>
 						{searchResult.hits.map(hit => {
 							return (
@@ -73,15 +84,6 @@ const SearchHNPage = () => {
 							)
 						})}
 					</ListGroup>
-
-					{/* <Pagination
-						page={searchResult.page + 1}
-						totalPages={searchResult.nbPages}
-						hasPreviousPage={page > 0}
-						hasNextPage={page + 1 < searchResult.nbPages}
-						onPreviousPage={() => setPage(prevPage => prevPage - 1)}
-						onNextPage={() => setPage(prevPage => prevPage + 1)}
-					/> */}
 				</div>
 			)}
 		</>
