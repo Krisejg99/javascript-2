@@ -8,12 +8,15 @@ import Navigation from './components/Navigation'
 import NotFound from './pages/NotFound'
 import CreateTodoPage from './pages/CreateTodoPage'
 import EditTodoPage from './pages/EditTodoPage'
+import GlobalFetchingSpinner from './components/GlobalFetchingSpinner'
 
 
 const App = () => {
 	return (
 		<div className="App">
 			<Navigation />
+
+			<GlobalFetchingSpinner />
 
 			<Container className='py-3'>
 				<Routes	>
