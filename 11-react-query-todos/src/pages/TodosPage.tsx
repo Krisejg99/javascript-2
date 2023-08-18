@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Alert } from 'react-bootstrap'
 
 const TodosPage = () => {
-	const { data: todos = [], isError } = useQuery({
+	const { data: todos, isError } = useQuery({
 		queryKey: ['todos'],
 		queryFn: async () => {
 			const todos = await TodosAPI.getTodos()
@@ -19,11 +19,13 @@ const TodosPage = () => {
 
 	const location = useLocation()
 
-	const completeTodos = todos.filter(todo => todo.completed)
+	const completeTodos = todos?.filter(todo => todo.completed)
 
 	useEffect(() => {
+		if (!todos || !completeTodos) return
+
 		document.title = `${completeTodos.length} / ${todos.length}`
-	}, [completeTodos.length, todos.length])
+	}, [todos, completeTodos])
 
 	if (isError) {
 		return <Alert variant='error'>Something went wrong, refresh the page.</Alert>
@@ -61,7 +63,7 @@ const TodosPage = () => {
 				</div>
 			</div>
 
-			{todos.length > 0 &&
+			{todos && completeTodos && todos.length > 0 &&
 				<TodoCounter
 					todos={todos.length}
 					completeTodos={completeTodos.length}
