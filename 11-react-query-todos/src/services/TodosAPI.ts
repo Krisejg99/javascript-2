@@ -31,7 +31,7 @@ const get = async <T>(endpoint: string) => {
  * Get all todos
  */
 export const getTodos = async () => {
-	return await get<Todo[]>('todos')
+	return await get<Todo[]>('/todos')
 }
 
 /**
