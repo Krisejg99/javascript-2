@@ -15,6 +15,9 @@ const instance = axios.create({
 	},
 })
 
+/**
+ * Generic funtion to get something
+ */
 const get = async <T>(endpoint: string) => {
 	const res = await instance.get<T>(endpoint)
 
