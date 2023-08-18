@@ -15,8 +15,6 @@ const TodosPage = () => {
 			todos.sort((a, b) => a.title.localeCompare(b.title))
 			return todos.sort((a, b) => Number(a.completed) - Number(b.completed))
 		},
-		cacheTime: 1000 * 15,
-		staleTime: 1000 * 15,
 	})
 
 	const location = useLocation()
