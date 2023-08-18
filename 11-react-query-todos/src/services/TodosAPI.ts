@@ -30,15 +30,15 @@ const get = async <T>(endpoint: string) => {
 /**
  * Get all todos
  */
-export const getTodos = async () => {
-	return await get<Todo[]>('/todos')
+export const getTodos = () => {
+	return get<Todo[]>('/todos')
 }
 
 /**
  * Get a single todo
  */
-export const getTodo = async (todoId: number) => {
-	return await get<Todo>(`/todos/${todoId}`)
+export const getTodo = (todoId: number) => {
+	return get<Todo>(`/todos/${todoId}`)
 }
 
 /**
