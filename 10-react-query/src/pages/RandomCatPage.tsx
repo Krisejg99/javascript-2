@@ -16,6 +16,7 @@ const RandomCatPage = () => {
 		queryKey: !breed ? ['random-cat'] : ['random-cat', breed],
 		queryFn: () => getRandomCatImage(breed),
 		cacheTime: 1000 * 60,
+		keepPreviousData: true,
 	})
 
 	if (error) {
