@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getRandomCatImage } from '../services/TheCatAPI'
 import { Image, Button, Alert } from 'react-bootstrap'
-import { Breed } from '../types/cat.types'
+import { Breed } from '../types/TheCatAPI.types'
 
 const breeds: Breed[] = [
 	{ id: '', name: 'Random' },

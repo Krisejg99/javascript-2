@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { CatImageSearchResponse } from '../types/index.types'
+import { CatImageSearchResponse } from '../types'
 
 const FAKE_DELAY = 1000 * 0
 
