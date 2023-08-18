@@ -6,7 +6,7 @@ import HomePage from './pages/HomePage'
 import NotFound from './pages/NotFound'
 import RandomCatPage from './pages/RandomCatPage'
 import GlobalFetchingSpinner from './components/GlobalFetchingSpinner'
-import SearchHNPage from './pages/SearchHnPage'
+import SearchHNPage from './pages/SearchHNPage'
 
 const App = () => {
 	return (
