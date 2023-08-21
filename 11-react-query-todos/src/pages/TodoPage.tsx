@@ -6,16 +6,29 @@ import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 import ConfirmationModal from "../components/ConfirmationModal"
 import AutoDismissingAlert from "../components/AutoDismissingAlert"
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 const TodoPage = () => {
 	const { id } = useParams()
 	const todoId = Number(id)
+	const todoQueryKey = ['todo', { id: todoId }]
 
 	const { data: todo, isError, refetch } = useQuery({
-		queryKey: ['todo', { id: todoId }],
+		queryKey: todoQueryKey,
 		queryFn: () => TodosAPI.getTodo(todoId),
 	})
+
+	const queryClient = useQueryClient()
+
+	const toggleMutation = useMutation({
+		mutationKey: todoQueryKey,
+		mutationFn: () => TodosAPI.updateTodo(todoId, { completed: !todo?.completed }),
+		onSuccess: () => {
+			queryClient.refetchQueries(todoQueryKey)
+			queryClient.refetchQueries(['todos'])
+		},
+	})
+
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 
 	const navigate = useNavigate()
@@ -34,30 +47,14 @@ const TodoPage = () => {
 		})
 	}
 
-	// const handleToggleTodo = async (todo: Todo) => {
-	// 	if (!todo.id) return
-
-	// 	const updatedTodo = await TodosAPI.updateTodo(todo.id, {
-	// 		completed: !todo.completed
-	// 	})
-
-	// 	setTodo(updatedTodo)
-	// }
-
-	// useEffect(() => {
-	// 	if (location.state?.message) {
-	// 		setTimeout(() => {
-	// 			navigate(location.pathname, { state: null })
-	// 		}, 3000)
-	// 	}
-	// }, [])
-
 	if (isError) {
 		return (
 			<Alert variant="danger">
 				<h1>Something went wrong!</h1>
 
-				<Button variant="primary" onClick={() => refetch()}>Try again</Button>
+				<Button variant="primary" onClick={() => refetch()}>
+					Try again
+				</Button>
 			</Alert >
 		)
 	}
@@ -80,13 +77,19 @@ const TodoPage = () => {
 					<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
 
 					<div className="buttons mb-3">
-						{/* <Button variant="success" onClick={() => handleToggleTodo(todo)}>Toggle</Button> */}
+						<Button variant="success" onClick={() => toggleMutation.mutate()}>
+							Toggle
+						</Button>
 
 						<Link to={`/todos/${todoId}/edit`}>
-							<Button variant="warning">Edit</Button>
+							<Button variant="warning">
+								Edit
+							</Button>
 						</Link>
 
-						<Button variant="danger" onClick={() => setShowConfirmDelete(true)}>Delete</Button>
+						<Button variant="danger" onClick={() => setShowConfirmDelete(true)}>
+							Delete
+						</Button>
 					</div>
 
 
@@ -104,7 +107,9 @@ const TodoPage = () => {
 
 
 			<Link to={'/todos'}>
-				<Button variant='secondary'>&laquo; All todos</Button>
+				<Button variant='secondary'>
+					&laquo; All todos
+				</Button>
 			</Link >
 		</>
 	)
