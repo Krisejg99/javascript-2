@@ -1,52 +1,29 @@
 import { useEffect, useRef, useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Todo } from '../types'
 import * as TodosAPI from '../services/TodosAPI'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
+import { PartialTodo } from '../types'
 
 const EditTodoPage = () => {
-	const [todo, setTodo] = useState<Todo | null>(null)
-	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState<string | null>(null)
-	const [newTodoTitle, setNewTodoTitle] = useState('')
-
-
-
-	const todoTitleRef = useRef<HTMLInputElement>(null)
-
 	const { id } = useParams()
 	const todoId = Number(id)
+	const TodoQueryKey = ['todo', { id: todoId }]
 
-	const navigate = useNavigate()
+	const queryClient = useQueryClient()
 
-	const getTodo = async (id: number) => {
-		setError(null)
-		setLoading(true)
+	const { data: todo, refetch, isError } = useQuery({
+		queryKey: TodoQueryKey,
+		queryFn: () => TodosAPI.getTodo(todoId),
+	})
 
-		try {
-			const data = await TodosAPI.getTodo(id)
-			setTodo(data)
-			setNewTodoTitle(data.title)
-		}
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		catch (err: any) {
-			setError(err.message)
-		}
-
-		setLoading(false)
-	}
-
-	const handleSubmitForm = async (e: React.FormEvent) => {
-		e.preventDefault()
-
-		if (!todo || !todo.id) return
-
-		try {
-			await TodosAPI.updateTodo(todo.id, {
-				title: newTodoTitle
-			})
-
+	const { mutate } = useMutation({
+		mutationKey: TodoQueryKey,
+		mutationFn: (data: PartialTodo) => TodosAPI.updateTodo(todoId, data),
+		onSuccess: () => {
+			queryClient.refetchQueries({ queryKey: TodoQueryKey })
+			queryClient.refetchQueries({ queryKey: ['todos'] })
 
 			navigate(`/todos/${todoId}`, {
 				replace: true,
@@ -54,66 +31,52 @@ const EditTodoPage = () => {
 					message: `Successfully changed to "${newTodoTitle}"`
 				},
 			})
-		}
-		catch (err: any) {
-			setError(err.message)
-		}
-	}
+		},
+	})
 
-	// const handleToggleTodo = async (todo: Todo) => {
-	// 	if (!todo.id) return
+	const [newTodoTitle, setNewTodoTitle] = useState(todo?.title ?? '')
+	const todoTitleRef = useRef<HTMLInputElement>(null)
 
-	// 	const updatedTodo = await TodosAPI.updateTodo(todo.id, {
-	// 		completed: !todo.completed
-	// 	})
-
-	// 	setTodo(updatedTodo)
-	// }
-
-	useEffect(() => {
-		if (typeof todoId !== "number") {
-			return
-		}
-
-		getTodo(todoId)
-	}, [todoId])
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		todoTitleRef.current?.focus()
 	}, [todo])
 
-	if (error) {
-		return (
-			<Alert variant="danger">
-				<h1>Something went wrong!</h1>
-				<p>{error}</p>
+	if (isError) return (
+		<Alert variant="danger">
+			<h1>Error: Something went wrong!</h1>
 
-				<Button variant="primary" onClick={() => getTodo(todoId)}>Try again</Button>
-			</Alert >
-		)
-	}
-
-	if (loading || !todo) {
-		return (<p>Loading...</p>)
-	}
+			<Button variant="primary" onClick={() => refetch()}>Try again</Button>
+		</Alert >
+	)
 
 	return (
 		<>
-			<h1>Edit '{todo.title}'</h1>
-			<form
-				className='todo-form'
-				onSubmit={handleSubmitForm}
-			>
-				<input
-					className='new-todo-input'
-					type="text"
-					value={newTodoTitle}
-					onChange={e => setNewTodoTitle(e.target.value)}
-					ref={todoTitleRef}
-				/>
+			{todo && (
+				<>
+					<h1>Edit '{todo.title}'</h1>
 
-				<button className='create-todo-btn'>Save</button>
-			</form>
+					<form
+						className='todo-form'
+						onSubmit={(e) => {
+							e.preventDefault()
+
+							mutate({ title: newTodoTitle })
+						}}
+					>
+						<input
+							className='new-todo-input'
+							type="text"
+							value={newTodoTitle}
+							onChange={e => setNewTodoTitle(e.target.value)}
+							ref={todoTitleRef}
+						/>
+
+						<button className='create-todo-btn'>Save</button>
+					</form>
+				</>
+			)}
 
 			<Button
 				variant='primary'
