@@ -4,10 +4,8 @@ import TodoCounter from '../components/TodoCounter'
 import * as TodosAPI from '../services/TodosAPI'
 import ListGroup from 'react-bootstrap/ListGroup'
 import AutoDismissingAlert from '../components/AutoDismissingAlert'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Alert } from 'react-bootstrap'
-import AddTodoForm from '../components/AddTodoForm'
-import { Todo } from '../types'
 
 const TodosPage = () => {
 	const { data: todos, isError } = useQuery({
@@ -16,17 +14,6 @@ const TodosPage = () => {
 			const todos = await TodosAPI.getTodos()
 			todos.sort((a, b) => a.title.localeCompare(b.title))
 			return todos.sort((a, b) => Number(a.completed) - Number(b.completed))
-		},
-	})
-
-	const queryClient = useQueryClient()
-
-	const mutation = useMutation({
-		mutationFn: (newTodo: Todo) => {
-			return TodosAPI.createTodo(newTodo)
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['todos'] })
 		},
 	})
 
@@ -45,10 +32,6 @@ const TodosPage = () => {
 	}
 	return (
 		<>
-			<AddTodoForm
-				onAddTodo={(newTodo) => mutation.mutate(newTodo)}
-			/>
-
 			{location.state?.message && (
 				<AutoDismissingAlert
 					variant='success'

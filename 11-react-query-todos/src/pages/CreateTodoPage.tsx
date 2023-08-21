@@ -1,39 +1,35 @@
-import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import AddTodoForm from '../components/AddTodoForm'
 import * as TodosAPI from '../services/TodosAPI'
 import { Todo } from '../types'
 import { useNavigate } from 'react-router-dom'
 import Popup from '../components/Popup'
 
-
-
 const CreateTodoPage = () => {
-	const [success, setSuccess] = useState<boolean | null>(null)
-
 	const navigate = useNavigate()
+	const queryClient = useQueryClient()
 
-	const handleAddTodo = (todo: Todo) => {
-		try {
-			TodosAPI.createTodo(todo)
-			setSuccess(true)
-		}
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		catch (err: any) {
-			setSuccess(false)
-		}
+	const { mutate, isSuccess, isError } = useMutation({
+		mutationFn: (newTodo: Todo) => {
+			return TodosAPI.createTodo(newTodo)
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['todos'] })
+		},
+	})
 
-		setTimeout(() => {
-			navigate('/todos')
-		}, 1500)
-	}
+	if (isSuccess) return <Popup type='success' msg={'Success'} />
+	if (isError) return <Popup type='danger' msg={'Failed to create todo'} />
+
 
 	return (
-		<>
-			{success === null && <AddTodoForm onAddTodo={handleAddTodo} />}
-			{success === true && <Popup type='success' msg={'Success'} />}
-			{success === false && <Popup type='danger' msg={'Failed to create todo'} />}
-		</>
+		<AddTodoForm onAddTodo={(newTodo) => {
+			mutate(newTodo)
 
+			setTimeout(() => {
+				navigate('/todos')
+			}, 1500)
+		}} />
 	)
 }
 
