@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
-import { Todo } from "../types"
 import * as TodosAPI from '../services/TodosAPI'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
@@ -13,12 +12,14 @@ const TodoPage = () => {
 	const todoId = Number(id)
 	const todoQueryKey = ['todo', { id: todoId }]
 
+	const navigate = useNavigate()
+	const location = useLocation()
+	const queryClient = useQueryClient()
+
 	const { data: todo, isError, refetch } = useQuery({
 		queryKey: todoQueryKey,
 		queryFn: () => TodosAPI.getTodo(todoId),
 	})
-
-	const queryClient = useQueryClient()
 
 	const toggleMutation = useMutation({
 		mutationKey: todoQueryKey,
@@ -29,35 +30,33 @@ const TodoPage = () => {
 		},
 	})
 
+	const deleteMutation = useMutation({
+		mutationKey: todoQueryKey,
+		mutationFn: () => TodosAPI.deleteTodo(todoId),
+		onSuccess: () => {
+			queryClient.removeQueries(todoQueryKey)
+			queryClient.refetchQueries(['todos'])
+
+			navigate('/todos', {
+				replace: true,
+				state: {
+					message: `"${todo?.title}" was successfully deleted`
+				},
+			})
+		},
+	})
+
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 
-	const navigate = useNavigate()
-	const location = useLocation()
+	if (isError) return (
+		<Alert variant="danger">
+			<h1>Something went wrong!</h1>
 
-	const handleDeleteTodo = async (todo: Todo) => {
-		if (!todo.id) return
-
-		TodosAPI.deleteTodo(todo.id)
-
-		navigate('/todos', {
-			replace: true,
-			state: {
-				message: `"${todo.title}" was successfully deleted`
-			},
-		})
-	}
-
-	if (isError) {
-		return (
-			<Alert variant="danger">
-				<h1>Something went wrong!</h1>
-
-				<Button variant="primary" onClick={() => refetch()}>
-					Try again
-				</Button>
-			</Alert >
-		)
-	}
+			<Button variant="primary" onClick={() => refetch()}>
+				Try again
+			</Button>
+		</Alert >
+	)
 
 	return (
 		<>
@@ -95,7 +94,7 @@ const TodoPage = () => {
 
 					<ConfirmationModal
 						show={showConfirmDelete}
-						onConfirm={() => handleDeleteTodo(todo)}
+						onConfirm={() => deleteMutation.mutate()}
 						onCancel={() => setShowConfirmDelete(false)}
 					>
 						Delete this todo
