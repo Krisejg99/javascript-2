@@ -10,7 +10,7 @@ import AutoDismissingAlert from "../components/AutoDismissingAlert"
 const TodoPage = () => {
 	const [todo, setTodo] = useState<Todo | null>(null)
 	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState<String | null>(null)
+	const [error, setError] = useState<string | null>(null)
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 
 	const { id } = useParams()

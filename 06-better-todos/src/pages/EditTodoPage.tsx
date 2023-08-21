@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button'
 const EditTodoPage = () => {
 	const [todo, setTodo] = useState<Todo | null>(null)
 	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState<String | null>(null)
+	const [error, setError] = useState<string | null>(null)
 	const [newTodoTitle, setNewTodoTitle] = useState('')
 
 
