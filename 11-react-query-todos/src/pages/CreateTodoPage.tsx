@@ -10,12 +10,8 @@ const CreateTodoPage = () => {
 	const queryClient = useQueryClient()
 
 	const { mutate, isSuccess, isError } = useMutation({
-		mutationFn: (newTodo: Todo) => {
-			return TodosAPI.createTodo(newTodo)
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['todos'] })
-		},
+		mutationFn: (newTodo: Todo) => TodosAPI.createTodo(newTodo),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
 	})
 
 	if (isSuccess) return <Popup type='success' msg={'Success'} />
