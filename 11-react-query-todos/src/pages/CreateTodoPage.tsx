@@ -17,6 +17,7 @@ const CreateTodoPage = () => {
 			TodosAPI.createTodo(todo)
 			setSuccess(true)
 		}
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		catch (err: any) {
 			setSuccess(false)
 		}
