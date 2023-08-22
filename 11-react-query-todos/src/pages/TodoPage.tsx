@@ -32,12 +32,13 @@ const TodoPage = () => {
 	})
 
 	const deleteMutation = useMutation({
-		mutationFn: () => TodosAPI.deleteTodo(todoId),
+		mutationFn: TodosAPI.deleteTodo,
 		onSuccess: () => {
 			queryClient.removeQueries(todoQueryKey)
 			queryClient.refetchQueries(['todos'])
 
 			navigate('/todos', {
+				replace: true,
 				state: {
 					message: `"${todo?.title}" was successfully deleted`
 				},
@@ -93,7 +94,7 @@ const TodoPage = () => {
 
 					<ConfirmationModal
 						show={showConfirmDelete}
-						onConfirm={() => deleteMutation.mutate()}
+						onConfirm={() => deleteMutation.mutate(todoId)}
 						onCancel={() => setShowConfirmDelete(false)}
 					>
 						Delete this todo
