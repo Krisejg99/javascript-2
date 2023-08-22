@@ -26,7 +26,7 @@ const TodoPage = () => {
 		mutationFn: () => TodosAPI.updateTodo(todoId, { completed: !todo?.completed }),
 		onSuccess: () => {
 			queryClient.refetchQueries(todoQueryKey)
-			queryClient.refetchQueries(['todos'])
+			queryClient.invalidateQueries(['todos'])
 		},
 	})
 
@@ -101,9 +101,6 @@ const TodoPage = () => {
 					</ConfirmationModal >
 				</>
 			)}
-
-
-
 
 			<Link to={'/todos'}>
 				<Button variant='secondary'>
