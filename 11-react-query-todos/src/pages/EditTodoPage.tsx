@@ -11,6 +11,7 @@ const EditTodoPage = () => {
 	const todoId = Number(id)
 	const TodoQueryKey = ['todo', { id: todoId }]
 
+	const navigate = useNavigate()
 	const queryClient = useQueryClient()
 
 	const { data: todo, refetch, isError } = useQuery({
@@ -19,14 +20,12 @@ const EditTodoPage = () => {
 	})
 
 	const { mutate } = useMutation({
-		mutationKey: TodoQueryKey,
 		mutationFn: (data: PartialTodo) => TodosAPI.updateTodo(todoId, data),
 		onSuccess: () => {
 			queryClient.refetchQueries({ queryKey: TodoQueryKey })
 			queryClient.invalidateQueries({ queryKey: ['todos'] })
 
 			navigate(`/todos/${todoId}`, {
-				replace: true,
 				state: {
 					message: `Successfully changed to "${newTodoTitle}"`
 				},
@@ -36,8 +35,6 @@ const EditTodoPage = () => {
 
 	const [newTodoTitle, setNewTodoTitle] = useState('')
 	const todoTitleRef = useRef<HTMLInputElement>(null)
-
-	const navigate = useNavigate()
 
 	useEffect(() => {
 		todoTitleRef.current?.focus()

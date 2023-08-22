@@ -22,7 +22,6 @@ const TodoPage = () => {
 	})
 
 	const toggleMutation = useMutation({
-		mutationKey: todoQueryKey,
 		mutationFn: () => TodosAPI.updateTodo(todoId, { completed: !todo?.completed }),
 		onSuccess: () => {
 			queryClient.refetchQueries(todoQueryKey)
@@ -31,14 +30,12 @@ const TodoPage = () => {
 	})
 
 	const deleteMutation = useMutation({
-		mutationKey: todoQueryKey,
 		mutationFn: () => TodosAPI.deleteTodo(todoId),
 		onSuccess: () => {
 			queryClient.removeQueries(todoQueryKey)
 			queryClient.refetchQueries(['todos'])
 
 			navigate('/todos', {
-				replace: true,
 				state: {
 					message: `"${todo?.title}" was successfully deleted`
 				},
