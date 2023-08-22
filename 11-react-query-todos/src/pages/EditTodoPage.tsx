@@ -23,7 +23,7 @@ const EditTodoPage = () => {
 		mutationFn: (data: PartialTodo) => TodosAPI.updateTodo(todoId, data),
 		onSuccess: () => {
 			queryClient.refetchQueries({ queryKey: TodoQueryKey })
-			queryClient.refetchQueries({ queryKey: ['todos'] })
+			queryClient.invalidateQueries({ queryKey: ['todos'] })
 
 			navigate(`/todos/${todoId}`, {
 				replace: true,
