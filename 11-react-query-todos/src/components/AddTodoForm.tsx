@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react"
-import { Todo } from "../types"
+import { NewTodo } from "../types"
 
 interface IProps {
-	onAddTodo: (newTodo: Todo) => void
+	onAddTodo: (newTodo: NewTodo) => void
 }
 
 const AddTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
@@ -12,7 +12,7 @@ const AddTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
 	const handleSubmitForm = (e: React.FormEvent) => {
 		e.preventDefault()
 
-		const newTodo: Todo = {
+		const newTodo: NewTodo = {
 			title: newTodoTitle,
 			completed: false,
 		}

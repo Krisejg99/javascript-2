@@ -2,7 +2,7 @@
  * Service for communicating with the json-server backend
  */
 import axios from 'axios'
-import { PartialTodo, Todo } from '../types'
+import { NewTodo, PartialTodo, Todo } from '../types'
 
 const FAKE_DELAY = 1000 * 0
 
@@ -46,7 +46,7 @@ export const getTodo = (todoId: number) => {
  *
  * @param data Object with properties and values for the new todo
  */
-export const createTodo = async (todo: Todo) => {
+export const createTodo = async (todo: NewTodo) => {
 	const res = await instance.post(`/todos`, todo)
 	return res.data as Todo
 }
