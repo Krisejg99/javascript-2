@@ -16,12 +16,12 @@ const CreateTodoPage = () => {
 		},
 	})
 
-	if (isSuccess) return <Popup type='success' msg={'Success'} />
-	if (isError) return <Popup type='danger' msg={'Failed to create todo'} />
-
 	return (
 		<>
 			<h1>Create todo</h1>
+
+			{isSuccess && <Popup type='success' msg={'Success!'} />}
+			{isError && <Popup type='danger' msg={'Failed to create todo'} />}
 
 			<AddTodoForm onAddTodo={(newTodo) => {
 				mutate(newTodo)
