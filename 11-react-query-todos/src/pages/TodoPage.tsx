@@ -22,7 +22,9 @@ const TodoPage = () => {
 	})
 
 	const toggleMutation = useMutation({
-		mutationFn: () => TodosAPI.updateTodo(todoId, { completed: !todo?.completed }),
+		mutationFn: (newCompletedStatus: boolean) => TodosAPI.updateTodo(todoId, {
+			completed: newCompletedStatus,
+		}),
 		onSuccess: () => {
 			queryClient.refetchQueries(todoQueryKey)
 			queryClient.invalidateQueries(['todos'])
@@ -73,7 +75,7 @@ const TodoPage = () => {
 					<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
 
 					<div className="buttons mb-3">
-						<Button variant="success" onClick={() => toggleMutation.mutate()}>
+						<Button variant="success" onClick={() => toggleMutation.mutate(!todo.completed)}>
 							Toggle
 						</Button>
 
