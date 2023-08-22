@@ -34,13 +34,15 @@ const EditTodoPage = () => {
 		},
 	})
 
-	const [newTodoTitle, setNewTodoTitle] = useState(todo?.title ?? '')
+	const [newTodoTitle, setNewTodoTitle] = useState('')
 	const todoTitleRef = useRef<HTMLInputElement>(null)
 
 	const navigate = useNavigate()
 
 	useEffect(() => {
 		todoTitleRef.current?.focus()
+
+		if (todo) setNewTodoTitle(todo.title)
 	}, [todo])
 
 	if (isError) return (
