@@ -29,9 +29,9 @@ const TodoPage = () => {
 		mutationFn: (newCompletedStatus: boolean) => TodosAPI.updateTodo(todoId, {
 			completed: newCompletedStatus,
 		}),
-		onSuccess: () => {
-			queryClient.refetchQueries(todoQueryKey)
-			queryClient.invalidateQueries(['todos'])
+		onSuccess: (updatedTodo) => {
+			queryClient.setQueryData(todoQueryKey, updatedTodo)
+			queryClient.refetchQueries(['todos'])
 		},
 	})
 

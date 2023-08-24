@@ -21,14 +21,15 @@ const EditTodoPage = () => {
 
 	const { mutate, isLoading } = useMutation({
 		mutationFn: (data: PartialTodo) => TodosAPI.updateTodo(todoId, data),
-		onSuccess: () => {
-			queryClient.refetchQueries({ queryKey: TodoQueryKey })
+		// svaret från mutationFn sänds som parameter till onSuccess
+		onSuccess: (updatedTodo) => {
+			queryClient.setQueryData(TodoQueryKey, updatedTodo)
 			queryClient.invalidateQueries({ queryKey: ['todos'] })
 
 			setTimeout(() => {
 				navigate(`/todos/${todoId}`, {
 					state: {
-						message: `Successfully changed to "${newTodoTitle}"`
+						message: `Successfully changed to "${updatedTodo.title}"`
 					},
 				})
 			}, 1500)

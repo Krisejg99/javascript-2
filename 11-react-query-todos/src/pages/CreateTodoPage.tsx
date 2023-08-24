@@ -3,6 +3,7 @@ import AddTodoForm from '../components/AddTodoForm'
 import * as TodosAPI from '../services/TodosAPI'
 import { useNavigate } from 'react-router-dom'
 import Popup from '../components/Popup'
+import { Todo } from '../types'
 
 const CreateTodoPage = () => {
 	const navigate = useNavigate()
@@ -10,9 +11,14 @@ const CreateTodoPage = () => {
 
 	const { mutate, isSuccess, isError } = useMutation({
 		mutationFn: TodosAPI.createTodo,
-		onSuccess: () => {
-			setTimeout(() => navigate('/todos'), 1500)
-			queryClient.refetchQueries({ queryKey: ['todos'] })
+		onSuccess: (newTodo) => {
+			queryClient.setQueryData<Todo[]>(['todos'], (prevTodos) => {
+				return [...prevTodos ?? [], newTodo]
+			})
+
+			queryClient.setQueryData(['todo', { id: newTodo.id }], newTodo)
+
+			setTimeout(() => navigate('/todos'), 1000 * 0)
 		},
 	})
 
