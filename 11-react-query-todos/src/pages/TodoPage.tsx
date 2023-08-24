@@ -6,6 +6,7 @@ import Alert from 'react-bootstrap/Alert'
 import ConfirmationModal from "../components/ConfirmationModal"
 import AutoDismissingAlert from "../components/AutoDismissingAlert"
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { Todo } from "../types"
 
 const TodoPage = () => {
 	const [queryEnabled, setQueryEnabled] = useState(true)
@@ -31,7 +32,12 @@ const TodoPage = () => {
 		}),
 		onSuccess: (updatedTodo) => {
 			queryClient.setQueryData(todoQueryKey, updatedTodo)
-			queryClient.refetchQueries(['todos'])
+			queryClient.setQueryData<Todo[]>(['todos'], (prevTodos) => {
+				return [
+					...prevTodos?.filter(todo => todo.id !== todoId) ?? [],
+					updatedTodo,
+				]
+			})
 		},
 	})
 
@@ -40,7 +46,9 @@ const TodoPage = () => {
 		onSuccess: () => {
 			setQueryEnabled(false)
 			queryClient.removeQueries(todoQueryKey)
-			queryClient.refetchQueries(['todos'])
+			queryClient.setQueryData<Todo[]>(['todos'], (prevTodos) => {
+				return prevTodos?.filter(todo => todo.id !== todoId) ?? []
+			})
 
 			setTimeout(() => {
 				navigate('/todos', {
