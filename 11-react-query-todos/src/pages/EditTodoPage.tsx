@@ -19,17 +19,19 @@ const EditTodoPage = () => {
 		queryFn: () => TodosAPI.getTodo(todoId),
 	})
 
-	const { mutate } = useMutation({
+	const { mutate, isLoading } = useMutation({
 		mutationFn: (data: PartialTodo) => TodosAPI.updateTodo(todoId, data),
 		onSuccess: () => {
 			queryClient.refetchQueries({ queryKey: TodoQueryKey })
 			queryClient.invalidateQueries({ queryKey: ['todos'] })
 
-			navigate(`/todos/${todoId}`, {
-				state: {
-					message: `Successfully changed to "${newTodoTitle}"`
-				},
-			})
+			setTimeout(() => {
+				navigate(`/todos/${todoId}`, {
+					state: {
+						message: `Successfully changed to "${newTodoTitle}"`
+					},
+				})
+			}, 1500)
 		},
 	})
 
@@ -72,7 +74,11 @@ const EditTodoPage = () => {
 							ref={todoTitleRef}
 						/>
 
-						<button className='create-todo-btn'>Save</button>
+						<button
+							className='create-todo-btn'
+							disabled={isLoading}
+						>Save
+						</button>
 					</form>
 				</>
 			)}

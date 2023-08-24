@@ -9,6 +9,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 const TodoPage = () => {
 	const [queryEnabled, setQueryEnabled] = useState(true)
+	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
+
 	const { id } = useParams()
 	const todoId = Number(id)
 	const todoQueryKey = ['todo', { id: todoId }]
@@ -51,8 +53,6 @@ const TodoPage = () => {
 		},
 	})
 
-	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
-
 	if (isError) return (
 		<Alert variant="danger">
 			<h1>Something went wrong!</h1>
@@ -81,8 +81,11 @@ const TodoPage = () => {
 					<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
 
 					<div className="buttons mb-3">
-						<Button variant="success" onClick={() => toggleMutation.mutate(!todo.completed)}>
-							Toggle
+						<Button
+							variant="success"
+							onClick={() => toggleMutation.mutate(!todo.completed)}
+							disabled={toggleMutation.isLoading}
+						>Toggle
 						</Button>
 
 						<Link to={`/todos/${todoId}/edit`}>
@@ -99,7 +102,7 @@ const TodoPage = () => {
 
 					<ConfirmationModal
 						show={showConfirmDelete}
-						onConfirm={() => deleteMutation.mutate(todoId)}
+						onConfirm={() => !deleteMutation.isLoading && deleteMutation.mutate(todoId)}
 						onCancel={() => setShowConfirmDelete(false)}
 					>
 						Delete this todo

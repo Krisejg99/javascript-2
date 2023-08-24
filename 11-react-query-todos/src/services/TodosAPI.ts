@@ -4,7 +4,7 @@
 import axios from 'axios'
 import { NewTodo, PartialTodo, Todo } from '../types'
 
-const FAKE_DELAY = 1000 * 0
+const FAKE_DELAY = 1000 * 1
 
 const instance = axios.create({
 	baseURL: 'http://localhost:3000',
@@ -48,6 +48,10 @@ export const getTodo = (todoId: number) => {
  */
 export const createTodo = async (todo: NewTodo) => {
 	const res = await instance.post(`/todos`, todo)
+
+	// Fake delay
+	!!FAKE_DELAY && await new Promise(r => setTimeout(r, FAKE_DELAY))
+
 	return res.data as Todo
 }
 
@@ -59,6 +63,10 @@ export const createTodo = async (todo: NewTodo) => {
  */
 export const updateTodo = async (todoId: number, data: PartialTodo) => {
 	const res = await instance.patch(`/todos/${todoId}`, data)
+
+	// Fake delay
+	!!FAKE_DELAY && await new Promise(r => setTimeout(r, FAKE_DELAY))
+
 	return res.data as Todo
 }
 
@@ -69,5 +77,9 @@ export const updateTodo = async (todoId: number, data: PartialTodo) => {
  */
 export const deleteTodo = async (todoId: number) => {
 	const res = await instance.delete(`/todos/${todoId}`)
+
+	// Fake delay
+	!!FAKE_DELAY && await new Promise(r => setTimeout(r, FAKE_DELAY))
+
 	return res.data
 }
