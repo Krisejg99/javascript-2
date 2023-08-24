@@ -8,6 +8,7 @@ import AutoDismissingAlert from "../components/AutoDismissingAlert"
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 const TodoPage = () => {
+	const [queryEnabled, setQueryEnabled] = useState(true)
 	const { id } = useParams()
 	const todoId = Number(id)
 	const todoQueryKey = ['todo', { id: todoId }]
@@ -19,6 +20,7 @@ const TodoPage = () => {
 	const { data: todo, isError, refetch } = useQuery({
 		queryKey: todoQueryKey,
 		queryFn: () => TodosAPI.getTodo(todoId),
+		enabled: queryEnabled,
 	})
 
 	const toggleMutation = useMutation({
@@ -34,15 +36,18 @@ const TodoPage = () => {
 	const deleteMutation = useMutation({
 		mutationFn: TodosAPI.deleteTodo,
 		onSuccess: () => {
+			setQueryEnabled(false)
 			queryClient.removeQueries(todoQueryKey)
 			queryClient.refetchQueries(['todos'])
 
-			navigate('/todos', {
-				replace: true,
-				state: {
-					message: `"${todo?.title}" was successfully deleted`
-				},
-			})
+			setTimeout(() => {
+				navigate('/todos', {
+					replace: true,
+					state: {
+						message: `"${todo?.title}" was successfully deleted`
+					},
+				})
+			}, 1500)
 		},
 	})
 
