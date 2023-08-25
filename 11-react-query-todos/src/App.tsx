@@ -9,6 +9,7 @@ import NotFound from './pages/NotFound'
 import CreateTodoPage from './pages/CreateTodoPage'
 import EditTodoPage from './pages/EditTodoPage'
 import GlobalFetchingSpinner from './components/GlobalFetchingSpinner'
+import { ToastContainer } from 'react-toastify'
 
 
 const App = () => {
@@ -32,6 +33,8 @@ const App = () => {
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</Container>
+
+			<ToastContainer />
 		</div>
 	)
 }
