@@ -1,24 +1,14 @@
 import { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import TodoCounter from '../components/TodoCounter'
-import * as TodosAPI from '../services/TodosAPI'
 import ListGroup from 'react-bootstrap/ListGroup'
 import AutoDismissingAlert from '../components/AutoDismissingAlert'
-import { useQuery } from '@tanstack/react-query'
 import { Alert } from 'react-bootstrap'
+import useTodos from '../hooks/useTodos'
 
 const TodosPage = () => {
-	const { data: todos, isError } = useQuery({
-		queryKey: ['todos'],
-		queryFn: async () => {
-			const todos = await TodosAPI.getTodos()
-			todos.sort((a, b) => a.title.localeCompare(b.title))
-			return todos.sort((a, b) => Number(a.completed) - Number(b.completed))
-		},
-	})
-
+	const { data: todos, isError } = useTodos()
 	const location = useLocation()
-
 	const completeTodos = todos?.filter(todo => todo.completed)
 
 	useEffect(() => {
