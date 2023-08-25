@@ -8,7 +8,7 @@ const useDeleteTodo = (todoId: number, disableQueries: () => void = () => { retu
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: deleteTodo,
+		mutationFn: () => deleteTodo(todoId),
 		onSuccess: () => {
 			disableQueries()
 

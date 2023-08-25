@@ -1,12 +1,9 @@
 import { useState } from "react"
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
-import * as TodosAPI from '../services/TodosAPI'
+import { Link, useLocation, useParams } from "react-router-dom"
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 import ConfirmationModal from "../components/ConfirmationModal"
 import AutoDismissingAlert from "../components/AutoDismissingAlert"
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Todo } from "../types"
 import useTodo from "../hooks/useTodo"
 import useUpdateTodo from "../hooks/useUpdateTodo"
 import useDeleteTodo from "../hooks/useDeleteTodo"
@@ -23,33 +20,7 @@ const TodoPage = () => {
 	const { data: todo, isError, refetch } = useTodo(todoId, queryEnabled)
 	const updateTodo = useUpdateTodo(todoId)
 
-	// const deleteTodo = useDeleteTodo(todoId, () => setQueryEnabled(false))
-
-	const navigate = useNavigate()
-	const queryClient = useQueryClient()
-	const deleteTodo = useMutation({
-
-		mutationFn: TodosAPI.deleteTodo,
-		onSuccess: () => {
-			setQueryEnabled(false)
-
-			queryClient.removeQueries({ queryKey: ['todo', { id: todoId }] })
-
-			// queryClient.setQueryData<Todo[]>(['todos'], (prevTodos) => {
-			// 	return prevTodos?.filter(todo => todo.id !== todoId) ?? []
-			// })
-
-			setTimeout(() => {
-				navigate('/todos', {
-					replace: true,
-					state: {
-						message: `"${todo?.title}" was successfully deleted`
-					},
-				})
-			}, 1500)
-
-		},
-	})
+	const deleteTodo = useDeleteTodo(todoId, () => setQueryEnabled(false))
 
 	if (isError) return (
 		<Alert variant="danger">
@@ -100,7 +71,7 @@ const TodoPage = () => {
 
 					<ConfirmationModal
 						show={showConfirmDelete}
-						onConfirm={() => !deleteTodo.isLoading && deleteTodo.mutate(todoId)}
+						onConfirm={() => !deleteTodo.isLoading && deleteTodo.mutate()}
 						onCancel={() => setShowConfirmDelete(false)}
 					>
 						Delete this todo
