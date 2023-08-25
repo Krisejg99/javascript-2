@@ -1,43 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import * as TodosAPI from '../services/TodosAPI'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
-import { PartialTodo } from '../types'
+import useTodo from '../hooks/useTodo'
+import useUpdateTodo from '../hooks/useUpdateTodo'
 
 const EditTodoPage = () => {
-	const { id } = useParams()
-	const todoId = Number(id)
-	const TodoQueryKey = ['todo', { id: todoId }]
-
-	const navigate = useNavigate()
-	const queryClient = useQueryClient()
-
-	const { data: todo, refetch, isError } = useQuery({
-		queryKey: TodoQueryKey,
-		queryFn: () => TodosAPI.getTodo(todoId),
-	})
-
-	const { mutate, isLoading } = useMutation({
-		mutationFn: (data: PartialTodo) => TodosAPI.updateTodo(todoId, data),
-		// svaret från mutationFn sänds som parameter till onSuccess
-		onSuccess: (updatedTodo) => {
-			queryClient.setQueryData(TodoQueryKey, updatedTodo)
-			queryClient.invalidateQueries({ queryKey: ['todos'] })
-
-			setTimeout(() => {
-				navigate(`/todos/${todoId}`, {
-					state: {
-						message: `Successfully changed to "${updatedTodo.title}"`
-					},
-				})
-			}, 1500)
-		},
-	})
-
 	const [newTodoTitle, setNewTodoTitle] = useState('')
 	const todoTitleRef = useRef<HTMLInputElement>(null)
+	const { id } = useParams()
+	const todoId = Number(id)
+	const navigate = useNavigate()
+
+	const { data: todo, refetch, isError } = useTodo(todoId)
+	const updateTodo = useUpdateTodo(todoId)
 
 	useEffect(() => {
 		todoTitleRef.current?.focus()
@@ -64,7 +40,20 @@ const EditTodoPage = () => {
 						onSubmit={(e) => {
 							e.preventDefault()
 
-							mutate({ title: newTodoTitle })
+							updateTodo.mutate(
+								{ title: newTodoTitle },
+								{
+									onSuccess: () => {
+										setTimeout(() => {
+											navigate(`/todos/${todoId}`, {
+												state: {
+													message: `Successfully changed to "${newTodoTitle}"`
+												},
+											})
+										}, 1500)
+									}
+								}
+							)
 						}}
 					>
 						<input
@@ -77,7 +66,7 @@ const EditTodoPage = () => {
 
 						<button
 							className='create-todo-btn'
-							disabled={isLoading}
+							disabled={updateTodo.isLoading}
 						>Save
 						</button>
 					</form>

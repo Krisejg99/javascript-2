@@ -5,8 +5,11 @@ import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 import ConfirmationModal from "../components/ConfirmationModal"
 import AutoDismissingAlert from "../components/AutoDismissingAlert"
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Todo } from "../types"
+import useTodo from "../hooks/useTodo"
+import useUpdateTodo from "../hooks/useUpdateTodo"
+import useDeleteTodo from "../hooks/useDeleteTodo"
 
 const TodoPage = () => {
 	const [queryEnabled, setQueryEnabled] = useState(true)
@@ -14,41 +17,27 @@ const TodoPage = () => {
 
 	const { id } = useParams()
 	const todoId = Number(id)
-	const todoQueryKey = ['todo', { id: todoId }]
+
+	const location = useLocation()
+
+	const { data: todo, isError, refetch } = useTodo(todoId, queryEnabled)
+	const updateTodo = useUpdateTodo(todoId)
+
+	// const deleteTodo = useDeleteTodo(todoId, () => setQueryEnabled(false))
 
 	const navigate = useNavigate()
-	const location = useLocation()
 	const queryClient = useQueryClient()
+	const deleteTodo = useMutation({
 
-	const { data: todo, isError, refetch } = useQuery({
-		queryKey: todoQueryKey,
-		queryFn: () => TodosAPI.getTodo(todoId),
-		enabled: queryEnabled,
-	})
-
-	const toggleMutation = useMutation({
-		mutationFn: (newCompletedStatus: boolean) => TodosAPI.updateTodo(todoId, {
-			completed: newCompletedStatus,
-		}),
-		onSuccess: (updatedTodo) => {
-			queryClient.setQueryData(todoQueryKey, updatedTodo)
-			queryClient.setQueryData<Todo[]>(['todos'], (prevTodos) => {
-				return [
-					...prevTodos?.filter(todo => todo.id !== todoId) ?? [],
-					updatedTodo,
-				]
-			})
-		},
-	})
-
-	const deleteMutation = useMutation({
 		mutationFn: TodosAPI.deleteTodo,
 		onSuccess: () => {
 			setQueryEnabled(false)
-			queryClient.removeQueries(todoQueryKey)
-			queryClient.setQueryData<Todo[]>(['todos'], (prevTodos) => {
-				return prevTodos?.filter(todo => todo.id !== todoId) ?? []
-			})
+
+			queryClient.removeQueries({ queryKey: ['todo', { id: todoId }] })
+
+			// queryClient.setQueryData<Todo[]>(['todos'], (prevTodos) => {
+			// 	return prevTodos?.filter(todo => todo.id !== todoId) ?? []
+			// })
 
 			setTimeout(() => {
 				navigate('/todos', {
@@ -58,6 +47,7 @@ const TodoPage = () => {
 					},
 				})
 			}, 1500)
+
 		},
 	})
 
@@ -91,8 +81,8 @@ const TodoPage = () => {
 					<div className="buttons mb-3">
 						<Button
 							variant="success"
-							onClick={() => toggleMutation.mutate(!todo.completed)}
-							disabled={toggleMutation.isLoading}
+							onClick={() => updateTodo.mutate({ completed: !todo.completed })}
+							disabled={updateTodo.isLoading}
 						>Toggle
 						</Button>
 
@@ -110,7 +100,7 @@ const TodoPage = () => {
 
 					<ConfirmationModal
 						show={showConfirmDelete}
-						onConfirm={() => !deleteMutation.isLoading && deleteMutation.mutate(todoId)}
+						onConfirm={() => !deleteTodo.isLoading && deleteTodo.mutate(todoId)}
 						onCancel={() => setShowConfirmDelete(false)}
 					>
 						Delete this todo
