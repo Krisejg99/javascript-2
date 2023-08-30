@@ -1,6 +1,43 @@
+import { createColumnHelper } from '@tanstack/react-table'
 import WarningAlert from '../components/alerts/WarningAlert'
-import AuthorList from '../components/AuthorList'
 import useAuthors from '../hooks/useAuthors'
+import { Author } from '../types/BooksAPI.types'
+import TanstackSortableTable from '../components/TanstackSortableTable'
+import { Card } from 'react-bootstrap'
+import CreateAuthorForm from '../components/forms/CreateAuthorForm'
+
+// // Another way of making columns
+// const columns: ColumnDef<Author>[] = [
+// 	{
+// 		accessorKey: 'name',
+// 		header: 'Name',
+// 	},
+// 	{
+// 		accessorKey: 'date_of_birth',
+// 		header: 'Date of birth',
+// 	},
+// ]
+
+const columnHelper = createColumnHelper<Author>()
+
+const columns = [
+	columnHelper.accessor('id', {
+		header: 'ID'
+	}),
+	columnHelper.group({
+		header: 'Author Details',
+		columns: [
+			columnHelper.accessor('name', {
+				header: 'Name'
+			}),
+			columnHelper.accessor('date_of_birth', {
+				header: 'Date of birth'
+			}),
+		]
+
+
+	})
+]
 
 const AuthorsPage = () => {
 	const { data: authors, isError, isLoading } = useAuthors()
@@ -19,7 +56,19 @@ const AuthorsPage = () => {
 				<p>Loading authors...</p>
 			)}
 
-			{authors && <AuthorList authors={authors} />}
+			{authors && (
+				<TanstackSortableTable
+					columns={columns}
+					data={authors}
+				/>
+			)}
+
+			<Card>
+				<Card.Body>
+					<Card.Title>Create Author</Card.Title>
+					<CreateAuthorForm />
+				</Card.Body>
+			</Card>
 		</>
 	)
 }

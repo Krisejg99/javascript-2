@@ -1,6 +1,27 @@
 import WarningAlert from '../components/alerts/WarningAlert'
-import BookList from '../components/BookList'
+import TanstackSortableTable from '../components/TanstackSortableTable'
 import useBooks from '../hooks/useBooks'
+import { Book } from '../types/BooksAPI.types'
+import { ColumnDef } from '@tanstack/react-table'
+
+const columns: ColumnDef<Book>[] = [
+	{
+		accessorKey: 'title',
+		header: 'Title',
+	},
+	{
+		accessorKey: 'author.name',
+		header: 'Author',
+	},
+	{
+		accessorKey: 'pages',
+		header: 'Pages',
+	},
+	{
+		accessorKey: 'published',
+		header: 'Published',
+	},
+]
 
 const BooksPage = () => {
 	const { data: books, isError, isLoading } = useBooks()
@@ -19,7 +40,12 @@ const BooksPage = () => {
 				<p>Loading books...</p>
 			)}
 
-			{books && <BookList books={books} />}
+			{books && (
+				<TanstackSortableTable
+					columns={columns}
+					data={books}
+				/>
+			)}
 		</>
 	)
 }
