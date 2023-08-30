@@ -5,6 +5,7 @@ import { Author } from '../types/BooksAPI.types'
 import TanstackSortableTable from '../components/TanstackSortableTable'
 import { Card } from 'react-bootstrap'
 import CreateAuthorForm from '../components/forms/CreateAuthorForm'
+import { Link } from 'react-router-dom'
 
 // // Another way of making columns
 // const columns: ColumnDef<Author>[] = [
@@ -36,7 +37,17 @@ const columns = [
 		]
 
 
-	})
+	}),
+	columnHelper.display({
+		id: 'actions',
+		cell: props => (
+			<div className="d-flex justify-content-end">
+				<Link className="btn btn-primary btn-sm" to={`/authors/${props.row.original.id}`}>
+					View
+				</Link>
+			</div>
+		),
+	}),
 ]
 
 const AuthorsPage = () => {

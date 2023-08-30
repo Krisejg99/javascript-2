@@ -1,6 +1,8 @@
 import { useParams } from 'react-router-dom'
 import WarningAlert from '../components/alerts/WarningAlert'
 import useAuthor from '../hooks/useAuthor'
+import { Card } from 'react-bootstrap'
+import CreateBookForm from '../components/forms/CreateBookForm'
 
 const AuthorPage = () => {
 	const { id } = useParams()
@@ -24,12 +26,20 @@ const AuthorPage = () => {
 
 				<p>Born: {author.date_of_birth}</p>
 
-				<ul>
+				<ul className='mb-5'>
 					{author.books.map(book => (
 						<li key={book.id}>{book.title}</li>
 					))}
 				</ul>
 			</>}
+
+			<Card>
+				<Card.Body>
+					<Card.Title>Create Book</Card.Title>
+
+					<CreateBookForm />
+				</Card.Body>
+			</Card>
 		</>
 	)
 }
