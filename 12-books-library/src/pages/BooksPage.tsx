@@ -1,8 +1,10 @@
+import { Card } from 'react-bootstrap'
 import WarningAlert from '../components/alerts/WarningAlert'
 import TanstackSortableTable from '../components/TanstackSortableTable'
 import useBooks from '../hooks/useBooks'
 import { Book } from '../types/BooksAPI.types'
 import { ColumnDef } from '@tanstack/react-table'
+import CreateBookForm from '../components/forms/CreateBookForm'
 
 const columns: ColumnDef<Book>[] = [
 	{
@@ -46,6 +48,14 @@ const BooksPage = () => {
 					data={books}
 				/>
 			)}
+
+			<Card>
+				<Card.Body>
+					<Card.Title>Create Book</Card.Title>
+
+					<CreateBookForm />
+				</Card.Body>
+			</Card>
 		</>
 	)
 }
