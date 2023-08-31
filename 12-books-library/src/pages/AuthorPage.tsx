@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import WarningAlert from '../components/alerts/WarningAlert'
 import useAuthor from '../hooks/useAuthor'
 import { Card } from 'react-bootstrap'
-import CreateBookForm from '../components/forms/CreateBookForm'
+import CreateAuthorBookForm from '../components/forms/CreateAuthorBookForm'
 
 const AuthorPage = () => {
 	const { id } = useParams()
@@ -37,7 +37,7 @@ const AuthorPage = () => {
 				<Card.Body>
 					<Card.Title>Create Book</Card.Title>
 
-					<CreateBookForm />
+					<CreateAuthorBookForm />
 				</Card.Body>
 			</Card>
 		</>

@@ -1,12 +1,12 @@
 import { Form, Button } from 'react-bootstrap'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { NewBook } from '../..//types/BooksAPI.types'
+import { NewBook } from '../../types/BooksAPI.types'
 import useCreateBook from '../../hooks/useCreateBook'
 import { useParams } from 'react-router-dom'
 
 const currentYear = new Date().getFullYear()
 
-const CreateBookForm = () => {
+const CreateAuthorBookForm = () => {
 	const { id } = useParams()
 	const authorId = Number(id)
 
@@ -81,4 +81,4 @@ const CreateBookForm = () => {
 		</Form>)
 }
 
-export default CreateBookForm
+export default CreateAuthorBookForm
