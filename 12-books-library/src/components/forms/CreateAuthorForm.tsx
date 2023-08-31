@@ -2,9 +2,13 @@ import { Form, Button } from "react-bootstrap"
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { NewAuthor } from "../../types/BooksAPI.types"
 import useCreateAuthor from "../../hooks/useCreateAuthor"
+import { AuthorSchema, authorSchema } from "../../schemas/AuthorSchema"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 const CreateAuthorForm = () => {
-	const { register, handleSubmit, formState } = useForm<NewAuthor>()
+	const { register, handleSubmit, formState: { errors } } = useForm<AuthorSchema>({
+		resolver: zodResolver(authorSchema)
+	})
 	const createAuthorMutation = useCreateAuthor()
 
 	const createAuthor: SubmitHandler<NewAuthor> = (data) => {
@@ -18,14 +22,11 @@ const CreateAuthorForm = () => {
 				<Form.Control
 					type="text"
 					placeholder="Type here..."
-					{...register('name', {
-						required: true,
-						minLength: 3,
-					})}
+					{...register('name')}
 				/>
 
-				{formState.errors.name && (
-					<p className="text-danger">Name to short.</p>
+				{errors.name && (
+					<p className="text-danger">{errors.name.message}</p>
 				)}
 			</Form.Group>
 
@@ -33,11 +34,11 @@ const CreateAuthorForm = () => {
 				<Form.Label>Date of Birth</Form.Label>
 				<Form.Control
 					type="date"
-					{...register('date_of_birth', { required: true })}
+					{...register('date_of_birth')}
 				/>
 
-				{formState.errors.date_of_birth && (
-					<p className="text-danger">Field missing.</p>
+				{errors.date_of_birth && (
+					<p className="text-danger">{errors.date_of_birth.message}</p>
 				)}
 			</Form.Group>
 

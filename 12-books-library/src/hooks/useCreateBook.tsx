@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from "react-toastify"
 import { createBook } from '../services/BooksAPI'
-import { Book } from '../types/BooksAPI.types'
 
 const useCreateBook = () => {
 	const queryClient = useQueryClient()
