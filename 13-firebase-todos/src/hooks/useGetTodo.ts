@@ -12,7 +12,6 @@ const useGetTodo = (id: string) => {
 	const getTodo = async () => {
 		setLoading(true)
 
-
 		const data = await getDocument()
 		if (!data) return setError('Could not get todo')
 
