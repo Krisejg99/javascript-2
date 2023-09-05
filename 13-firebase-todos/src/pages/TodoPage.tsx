@@ -1,54 +1,57 @@
 import { useState } from "react"
 import Button from "react-bootstrap/Button"
 import { Link, useParams } from "react-router-dom"
-import { Todo } from "../types/Todo.types"
 import ConfirmationModal from "../components/ConfirmationModal"
-
-const todo: Todo = {
-	id: "133713371337",
-	title: "Learn to fake better data 😅",
-	completed: true,
-}
+import useGetTodo from "../hooks/useGetTodo"
 
 const TodoPage = () => {
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 	const { id } = useParams()
-	const todoId = Number(id)
+
+	const { todo, loading, refetch } = useGetTodo(id ?? '')
 
 	return (
 		<>
-			<h1>{todo.title}</h1>
+			{loading && <p>Loading...</p>}
 
-			<p>
-				<strong>Status:</strong>{" "}
-				{todo.completed ? "Completed" : "Not completed"}
-			</p>
+			{todo && <>
+				<div className="d-flex justify-content-between align-items-center">
+					<h1 className="mb-3">{todo.title}</h1>
 
-			<div className="buttons mb-3">
-				<Button
-					variant="success"
-					onClick={() => console.log("Would toggle todo")}
-				>
-					Toggle
-				</Button>
+					<Button variant="primary" onClick={() => refetch()}>Refresh</Button>
+				</div>
 
-				<Link to={`/todos/${todoId}/edit`}>
-					<Button variant="warning">Edit</Button>
-				</Link>
+				<p>
+					<strong>Status:</strong>{" "}
+					{todo.completed ? "Completed" : "Not completed"}
+				</p>
 
-				<Button
-					variant="danger"
-					onClick={() => setShowConfirmDelete(true)}
-				>
-					Delete
-				</Button>
-			</div>
+				<div className="buttons mb-3">
+					<Button
+						variant="success"
+						onClick={() => console.log("Would toggle todo")}
+					>
+						Toggle
+					</Button>
+
+					<Link to={`/todos/${id}/edit`}>
+						<Button variant="warning">Edit</Button>
+					</Link>
+
+					<Button
+						variant="danger"
+						onClick={() => setShowConfirmDelete(true)}
+					>
+						Delete
+					</Button>
+				</div>
+			</>}
 
 			<ConfirmationModal
 				show={showConfirmDelete}
 				onCancel={() => setShowConfirmDelete(false)}
 				onConfirm={() =>
-					console.log("Would delete todo with id:", todoId)
+					console.log("Would delete todo with id:", id)
 				}
 			>
 				U SURE BRO?!
