@@ -3,6 +3,9 @@ import Button from "react-bootstrap/Button"
 import { Link, useParams } from "react-router-dom"
 import ConfirmationModal from "../components/ConfirmationModal"
 import useGetTodo from "../hooks/useGetTodo"
+import { doc, updateDoc } from "firebase/firestore"
+import { db } from "../services/firebase"
+import { PartialTodo } from "../types/Todo.types"
 
 const TodoPage = () => {
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
@@ -10,10 +13,13 @@ const TodoPage = () => {
 
 	const { todo, loading, refetch } = useGetTodo(id ?? '')
 
+	const toggleTodo = async (id: string, data: PartialTodo) => {
+		await updateDoc(doc(db, 'todos', id), data)
+		refetch()
+	}
+
 	return (
 		<>
-			{loading && <p>Loading...</p>}
-
 			{todo && <>
 				<div className="d-flex justify-content-between align-items-center">
 					<h1 className="mb-3">{todo.title}</h1>
@@ -29,7 +35,9 @@ const TodoPage = () => {
 				<div className="buttons mb-3">
 					<Button
 						variant="success"
-						onClick={() => console.log("Would toggle todo")}
+						onClick={() => toggleTodo(todo._id, {
+							completed: !todo.completed
+						})}
 					>
 						Toggle
 					</Button>
@@ -60,6 +68,8 @@ const TodoPage = () => {
 			<Link to="/todos">
 				<Button variant="secondary">&laquo; All todos</Button>
 			</Link>
+
+			{loading && <p>Loading...</p>}
 		</>
 	)
 }
