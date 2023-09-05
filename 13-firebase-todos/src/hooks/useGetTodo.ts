@@ -1,22 +1,20 @@
 import { Todo } from "../types/Todo.types"
 import { useEffect, useState } from "react"
-import { db } from "../services/firebase"
-import { doc, getDoc } from "firebase/firestore"
+import useGetDocument from "./useGetDocument"
 
 const useGetTodo = (id: string) => {
 	const [todo, setTodo] = useState<Todo | null>(null)
 	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState<string | null>(null)
+
+	const { getDocument } = useGetDocument<Todo>('todos', id)
 
 	const getTodo = async () => {
 		setLoading(true)
 
-		const snapshot = await getDoc(doc(db, 'todos', id ?? '0'))
-		if (!snapshot.exists) return
 
-		const data = {
-			_id: snapshot.id,
-			...snapshot.data()
-		} as Todo
+		const data = await getDocument()
+		if (!data) return setError('Could not get todo')
 
 		setTodo(data)
 		setLoading(false)
@@ -29,6 +27,7 @@ const useGetTodo = (id: string) => {
 	return {
 		todo,
 		loading,
+		error,
 		refetch: getTodo
 	}
 }
