@@ -6,11 +6,15 @@ import { collection, getDocs } from "firebase/firestore"
 import { db } from "../services/firebase"
 import { useEffect } from "react"
 import { useState } from "react"
+import { Button } from "react-bootstrap"
 
 const TodosPage = () => {
 	const [todos, setTodos] = useState<Todos | null>(null)
+	const [loading, setLoading] = useState(true)
 
 	const getTodos = async () => {
+		setLoading(true)
+
 		const snapshot = await getDocs(collection(db, 'todos'))
 
 		const data: Todos = snapshot.docs.map(doc => {
@@ -21,6 +25,7 @@ const TodosPage = () => {
 		})
 
 		setTodos(data)
+		setLoading(false)
 
 		return data
 	}
@@ -37,7 +42,13 @@ const TodosPage = () => {
 
 	return (
 		<>
-			<h1 className="mb-3">Todos</h1>
+			<div className="d-flex justify-content-between align-items-center">
+				<h1 className="mb-3">Todos</h1>
+
+				{loading && <p>Loading...</p>}
+
+				<Button variant="primary" onClick={() => getTodos()}>Refresh</Button>
+			</div>
 
 			<AddNewTodoForm onAddTodo={addTodo} />
 
