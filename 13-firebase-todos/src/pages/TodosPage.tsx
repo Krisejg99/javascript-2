@@ -4,16 +4,11 @@ import AddNewTodoForm from "../components/AddNewTodoForm"
 import { Button } from "react-bootstrap"
 import useGetTodos from "../hooks/useGetTodos"
 import useAddTodo from "../hooks/useAddTodo"
-import { useEffect } from "react"
+import { NewTodo } from "../types/Todo.types"
 
 const TodosPage = () => {
 	const { todos, loading, refetch } = useGetTodos()
-
 	const { addTodo } = useAddTodo()
-
-	useEffect(() => {
-		refetch()
-	}, [addTodo])
 
 	return (
 		<>
@@ -25,7 +20,10 @@ const TodosPage = () => {
 				<Button variant="primary" onClick={() => refetch()}>Refresh</Button>
 			</div>
 
-			<AddNewTodoForm onAddTodo={addTodo} />
+			<AddNewTodoForm onAddTodo={(newTodo: NewTodo) => {
+				addTodo(newTodo)
+				refetch()
+			}} />
 
 			{todos && todos.length > 0 && (
 				<ListGroup className="todolist">
