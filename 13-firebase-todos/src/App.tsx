@@ -19,13 +19,8 @@ const App = () => {
 					<Route path="/" element={<HomePage />} />
 
 					<Route path="/todos">
-						{/* /todos */}
 						<Route path="" element={<TodosPage />} />
-
-						{/* /todos/:id */}
 						<Route path=":id" element={<TodoPage />} />
-
-						{/* /todos/:id/edit */}
 						<Route path=":id/edit" element={<EditTodoPage />} />
 					</Route>
 
