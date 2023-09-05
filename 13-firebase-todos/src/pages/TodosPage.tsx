@@ -1,16 +1,19 @@
 import ListGroup from "react-bootstrap/ListGroup"
 import { Link } from "react-router-dom"
 import AddNewTodoForm from "../components/AddNewTodoForm"
-import { NewTodo } from "../types/Todo.types"
 import { Button } from "react-bootstrap"
 import useGetTodos from "../hooks/useGetTodos"
+import useAddTodo from "../hooks/useAddTodo"
+import { useEffect } from "react"
 
 const TodosPage = () => {
 	const { todos, loading, refetch } = useGetTodos()
 
-	const addTodo = (todo: NewTodo) => {
-		console.log("Would add a new todo:", todo)
-	}
+	const { addTodo } = useAddTodo()
+
+	useEffect(() => {
+		refetch()
+	}, [addTodo])
 
 	return (
 		<>
