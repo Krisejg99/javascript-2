@@ -5,6 +5,7 @@ import useGetCollection from "./useGetCollection"
 const useGetTodos = () => {
 	const [todos, setTodos] = useState<Todos | null>(null)
 	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState<string | null>(null)
 
 	const { getCollection } = useGetCollection<Todos>('todos')
 
@@ -12,6 +13,7 @@ const useGetTodos = () => {
 		setLoading(true)
 
 		const data = await getCollection()
+		if (!data) return setError('Could not get todos')
 
 		setTodos(data)
 		setLoading(false)
@@ -26,6 +28,7 @@ const useGetTodos = () => {
 	return {
 		todos,
 		loading,
+		error,
 		refetch: getTodos
 	}
 }
