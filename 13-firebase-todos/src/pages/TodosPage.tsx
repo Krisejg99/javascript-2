@@ -1,42 +1,14 @@
 import ListGroup from "react-bootstrap/ListGroup"
 import { Link } from "react-router-dom"
 import AddNewTodoForm from "../components/AddNewTodoForm"
-import { NewTodo, Todo, Todos } from "../types/Todo.types"
-import { collection, getDocs } from "firebase/firestore"
-import { db } from "../services/firebase"
-import { useEffect } from "react"
-import { useState } from "react"
+import { NewTodo } from "../types/Todo.types"
 import { Button } from "react-bootstrap"
+import useGetTodos from "../hooks/useGetTodos"
 
 const TodosPage = () => {
-	const [todos, setTodos] = useState<Todos | null>(null)
-	const [loading, setLoading] = useState(true)
+	const { todos, loading, refetch } = useGetTodos()
 
-	const getTodos = async () => {
-		setLoading(true)
-
-		const snapshot = await getDocs(collection(db, 'todos'))
-
-		const data: Todos = snapshot.docs.map(doc => {
-			return {
-				_id: doc.id,
-				...doc.data()
-			} as Todo
-		})
-
-		setTodos(data)
-		setLoading(false)
-
-		return data
-	}
-
-	useEffect(() => {
-		getTodos()
-	}, [])
-
-	// Create a new todo in the API
 	const addTodo = (todo: NewTodo) => {
-		// 👻
 		console.log("Would add a new todo:", todo)
 	}
 
@@ -47,7 +19,7 @@ const TodosPage = () => {
 
 				{loading && <p>Loading...</p>}
 
-				<Button variant="primary" onClick={() => getTodos()}>Refresh</Button>
+				<Button variant="primary" onClick={() => refetch()}>Refresh</Button>
 			</div>
 
 			<AddNewTodoForm onAddTodo={addTodo} />
