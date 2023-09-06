@@ -1,4 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { Form, Button } from 'react-bootstrap'
+import { todoSchema } from '../schemas/TodoSchema'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { NewTodo } from '../types/Todo.types'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -7,50 +11,44 @@ interface IProps {
 }
 
 const AddNewTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
-	const [newTodoTitle, setNewTodoTitle] = useState("")
-	const newTodoTitleRef = useRef<HTMLInputElement>(null)
-
-	const handleSubmit = (e: React.FormEvent) => {
-		// stop form from submitting
-		e.preventDefault()
-
-		// create a new todo and set a new todos state
-		const newTodo: NewTodo = {
-			title: newTodoTitle,
+	const { register, handleSubmit, formState: { errors }, setFocus } = useForm<NewTodo>({
+		resolver: zodResolver(todoSchema),
+		defaultValues: {
 			completed: false,
-		}
-		onAddTodo(newTodo)   // <-- calls `addTodo()` in `App.tsx`
+		},
+	})
 
-		// clear newTodoTitle state
-		setNewTodoTitle("")
+	const submitData = (todo: NewTodo) => {
+		onAddTodo(todo)
 	}
 
-	// On component mount, focus on input field
 	useEffect(() => {
-		newTodoTitleRef.current?.focus()
-	}, [])
-
-	// console.log("AddNewTodoForm rendering...")
+		setFocus('title')
+	}, [setFocus])
 
 	return (
-		<form onSubmit={handleSubmit} className="mb-3">
-			<div className="input-group">
-				<input
-					ref={newTodoTitleRef}
+		<Form onSubmit={handleSubmit(submitData)} className="mb-3">
+			<Form.Group className="input-group">
+				<Form.Control
 					type="text"
-					className="form-control"
 					placeholder="Todo title"
-					onChange={e => setNewTodoTitle(e.target.value)}
-					value={newTodoTitle}
+					{...register('title')}
 				/>
 
-				<button
-					disabled={!newTodoTitle.trim()}
+				<Form.Control
+					type="hidden"
+					{...register('completed')}
+				/>
+
+				<Button
+					variant='success'
 					type="submit"
-					className="btn btn-success"
-				>Create</button>
-			</div>
-		</form>
+				>Create
+				</Button>
+			</Form.Group>
+
+			{errors.title && <span className='text-danger'>{errors.title.message ?? 'Invalid title'}</span>}
+		</Form>
 	)
 }
 
