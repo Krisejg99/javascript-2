@@ -17,7 +17,7 @@ const TodosPage = () => {
 
 				{loading && <p>Loading...</p>}
 
-				<Button variant="primary" onClick={() => getTodos()}>Refresh</Button>
+				<Button variant="primary" onClick={getTodos}>Refresh</Button>
 			</div>
 
 			<AddNewTodoForm onAddTodo={(newTodo: NewTodo) => {
