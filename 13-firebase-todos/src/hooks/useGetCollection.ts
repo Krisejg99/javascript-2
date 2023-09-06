@@ -1,22 +1,44 @@
-import { getDocs, collection } from "firebase/firestore"
-import { db } from "../services/firebase"
+import { CollectionReference, getDocs } from "firebase/firestore"
+import { useEffect, useState } from "react"
 
-const useGetCollection = <T>(collectionName: string) => {
+const useGetCollection = <T>(collection: CollectionReference) => {
+	const [data, setData] = useState<T | null>(null)
+	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState(false)
+
 	const getCollection = async () => {
-		const snapshot = await getDocs(collection(db, collectionName))
+		setLoading(true)
+		setError(false)
 
-		if (snapshot.empty) return
+		const snapshot = await getDocs(collection)
 
-		return snapshot.docs.map(doc => {
+		if (snapshot.empty) {
+			setData(null)
+			setLoading(false)
+			setError(true)
+			return
+		}
+
+		const data = snapshot.docs.map(doc => {
 			return {
+				...doc.data(),
 				_id: doc.id,
-				...doc.data()
 			}
 		}) as T
+
+		setData(data)
+		setLoading(false)
 	}
 
+	useEffect(() => {
+		getCollection()
+	}, [])
+
 	return {
-		getCollection
+		data,
+		loading,
+		error,
+		getCollection,
 	}
 }
 

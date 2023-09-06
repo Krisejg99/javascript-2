@@ -7,7 +7,7 @@ import useAddTodo from "../hooks/useAddTodo"
 import { NewTodo } from "../types/Todo.types"
 
 const TodosPage = () => {
-	const { todos, loading, refetch } = useGetTodos()
+	const { todos, loading, error, getTodos } = useGetTodos()
 	const { addTodo } = useAddTodo()
 
 	return (
@@ -17,12 +17,12 @@ const TodosPage = () => {
 
 				{loading && <p>Loading...</p>}
 
-				<Button variant="primary" onClick={() => refetch()}>Refresh</Button>
+				<Button variant="primary" onClick={() => getTodos()}>Refresh</Button>
 			</div>
 
 			<AddNewTodoForm onAddTodo={(newTodo: NewTodo) => {
 				addTodo(newTodo)
-				refetch()
+				getTodos()
 			}} />
 
 			{todos && todos.length > 0 && (
@@ -40,6 +40,8 @@ const TodosPage = () => {
 					))}
 				</ListGroup>
 			)}
+
+			{error && <p>Error: Could not get todos</p>}
 
 			{todos && todos.length === 0 && (
 				<p>Yayyy, you have 0 todos to do</p>
