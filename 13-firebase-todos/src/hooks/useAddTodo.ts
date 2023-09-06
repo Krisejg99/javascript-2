@@ -1,10 +1,10 @@
 import { NewTodo } from '../types/Todo.types'
-import { db } from '../services/firebase'
-import { addDoc, collection } from 'firebase/firestore'
+import { todosCol } from '../services/firebase'
+import { addDoc } from 'firebase/firestore'
 
 const useAddTodo = () => {
 	const addTodo = async (todo: NewTodo) => {
-		await addDoc(collection(db, 'todos'), todo)
+		return await addDoc(todosCol, todo)
 	}
 
 	return {
