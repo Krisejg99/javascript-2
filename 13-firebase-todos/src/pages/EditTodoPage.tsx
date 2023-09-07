@@ -1,37 +1,77 @@
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import InputGroup from 'react-bootstrap/InputGroup'
 import { useNavigate, useParams } from 'react-router-dom'
+import useGetTodo from '../hooks/useGetTodo'
+// import useEditTodo from '../hooks/useEditTodo'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { TodoSchema, todoSchema } from '../schemas/TodoSchema'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { doc, updateDoc } from 'firebase/firestore'
+import { todosCol } from '../services/firebase'
+import { toast } from 'react-toastify'
 
 const EditTodoPage = () => {
 	const navigate = useNavigate()
 	const { id } = useParams()
-	const todoId = Number(id)
+	const todoId = id as string
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault()
+	const { data: todo, loading, error, getData: getTodo } = useGetTodo(todoId)
 
-		if (!todoId) {
-			return
-		}
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<TodoSchema>({
+		resolver: zodResolver(todoSchema),
+	})
+
+	// const { editTodo } = useEditTodo(todoId)
+
+	const submitData: SubmitHandler<TodoSchema> = async (data: TodoSchema) => {
+		const docRef = doc(todosCol, todoId)
+
+		toast.promise(updateDoc(docRef, data), {
+			pending: 'Saving todod...',
+			success: 'Todo was updated successfully',
+			error: 'Unable to save todo',
+		})
+
+		await getTodo()
+
+		navigate('/todos/' + todoId)
 	}
 
 	return (
 		<>
-			<h1>Edit: {``}</h1>
+			{loading && <p>Loading...</p>}
 
-			<Form onSubmit={handleSubmit} className='mb-4'>
-				<Form.Group className="mb-3" controlId="title">
-					<Form.Label>Title</Form.Label>
-					<Form.Control
-						type="text"
-						placeholder="Enter the new title"
-					/>
-				</Form.Group>
+			{error && <p>Error occured while updating the todo.</p>}
 
-				<Button variant="primary" type="submit" disabled={false}>
-					Save
-				</Button>
-			</Form>
+			{todo && <>
+				<h1>Edit: {todo.title}</h1>
+
+				<Form onSubmit={handleSubmit(submitData)} className="mb-3">
+					<Form.Label>Title:</Form.Label>
+
+					<InputGroup>
+						<Form.Control
+							aria-label='The new title of the todo'
+							type="text"
+							defaultValue={todo.title}
+							{...register('title')}
+						/>
+
+						<Button
+							variant='success'
+							type="submit"
+						>Update
+						</Button>
+					</InputGroup>
+
+					{errors.title && <span className='text-danger'>{errors.title.message ?? 'Invalid title'}</span>}
+				</Form>
+			</>}
 
 			<Button variant='secondary' onClick={() => navigate(-1)}>&laquo; Go back</Button>
 		</>
