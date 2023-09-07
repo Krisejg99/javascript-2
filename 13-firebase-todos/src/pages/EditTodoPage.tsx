@@ -3,7 +3,6 @@ import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import { useNavigate, useParams } from 'react-router-dom'
 import useGetTodo from '../hooks/useGetTodo'
-// import useEditTodo from '../hooks/useEditTodo'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TodoSchema, todoSchema } from '../schemas/TodoSchema'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -16,7 +15,7 @@ const EditTodoPage = () => {
 	const { id } = useParams()
 	const todoId = id as string
 
-	const { data: todo, loading, error, getData: getTodo } = useGetTodo(todoId)
+	const { data: todo, loading, error } = useGetTodo(todoId)
 
 	const {
 		register,
@@ -26,8 +25,6 @@ const EditTodoPage = () => {
 		resolver: zodResolver(todoSchema),
 	})
 
-	// const { editTodo } = useEditTodo(todoId)
-
 	const submitData: SubmitHandler<TodoSchema> = async (data: TodoSchema) => {
 		const docRef = doc(todosCol, todoId)
 
@@ -36,10 +33,6 @@ const EditTodoPage = () => {
 			success: 'Todo was updated successfully',
 			error: 'Unable to save todo',
 		})
-
-		await getTodo()
-
-		navigate('/todos/' + todoId)
 	}
 
 	return (
