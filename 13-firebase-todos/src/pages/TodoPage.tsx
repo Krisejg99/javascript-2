@@ -18,7 +18,6 @@ const TodoPage = () => {
 		data: todo,
 		loading,
 		error,
-		getData
 	} = useGetTodo(todoId)
 
 	const deleteTodo = async () => {
@@ -36,11 +35,7 @@ const TodoPage = () => {
 	return (
 		<>
 			{todo && <>
-				<div className="d-flex justify-content-between align-items-center">
-					<h1 className="mb-3">{todo.title}</h1>
-
-					<Button variant="primary" onClick={getData}>Refresh</Button>
-				</div>
+				<h1 className="mb-3">{todo.title}</h1>
 
 				<p>
 					<strong>Status:</strong>{" "}
