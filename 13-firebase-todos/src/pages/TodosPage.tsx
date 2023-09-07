@@ -7,7 +7,7 @@ import useAddTodo from "../hooks/useAddTodo"
 import { NewTodo } from "../types/Todo.types"
 
 const TodosPage = () => {
-	const { todos, loading, error, getTodos } = useGetTodos()
+	const { data: todos, loading, error, getData: getTodos } = useGetTodos()
 	const { addTodo } = useAddTodo()
 
 	return (

@@ -1,16 +1,16 @@
 import { CollectionReference, getDocs } from "firebase/firestore"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
-const useGetCollection = <T>(collection: CollectionReference) => {
-	const [data, setData] = useState<T | null>(null)
+const useGetCollection = <T>(colRef: CollectionReference<T>) => {
+	const [data, setData] = useState<T[] | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(false)
 
-	const getCollection = async () => {
+	const getData = useCallback(async () => {
 		setLoading(true)
 		setError(false)
 
-		const snapshot = await getDocs(collection)
+		const snapshot = await getDocs(colRef)
 
 		if (snapshot.empty) {
 			setData(null)
@@ -19,26 +19,26 @@ const useGetCollection = <T>(collection: CollectionReference) => {
 			return
 		}
 
-		const data = snapshot.docs.map(doc => {
+		const data: T[] = snapshot.docs.map(doc => {
 			return {
 				...doc.data(),
 				_id: doc.id,
 			}
-		}) as T
+		})
 
 		setData(data)
 		setLoading(false)
-	}
+	}, [colRef])
 
 	useEffect(() => {
-		getCollection()
-	}, [])
+		getData()
+	}, [getData])
 
 	return {
 		data,
 		loading,
 		error,
-		getCollection,
+		getData,
 	}
 }
 
