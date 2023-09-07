@@ -6,7 +6,6 @@ import useGetTodo from "../hooks/useGetTodo"
 import { todosCol } from "../services/firebase"
 import { deleteDoc, doc } from "firebase/firestore"
 import { toast } from "react-toastify"
-// import useEditTodo from "../hooks/useEditTodo"
 
 const TodoPage = () => {
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
@@ -21,8 +20,6 @@ const TodoPage = () => {
 		error,
 		getData
 	} = useGetTodo(todoId)
-
-	// const { editTodo } = useEditTodo(todoId)
 
 	const deleteTodo = async () => {
 		const docRef = doc(todosCol, todoId)
@@ -53,7 +50,6 @@ const TodoPage = () => {
 				<div className="buttons mb-3">
 					<Button
 						variant="success"
-					// onClick={() => editTodo({ completed: !todo.completed })}
 					>
 						Toggle
 					</Button>
