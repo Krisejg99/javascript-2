@@ -1,26 +1,33 @@
 import React, { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { Form, Button } from 'react-bootstrap'
-import { todoSchema } from '../schemas/TodoSchema'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { Form, Button, InputGroup } from 'react-bootstrap'
+import { TodoSchema, todoSchema } from '../schemas/TodoSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NewTodo } from '../types/Todo.types'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {
-	onAddTodo: (todo: NewTodo) => void
+	onAddTodo: (todo: NewTodo) => Promise<void>
 }
 
 const AddNewTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
-	const { register, handleSubmit, formState: { errors }, setFocus } = useForm<NewTodo>({
+	const { register, handleSubmit, formState: { errors, isSubmitSuccessful }, setFocus, reset } = useForm<TodoSchema>({
 		resolver: zodResolver(todoSchema),
-		defaultValues: {
-			completed: false,
-		},
 	})
 
-	const submitData = (todo: NewTodo) => {
-		onAddTodo(todo)
+	const submitData: SubmitHandler<TodoSchema> = async (todo: TodoSchema) => {
+		const newTodo: NewTodo = {
+			title: todo.title,
+			completed: false,
+		}
+
+		// await för att 'reset' ska vänta på svaret
+		await onAddTodo(newTodo)
 	}
+
+	useEffect(() => {
+		reset()
+	}, [isSubmitSuccessful, reset])
 
 	useEffect(() => {
 		setFocus('title')
@@ -28,16 +35,12 @@ const AddNewTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
 
 	return (
 		<Form onSubmit={handleSubmit(submitData)} className="mb-3">
-			<Form.Group className="input-group">
+			<InputGroup>
 				<Form.Control
+					aria-label='The title of the new todo'
 					type="text"
 					placeholder="Todo title"
 					{...register('title')}
-				/>
-
-				<Form.Control
-					type="hidden"
-					{...register('completed')}
 				/>
 
 				<Button
@@ -45,7 +48,7 @@ const AddNewTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
 					type="submit"
 				>Create
 				</Button>
-			</Form.Group>
+			</InputGroup>
 
 			{errors.title && <span className='text-danger'>{errors.title.message ?? 'Invalid title'}</span>}
 		</Form>

@@ -3,12 +3,15 @@ import { Link } from "react-router-dom"
 import AddNewTodoForm from "../components/AddNewTodoForm"
 import { Button } from "react-bootstrap"
 import useGetTodos from "../hooks/useGetTodos"
-import useAddTodo from "../hooks/useAddTodo"
+// import useAddTodo from "../hooks/useAddTodo"
 import { NewTodo } from "../types/Todo.types"
+import { toast } from "react-toastify"
+import { todosCol } from "../services/firebase"
+import { doc, setDoc } from "firebase/firestore"
 
 const TodosPage = () => {
 	const { data: todos, loading, error, getData: getTodos } = useGetTodos()
-	const { addTodo } = useAddTodo()
+	// const { addTodo } = useAddTodo()
 
 	return (
 		<>
@@ -20,9 +23,13 @@ const TodosPage = () => {
 				<Button variant="primary" onClick={getTodos}>Refresh</Button>
 			</div>
 
-			<AddNewTodoForm onAddTodo={(newTodo: NewTodo) => {
-				addTodo(newTodo)
-				getTodos()
+			<AddNewTodoForm onAddTodo={async (newTodo: NewTodo) => {
+				const docRef = doc(todosCol)
+				await setDoc(docRef, newTodo)
+
+				// getTodos()
+
+				toast.success('Success!')
 			}} />
 
 			{todos && todos.length > 0 && (
