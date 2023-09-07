@@ -1,21 +1,20 @@
 import ListGroup from "react-bootstrap/ListGroup"
 import { Link } from "react-router-dom"
-import AddNewTodoForm from "../components/AddNewTodoForm"
 import useGetTodos from "../hooks/useGetTodos"
 import { toast } from "react-toastify"
 import { newTodosCol } from "../services/firebase"
 import { doc, serverTimestamp, setDoc } from "firebase/firestore"
 import { TodoSchema } from "../schemas/TodoSchema"
+import TodoForm from "../components/TodoForm"
 
 const TodosPage = () => {
 	const { data: todos, loading } = useGetTodos()
 
-	const addTodo = async (todo: TodoSchema) => {
+	const addTodo = async (data: TodoSchema) => {
 		const docRef = doc(newTodosCol)
 
 		await setDoc(docRef, {
-			title: todo.title,
-			completed: false,
+			...data,
 			created_at: serverTimestamp(),
 			updated_at: serverTimestamp(),
 		})
@@ -31,7 +30,7 @@ const TodosPage = () => {
 				{loading && <p>Loading...</p>}
 			</div>
 
-			<AddNewTodoForm onAddTodo={addTodo} />
+			<TodoForm onSave={addTodo} />
 
 			{todos && todos.length > 0 && (
 				<ListGroup className="todolist">

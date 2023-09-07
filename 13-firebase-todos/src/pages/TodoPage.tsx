@@ -43,12 +43,6 @@ const TodoPage = () => {
 				</p>
 
 				<div className="buttons mb-3">
-					<Button
-						variant="success"
-					>
-						Toggle
-					</Button>
-
 					<Link to={`/todos/${todoId}/edit`}>
 						<Button variant="warning">Edit</Button>
 					</Link>

@@ -5,6 +5,9 @@ export const todoSchema = z.object({
 		.string()
 		.min(2, { message: 'Minimun length of 2 characters' })
 		.max(30, { message: 'Maximum length of 40 characters' }),
+
+	completed: z
+		.boolean()
 })
 
 export type TodoSchema = z.infer<typeof todoSchema>

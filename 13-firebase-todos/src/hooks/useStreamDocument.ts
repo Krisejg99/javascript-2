@@ -1,4 +1,4 @@
-import { CollectionReference, doc, onSnapshot } from "firebase/firestore"
+import { CollectionReference, doc, getDoc, onSnapshot } from "firebase/firestore"
 import { useEffect, useState } from "react"
 
 const useStreamDocument = <T>(colRef: CollectionReference<T>, documentId: string) => {
@@ -17,7 +17,7 @@ const useStreamDocument = <T>(colRef: CollectionReference<T>, documentId: string
 				return
 			}
 
-			const data: T =  {
+			const data: T = {
 				...snapshot.data(),
 				_id: snapshot.id,
 			}
