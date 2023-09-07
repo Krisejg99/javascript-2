@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app"
 import { CollectionReference, DocumentData, collection, getFirestore } from "firebase/firestore"
-import { Todo } from "../types/Todo.types"
+import { NewTodo, Todo } from "../types/Todo.types"
 
 const env = import.meta.env
 
@@ -25,3 +25,4 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 }
 
 export const todosCol = createCollection<Todo>('todos')
+export const newTodosCol = createCollection<NewTodo>('todos')

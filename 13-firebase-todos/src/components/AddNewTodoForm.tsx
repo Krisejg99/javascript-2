@@ -3,11 +3,9 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { Form, Button, InputGroup } from 'react-bootstrap'
 import { TodoSchema, todoSchema } from '../schemas/TodoSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { NewTodo } from '../types/Todo.types'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {
-	onAddTodo: (todo: NewTodo) => Promise<void>
+	onAddTodo: (todo: TodoSchema) => Promise<void>
 }
 
 const AddNewTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
@@ -16,13 +14,8 @@ const AddNewTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
 	})
 
 	const submitData: SubmitHandler<TodoSchema> = async (todo: TodoSchema) => {
-		const newTodo: NewTodo = {
-			title: todo.title,
-			completed: false,
-		}
-
 		// await för att 'reset' ska vänta på svaret
-		await onAddTodo(newTodo)
+		await onAddTodo(todo)
 	}
 
 	useEffect(() => {
