@@ -1,16 +1,16 @@
-import { CollectionReference, DocumentReference, doc, getDoc } from "firebase/firestore"
-import { useEffect, useState } from "react"
+import { CollectionReference, doc, getDoc } from "firebase/firestore"
+import { useCallback, useEffect, useState } from "react"
 
-const useGetDocument = <T>(collection: CollectionReference, documentId: string) => {
+const useGetDocument = <T>(colRef: CollectionReference<T>, documentId: string) => {
 	const [data, setData] = useState<T | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(false)
 
-	const getDocument = async (documentId: string) => {
+	const getData = useCallback(async () => {
 		setLoading(true)
 		setError(false)
 
-		const docRef = doc(collection, documentId) as DocumentReference<T>
+		const docRef = doc(colRef, documentId)
 		const snapshot = await getDoc(docRef)
 
 		if (!snapshot.exists()) {
@@ -20,24 +20,24 @@ const useGetDocument = <T>(collection: CollectionReference, documentId: string) 
 			return
 		}
 
-		const data =  {
+		const data: T =  {
 			...snapshot.data(),
 			_id: snapshot.id,
-		} as T
+		}
 
 		setData(data)
 		setLoading(false)
-	}
+	}, [colRef, documentId])
 
 	useEffect(() => {
-		getDocument(documentId)
-	}, [documentId])
+		getData()
+	}, [getData])
 
 	return {
 		data,
 		loading,
 		error,
-		getDocument,
+		getData,
 	}
 }
 

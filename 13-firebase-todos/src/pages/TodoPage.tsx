@@ -10,7 +10,13 @@ const TodoPage = () => {
 	const { id } = useParams()
 	const todoId = id as string
 
-	const { todo, loading, error, getTodo } = useGetTodo(todoId)
+	const {
+		data: todo,
+		loading,
+		error,
+		getData
+	} = useGetTodo(todoId)
+
 	// const { editTodo } = useEditTodo(todoId)
 
 	return (
@@ -19,7 +25,7 @@ const TodoPage = () => {
 				<div className="d-flex justify-content-between align-items-center">
 					<h1 className="mb-3">{todo.title}</h1>
 
-					<Button variant="primary" onClick={() => getTodo(todoId)}>Refresh</Button>
+					<Button variant="primary" onClick={getData}>Refresh</Button>
 				</div>
 
 				<p>
