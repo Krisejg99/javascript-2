@@ -6,6 +6,7 @@ import { newTodosCol } from "../services/firebase"
 import { doc, serverTimestamp, setDoc } from "firebase/firestore"
 import { TodoSchema } from "../schemas/TodoSchema"
 import TodoForm from "../components/TodoForm"
+import { dateToYmdHms, firebaseTimestampToDate } from '../helpers/time'
 
 const TodosPage = () => {
 	const { data: todos, loading } = useGetTodos()
@@ -42,7 +43,8 @@ const TodosPage = () => {
 							className={todo.completed ? "done" : ""}
 							to={`/todos/${todo._id}`}
 						>
-							{todo.title}
+							<span>{todo.title}</span>
+							<span className="created">{dateToYmdHms(firebaseTimestampToDate(todo.created_at))}</span>
 						</ListGroup.Item>
 					))}
 				</ListGroup>
