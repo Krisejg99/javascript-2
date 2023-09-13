@@ -3,9 +3,10 @@ import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import { NavLink, Link } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
+import { NavDropdown } from 'react-bootstrap'
 
 const Navigation = () => {
-	const { currentUser } = useAuth()
+	const { currentUser, userEmail } = useAuth()
 
 	return (
 		<Navbar bg="dark" variant="dark" expand="sm">
@@ -18,7 +19,10 @@ const Navigation = () => {
 						{currentUser
 							? <>
 								<Nav.Link as={NavLink} end to="/todos">Todos</Nav.Link>
-								<Nav.Link as={NavLink} end to="/logout">Logout</Nav.Link>
+
+								<NavDropdown title={userEmail}>
+									<NavDropdown.Item as={NavLink} end to="/logout">Logout</NavDropdown.Item>
+								</NavDropdown>
 							</>
 
 							: <>
