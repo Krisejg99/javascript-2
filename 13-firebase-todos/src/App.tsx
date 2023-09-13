@@ -10,6 +10,7 @@ import TodosPage from './pages/TodosPage'
 import './assets/scss/App.scss'
 import SignUpPage from './pages/SignUpPage'
 import LoginPage from './pages/LoginPage'
+import LogOutPage from './pages/LogOutPage'
 
 const App = () => {
 	return (
@@ -27,6 +28,7 @@ const App = () => {
 					</Route>
 
 					<Route path="/login" element={<LoginPage />} />
+					<Route path="/logout" element={<LogOutPage />} />
 					<Route path="/signup" element={<SignUpPage />} />
 
 					<Route path="*" element={<NotFound />} />

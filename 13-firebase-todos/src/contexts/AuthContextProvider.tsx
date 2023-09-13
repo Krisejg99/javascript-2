@@ -3,7 +3,8 @@ import {
 	UserCredential,
 	createUserWithEmailAndPassword,
 	onAuthStateChanged,
-	signInWithEmailAndPassword
+	signInWithEmailAndPassword,
+	signOut
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
 import { auth } from '../services/firebase'
@@ -13,7 +14,7 @@ type AuthContextType = {
 	userEmail: string | null
 	signUp: (email: string, password: string) => Promise<UserCredential>
 	logIn: (email: string, password: string) => Promise<UserCredential>
-	// logOut:
+	logOut: () => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)
@@ -34,9 +35,9 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return signInWithEmailAndPassword(auth, email, password)
 	}
 
-	// const logOut = (email: string, password: string) => {
-	// 	return createUserWithEmailAndPassword(auth, email, password)
-	// }
+	const logOut = () => {
+		return signOut(auth)
+	}
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -55,6 +56,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			userEmail,
 			signUp,
 			logIn,
+			logOut,
 		}}>
 			{children}
 		</AuthContext.Provider>
