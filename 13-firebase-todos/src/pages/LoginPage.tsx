@@ -7,17 +7,17 @@ import Row from 'react-bootstrap/Row'
 import Alert from 'react-bootstrap/Alert'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { LoginSchema } from '../schemas/LoginSchema'
+import { LogInSchema } from '../schemas/LogInSchema'
 import { useState } from 'react'
 import useAuth from '../hooks/useAuth'
 import { FirebaseError } from 'firebase/app'
 import Container from 'react-bootstrap/Container'
 
-const LoginPage = () => {
+const LogInPage = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
-	const { register, handleSubmit, formState: { errors }, watch } = useForm<LoginSchema>({
-		// resolver: zodResolver(loginSchema)
+	const { register, handleSubmit, formState: { errors }, watch } = useForm<LogInSchema>({
+		// resolver: zodResolver(logInSchema)
 	})
 
 	const { logIn } = useAuth()
@@ -27,7 +27,7 @@ const LoginPage = () => {
 	const passwordRef = useRef('')
 	passwordRef.current = watch('password')
 
-	const onLogin: SubmitHandler<LoginSchema> = async (data: LoginSchema) => {
+	const onLogIn: SubmitHandler<LogInSchema> = async (data: LogInSchema) => {
 		setErrorMessage(null)
 
 		try {
@@ -54,11 +54,11 @@ const LoginPage = () => {
 				<Col md={{ span: 6, offset: 3 }}>
 					<Card className='mb-3'>
 						<Card.Body>
-							<Card.Title className='mb-3'>Login</Card.Title>
+							<Card.Title className='mb-3'>LogIn</Card.Title>
 
 							{errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}
 
-							<Form onSubmit={handleSubmit(onLogin)}>
+							<Form onSubmit={handleSubmit(onLogIn)}>
 								<Form.Group controlId='email'>
 									<Form.Label>Email</Form.Label>
 									<Form.Control
@@ -103,4 +103,4 @@ const LoginPage = () => {
 	)
 }
 
-export default LoginPage
+export default LogInPage

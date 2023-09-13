@@ -8,7 +8,7 @@ import TodoPage from './pages/TodoPage'
 import TodosPage from './pages/TodosPage'
 import './assets/scss/App.scss'
 import SignUpPage from './pages/SignUpPage'
-import LoginPage from './pages/LoginPage'
+import LogInPage from './pages/LogInPage'
 import LogOutPage from './pages/LogOutPage'
 import RequireAuth from './components/RequireAuth'
 import UpdateProfilePage from './pages/UpdateProfilePage'
@@ -54,7 +54,7 @@ const App = () => {
 				</Route>
 
 				{/* Guest routes */}
-				<Route path="/login" element={<LoginPage />} />
+				<Route path="/login" element={<LogInPage />} />
 				<Route path="/logout" element={<LogOutPage />} />
 				<Route path="/signup" element={<SignUpPage />} />
 				<Route path="/forgot-password" element={<ForgotPasswordPage />} />
