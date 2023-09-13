@@ -6,6 +6,7 @@ import useGetTodo from "../hooks/useGetTodo"
 import { todosCol } from "../services/firebase"
 import { deleteDoc, doc } from "firebase/firestore"
 import { toast } from "react-toastify"
+import Container from 'react-bootstrap/Container'
 
 const TodoPage = () => {
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
@@ -33,7 +34,7 @@ const TodoPage = () => {
 	}
 
 	return (
-		<>
+		<Container className='py-3 center-y'>
 			{todo && <>
 				<h1 className="mb-3">{todo.title}</h1>
 
@@ -71,7 +72,7 @@ const TodoPage = () => {
 			</Link>
 
 			{loading && <p>Loading...</p>}
-		</>
+		</Container>
 	)
 }
 

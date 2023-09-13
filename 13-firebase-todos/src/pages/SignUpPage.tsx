@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { SignUpSchema } from '../schemas/SignUpSchema'
 import useAuth from '../hooks/useAuth'
 import { FirebaseError } from 'firebase/app'
+import Container from 'react-bootstrap/Container'
 
 const SignUpPage = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -47,66 +48,68 @@ const SignUpPage = () => {
 	}
 
 	return (
-		<Row>
-			<Col md={{ span: 6, offset: 3 }}>
-				<Card>
-					<Card.Body>
-						<Card.Title className='mb-3'>Sign Up</Card.Title>
+		<Container className='py-3 center-y'>
+			<Row>
+				<Col md={{ span: 6, offset: 3 }}>
+					<Card>
+						<Card.Body>
+							<Card.Title className='mb-3'>Sign Up</Card.Title>
 
-						{errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}
+							{errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}
 
-						<Form onSubmit={handleSubmit(onSignUp)}>
-							<Form.Group controlId='email'>
-								<Form.Label>Email</Form.Label>
-								<Form.Control
-									type='email'
-									{...register('email')}
-								/>
+							<Form onSubmit={handleSubmit(onSignUp)}>
+								<Form.Group controlId='email'>
+									<Form.Label>Email</Form.Label>
+									<Form.Control
+										type='email'
+										{...register('email')}
+									/>
 
-								{errors.email && <span className='text-danger'>{errors.email.message || 'Invalid email'}</span>}
-							</Form.Group>
+									{errors.email && <span className='text-danger'>{errors.email.message || 'Invalid email'}</span>}
+								</Form.Group>
 
-							<Form.Group controlId='password'>
-								<Form.Label>Password</Form.Label>
-								<Form.Control
-									type='password'
-									{...register('password')}
-									autoComplete='new-password'
-								/>
+								<Form.Group controlId='password'>
+									<Form.Label>Password</Form.Label>
+									<Form.Control
+										type='password'
+										{...register('password')}
+										autoComplete='new-password'
+									/>
 
-								{errors.password && <span className='text-danger'>{errors.password.message || 'Invalid password'}</span>}
-							</Form.Group>
+									{errors.password && <span className='text-danger'>{errors.password.message || 'Invalid password'}</span>}
+								</Form.Group>
 
-							<Form.Group controlId='confirmPassword'>
-								<Form.Label>Confirm Password</Form.Label>
-								<Form.Control
-									type='password'
-									autoComplete='off'
-									{...register('confirmPassword', {
-										validate: (value) => {
-											return value === passwordRef.current || "Passwords don't match"
-										},
-									})}
-								/>
+								<Form.Group controlId='confirmPassword'>
+									<Form.Label>Confirm Password</Form.Label>
+									<Form.Control
+										type='password'
+										autoComplete='off'
+										{...register('confirmPassword', {
+											validate: (value) => {
+												return value === passwordRef.current || "Passwords don't match"
+											},
+										})}
+									/>
 
-								{errors.confirmPassword && <span className='text-danger'>{errors.confirmPassword.message || 'Invalid password confirmation'}</span>}
-							</Form.Group>
+									{errors.confirmPassword && <span className='text-danger'>{errors.confirmPassword.message || 'Invalid password confirmation'}</span>}
+								</Form.Group>
 
-							<Button
-								type='submit'
-								disabled={loading}
-							>
-								{loading ? 'Creating account...' : 'Create account'}
-							</Button>
-						</Form>
-					</Card.Body>
-				</Card>
+								<Button
+									type='submit'
+									disabled={loading}
+								>
+									{loading ? 'Creating account...' : 'Create account'}
+								</Button>
+							</Form>
+						</Card.Body>
+					</Card>
 
-				<div className="text-center mt-3">
-					Already have an account? <Link to="/login">Log In</Link>
-				</div>
-			</Col>
-		</Row>
+					<div className="text-center mt-3">
+						Already have an account? <Link to="/login">Log In</Link>
+					</div>
+				</Col>
+			</Row>
+		</Container>
 	)
 }
 

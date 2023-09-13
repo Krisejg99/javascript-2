@@ -7,6 +7,7 @@ import { doc, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { todosCol } from '../services/firebase'
 import { toast } from 'react-toastify'
 import TodoForm from '../components/TodoForm'
+import Container from 'react-bootstrap/Container'
 
 const EditTodoPage = () => {
 	const navigate = useNavigate()
@@ -29,7 +30,7 @@ const EditTodoPage = () => {
 	}
 
 	return (
-		<>
+		<Container className='py-3 center-y'>
 			{loading && <p>Loading...</p>}
 
 			{error && <p>Error occured while updating the todo.</p>}
@@ -41,7 +42,7 @@ const EditTodoPage = () => {
 			</>}
 
 			<Button variant='secondary' onClick={() => navigate(-1)}>&laquo; Go back</Button>
-		</>
+		</Container>
 	)
 }
 

@@ -11,6 +11,7 @@ import { LoginSchema } from '../schemas/LoginSchema'
 import { useState } from 'react'
 import useAuth from '../hooks/useAuth'
 import { FirebaseError } from 'firebase/app'
+import Container from 'react-bootstrap/Container'
 
 const LoginPage = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -48,50 +49,52 @@ const LoginPage = () => {
 	}
 
 	return (
-		<Row>
-			<Col md={{ span: 6, offset: 3 }}>
-				<Card>
-					<Card.Body>
-						<Card.Title className='mb-3'>Login</Card.Title>
+		<Container className='py-3 center-y'>
+			<Row>
+				<Col md={{ span: 6, offset: 3 }}>
+					<Card>
+						<Card.Body>
+							<Card.Title className='mb-3'>Login</Card.Title>
 
-						{errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}
+							{errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}
 
-						<Form onSubmit={handleSubmit(onLogin)}>
-							<Form.Group controlId='email'>
-								<Form.Label>Email</Form.Label>
-								<Form.Control
-									type='email'
-									{...register('email')}
-								/>
+							<Form onSubmit={handleSubmit(onLogin)}>
+								<Form.Group controlId='email'>
+									<Form.Label>Email</Form.Label>
+									<Form.Control
+										type='email'
+										{...register('email')}
+									/>
 
-								{errors.email && <span className='text-danger'>{errors.email.message || 'Invalid email'}</span>}
-							</Form.Group>
+									{errors.email && <span className='text-danger'>{errors.email.message || 'Invalid email'}</span>}
+								</Form.Group>
 
-							<Form.Group controlId='password'>
-								<Form.Label>Password</Form.Label>
-								<Form.Control
-									type='password'
-									{...register('password')}
-								/>
+								<Form.Group controlId='password'>
+									<Form.Label>Password</Form.Label>
+									<Form.Control
+										type='password'
+										{...register('password')}
+									/>
 
-								{errors.password && <span className='text-danger'>{errors.password.message || 'Invalid password'}</span>}
-							</Form.Group>
+									{errors.password && <span className='text-danger'>{errors.password.message || 'Invalid password'}</span>}
+								</Form.Group>
 
-							<Button
-								type='submit'
-								disabled={loading}
-							>
-								{loading ? 'Logging in...' : 'Log in'}
-							</Button>
-						</Form>
-					</Card.Body>
-				</Card>
+								<Button
+									type='submit'
+									disabled={loading}
+								>
+									{loading ? 'Logging in...' : 'Log in'}
+								</Button>
+							</Form>
+						</Card.Body>
+					</Card>
 
-				<div className="text-center mt-3">
-					Need an account? <Link to="/signup">Sign Up</Link>
-				</div>
-			</Col>
-		</Row>
+					<div className="text-center mt-3">
+						Need an account? <Link to="/signup">Sign Up</Link>
+					</div>
+				</Col>
+			</Row>
+		</Container>
 	)
 }
 

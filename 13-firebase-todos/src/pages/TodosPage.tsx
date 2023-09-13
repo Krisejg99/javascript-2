@@ -7,6 +7,7 @@ import { doc, serverTimestamp, setDoc } from "firebase/firestore"
 import { TodoSchema } from "../schemas/TodoSchema"
 import TodoForm from "../components/TodoForm"
 import { dateToYmdHms, firebaseTimestampToDate } from '../helpers/time'
+import Container from 'react-bootstrap/Container'
 
 const TodosPage = () => {
 	const { data: todos, loading } = useGetTodos()
@@ -24,7 +25,7 @@ const TodosPage = () => {
 	}
 
 	return (
-		<>
+		<Container className='py-3 center-y'>
 			<div className="d-flex justify-content-between align-items-center">
 				<h1 className="mb-3">Todos</h1>
 
@@ -53,7 +54,7 @@ const TodosPage = () => {
 			{todos && todos.length === 0 && (
 				<p>Yayyy, you have 0 todos to do</p>
 			)}
-		</>
+		</Container>
 	)
 }
 
