@@ -95,7 +95,9 @@ const SignUpPage = () => {
 							<Button
 								type='submit'
 								disabled={loading}
-							>Sign Up</Button>
+							>
+								{loading ? 'Creating account...' : 'Create account'}
+							</Button>
 						</Form>
 					</Card.Body>
 				</Card>

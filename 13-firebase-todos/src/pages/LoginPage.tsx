@@ -4,21 +4,47 @@ import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
+import Alert from 'react-bootstrap/Alert'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { Link } from 'react-router-dom'
-import { LoginSchema, loginSchema } from '../schemas/LoginSchema'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { Link, useNavigate } from 'react-router-dom'
+import { LoginSchema } from '../schemas/LoginSchema'
+import { useState } from 'react'
+import useAuth from '../hooks/useAuth'
+import { FirebaseError } from 'firebase/app'
 
 const LoginPage = () => {
+	const [errorMessage, setErrorMessage] = useState<string | null>(null)
+	const [loading, setLoading] = useState(false)
 	const { register, handleSubmit, formState: { errors }, watch } = useForm<LoginSchema>({
 		// resolver: zodResolver(loginSchema)
 	})
 
+	const { logIn } = useAuth()
+
+	const navigate = useNavigate()
+
 	const passwordRef = useRef('')
 	passwordRef.current = watch('password')
 
-	const submitForm: SubmitHandler<LoginSchema> = (data: LoginSchema) => {
-		console.log('Loggin in:', data)
+	const onLogin: SubmitHandler<LoginSchema> = async (data: LoginSchema) => {
+		setErrorMessage(null)
+
+		try {
+			setLoading(true)
+			await logIn(data.email, data.password)
+
+			navigate('/')
+		}
+		catch (error) {
+			if (error instanceof FirebaseError) {
+				setErrorMessage(error.message)
+			}
+			else {
+				setErrorMessage('Something went wrong. Have you tried turning it off and back on again?')
+			}
+
+			setLoading(false)
+		}
 	}
 
 	return (
@@ -28,7 +54,9 @@ const LoginPage = () => {
 					<Card.Body>
 						<Card.Title className='mb-3'>Login</Card.Title>
 
-						<Form onSubmit={handleSubmit(submitForm)}>
+						{errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}
+
+						<Form onSubmit={handleSubmit(onLogin)}>
 							<Form.Group controlId='email'>
 								<Form.Label>Email</Form.Label>
 								<Form.Control
@@ -49,7 +77,12 @@ const LoginPage = () => {
 								{errors.password && <span className='text-danger'>{errors.password.message || 'Invalid password'}</span>}
 							</Form.Group>
 
-							<Button type='submit'>Log In</Button>
+							<Button
+								type='submit'
+								disabled={loading}
+							>
+								{loading ? 'Logging in...' : 'Log in'}
+							</Button>
 						</Form>
 					</Card.Body>
 				</Card>
