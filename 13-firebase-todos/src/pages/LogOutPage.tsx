@@ -5,7 +5,6 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import { useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
-import { toast } from 'react-toastify'
 
 const LogOutPage = () => {
 	const navigate = useNavigate()
@@ -14,7 +13,6 @@ const LogOutPage = () => {
 	useEffect(() => {
 		(async () => {
 			await logOut()
-			toast.success('Succesfully logged out')
 			navigate('/')
 		})()
 	}, [logOut, navigate])
