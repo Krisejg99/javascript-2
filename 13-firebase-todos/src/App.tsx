@@ -10,6 +10,7 @@ import './assets/scss/App.scss'
 import SignUpPage from './pages/SignUpPage'
 import LoginPage from './pages/LoginPage'
 import LogOutPage from './pages/LogOutPage'
+import RequireAuth from './components/RequireAuth'
 
 const App = () => {
 	return (
@@ -17,14 +18,33 @@ const App = () => {
 			<Navigation />
 
 			<Routes>
-				<Route path="/" element={<HomePage />} />
+				{/* Protected routes */}
+				<Route path="/" element={
+					<RequireAuth>
+						<HomePage />
+					</RequireAuth>
+				} />
 
 				<Route path="/todos">
-					<Route path="" element={<TodosPage />} />
-					<Route path=":id" element={<TodoPage />} />
-					<Route path=":id/edit" element={<EditTodoPage />} />
+					<Route path="" element={
+						<RequireAuth>
+							<TodosPage />
+						</RequireAuth>
+					} />
+
+					<Route path=":id" element={
+						<RequireAuth>
+							<TodoPage />
+						</RequireAuth>
+					} />
+					<Route path=":id/edit" element={
+						<RequireAuth>
+							<EditTodoPage />
+						</RequireAuth>
+					} />
 				</Route>
 
+				{/* Guest routes */}
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/logout" element={<LogOutPage />} />
 				<Route path="/signup" element={<SignUpPage />} />
