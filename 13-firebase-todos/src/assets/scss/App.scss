@@ -12,6 +12,13 @@ h1, h2, h3, h4, h5, h6 {
 	right: 3.5rem;
 }
 
+#initial-loader {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+
 .todolist {
 	.done {
 		color: $success;

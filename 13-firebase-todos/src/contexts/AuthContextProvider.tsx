@@ -8,6 +8,7 @@ import {
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
 import { auth } from '../services/firebase'
+import { SyncLoader } from 'react-spinners'
 
 type AuthContextType = {
 	currentUser: User | null
@@ -26,6 +27,7 @@ type AuthContextProps = {
 const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState<User | null>(null)
 	const [userEmail, setUserEmail] = useState<string | null>(null)
+	const [loading, setLoading] = useState(true)
 
 	const signUp = (email: string, password: string) => {
 		return createUserWithEmailAndPassword(auth, email, password)
@@ -45,6 +47,8 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 
 			setCurrentUser(user)
 			setUserEmail(user?.email ?? null)
+
+			setLoading(false)
 		})
 
 		return unsubscribe
@@ -58,7 +62,13 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			logIn,
 			logOut,
 		}}>
-			{children}
+			{loading
+				? <div id='initial-loader'>
+					<SyncLoader color='#888' size={15} speedMultiplier={1.1} />
+				</div>
+
+				: <>{children}</>
+			}
 		</AuthContext.Provider>
 	)
 }
