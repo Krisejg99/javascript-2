@@ -4,14 +4,15 @@ import { Navigate } from 'react-router-dom'
 
 type IProps = {
 	children: React.ReactNode
+	redirectTo?: string
 }
 
-const RequireAuth: React.FC<IProps> = ({ children }) => {
+const RequireAuth: React.FC<IProps> = ({ children, redirectTo = 'login' }) => {
 	const { currentUser } = useAuth()
 
 	return currentUser
 		? <>{children}</>
-		: <Navigate to='/login' />
+		: <Navigate to={redirectTo} />
 }
 
 export default RequireAuth
