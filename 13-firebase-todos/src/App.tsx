@@ -11,6 +11,8 @@ import SignUpPage from './pages/SignUpPage'
 import LoginPage from './pages/LoginPage'
 import LogOutPage from './pages/LogOutPage'
 import RequireAuth from './components/RequireAuth'
+import UpdateProfilePage from './pages/UpdateProfilePage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
 
 const App = () => {
 	return (
@@ -22,6 +24,12 @@ const App = () => {
 				<Route path="/" element={
 					<RequireAuth>
 						<HomePage />
+					</RequireAuth>
+				} />
+
+				<Route path="/update-profile" element={
+					<RequireAuth>
+						<UpdateProfilePage />
 					</RequireAuth>
 				} />
 
@@ -37,6 +45,7 @@ const App = () => {
 							<TodoPage />
 						</RequireAuth>
 					} />
+
 					<Route path=":id/edit" element={
 						<RequireAuth>
 							<EditTodoPage />
@@ -48,6 +57,7 @@ const App = () => {
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/logout" element={<LogOutPage />} />
 				<Route path="/signup" element={<SignUpPage />} />
+				<Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
 				<Route path="*" element={<NotFound />} />
 			</Routes>

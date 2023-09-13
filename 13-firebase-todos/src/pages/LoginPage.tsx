@@ -52,7 +52,7 @@ const LoginPage = () => {
 		<Container className='py-3 center-y'>
 			<Row>
 				<Col md={{ span: 6, offset: 3 }}>
-					<Card>
+					<Card className='mb-3'>
 						<Card.Body>
 							<Card.Title className='mb-3'>Login</Card.Title>
 
@@ -82,6 +82,7 @@ const LoginPage = () => {
 								<Button
 									type='submit'
 									disabled={loading}
+									className='mt-3'
 								>
 									{loading ? 'Logging in...' : 'Log in'}
 								</Button>
@@ -89,8 +90,12 @@ const LoginPage = () => {
 						</Card.Body>
 					</Card>
 
-					<div className="text-center mt-3">
+					<div className="text-center">
 						Need an account? <Link to="/signup">Sign Up</Link>
+					</div>
+
+					<div className="text-center">
+						<Link to='/forgot-password'>Forgot Password?</Link>
 					</div>
 				</Col>
 			</Row>

@@ -6,34 +6,32 @@ import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Alert from 'react-bootstrap/Alert'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
-import { SignUpSchema } from '../schemas/SignUpSchema'
+import { Link } from 'react-router-dom'
+import { UpdateProfileSchema } from '../schemas/UpdateProfileSchema'
 import useAuth from '../hooks/useAuth'
 import { FirebaseError } from 'firebase/app'
 import Container from 'react-bootstrap/Container'
 
-const SignUpPage = () => {
+const UpdateProfilePage = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
-	const { register, handleSubmit, formState: { errors }, watch } = useForm<SignUpSchema>({
-		// resolver: zodResolver(signUpSchema)
+	const { register, handleSubmit, formState: { errors }, watch } = useForm<UpdateProfileSchema>({
+		// resolver: zodResolver(updateProfileSchema)
 	})
 
 	const { signUp } = useAuth()
 
-	const navigate = useNavigate()
 
 	const passwordRef = useRef('')
 	passwordRef.current = watch('password')
 
-	const onSignUp: SubmitHandler<SignUpSchema> = async (data: SignUpSchema) => {
+	const onUpdateProfile: SubmitHandler<UpdateProfileSchema> = async (data: UpdateProfileSchema) => {
 		setErrorMessage(null)
 
 		try {
 			setLoading(true)
 			await signUp(data.email, data.password)
 
-			navigate('/')
 		}
 		catch (error) {
 			if (error instanceof FirebaseError) {
@@ -53,15 +51,39 @@ const SignUpPage = () => {
 				<Col md={{ span: 6, offset: 3 }}>
 					<Card className='mb-3'>
 						<Card.Body>
-							<Card.Title className='mb-3'>Sign Up</Card.Title>
+							<Card.Title className='mb-3'>Update Profile</Card.Title>
 
 							{errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}
 
-							<Form onSubmit={handleSubmit(onSignUp)}>
+							<Form onSubmit={handleSubmit(onUpdateProfile)}>
+								<Form.Group controlId='displayName'>
+									<Form.Label>Name</Form.Label>
+									<Form.Control
+										type='text'
+										placeholder='Sean Banan'
+										{...register('displayName')}
+									/>
+
+									{errors.displayName && <span className='text-danger'>{errors.displayName.message || 'Invalid email'}</span>}
+								</Form.Group>
+
+								<Form.Group controlId='profileImage'>
+									<Form.Label>Profile Image</Form.Label>
+									<Form.Control
+										type='url'
+										placeholder='https://www.profile-image.jpg'
+										autoComplete='off'
+										{...register('profileImage')}
+									/>
+
+									{errors.profileImage && <span className='text-danger'>{errors.profileImage.message || 'Invalid image link'}</span>}
+								</Form.Group>
+
 								<Form.Group controlId='email'>
 									<Form.Label>Email</Form.Label>
 									<Form.Control
 										type='email'
+										placeholder='email@gmail.com'
 										{...register('email')}
 									/>
 
@@ -69,7 +91,7 @@ const SignUpPage = () => {
 								</Form.Group>
 
 								<Form.Group controlId='password'>
-									<Form.Label>Password</Form.Label>
+									<Form.Label>New Password</Form.Label>
 									<Form.Control
 										type='password'
 										{...register('password')}
@@ -80,7 +102,7 @@ const SignUpPage = () => {
 								</Form.Group>
 
 								<Form.Group controlId='confirmPassword'>
-									<Form.Label>Confirm Password</Form.Label>
+									<Form.Label>Confirm New Password</Form.Label>
 									<Form.Control
 										type='password'
 										autoComplete='off'
@@ -99,14 +121,14 @@ const SignUpPage = () => {
 									disabled={loading}
 									className='mt-3'
 								>
-									{loading ? 'Creating account...' : 'Create account'}
+									{loading ? 'Saving...' : 'Save'}
 								</Button>
 							</Form>
 						</Card.Body>
 					</Card>
 
 					<div className="text-center">
-						Already have an account? <Link to="/login">Log In</Link>
+						<Link to="/forgot-password">Forgot password?</Link>
 					</div>
 				</Col>
 			</Row>
@@ -114,4 +136,4 @@ const SignUpPage = () => {
 	)
 }
 
-export default SignUpPage
+export default UpdateProfilePage

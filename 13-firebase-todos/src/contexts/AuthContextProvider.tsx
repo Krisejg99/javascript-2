@@ -3,6 +3,7 @@ import {
 	UserCredential,
 	createUserWithEmailAndPassword,
 	onAuthStateChanged,
+	sendPasswordResetEmail,
 	signInWithEmailAndPassword,
 	signOut
 } from 'firebase/auth'
@@ -16,6 +17,12 @@ type AuthContextType = {
 	signUp: (email: string, password: string) => Promise<UserCredential>
 	logIn: (email: string, password: string) => Promise<UserCredential>
 	logOut: () => Promise<void>
+	// reloadUser:
+	resetPassword: (email: string) => Promise<void>
+	// setEmail:
+	// setPassword:
+	// setDisplayName:
+	// setPhotoUrl:
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)
@@ -41,10 +48,27 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return signOut(auth)
 	}
 
+	// const reloadUser = () => {
+	// }
+
+	const resetPassword = (email: string) => {
+		return sendPasswordResetEmail(auth, email)
+	}
+
+	// const setEmail = (email: string) => {
+	// }
+
+	// const setPassword = (password: string) => {
+	// }
+
+	// const setDisplayName = (name: string) => {
+	// }
+
+	// const setPhotoUrl = (url: string) => {
+	// }
+
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
-			console.log('auth state changed: ', user)
-
 			setCurrentUser(user)
 			setUserEmail(user?.email ?? null)
 
@@ -61,6 +85,12 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			signUp,
 			logIn,
 			logOut,
+			// reloadUser,
+			resetPassword,
+			// setEmail,
+			// setPassword,
+			// setDisplayName,
+			// setPhotoUrl,
 		}}>
 			{loading
 				? <div id='initial-loader'>
