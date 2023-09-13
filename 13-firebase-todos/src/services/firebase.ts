@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app"
+import { getAuth } from "firebase/auth"
 import { CollectionReference, DocumentData, collection, getFirestore } from "firebase/firestore"
 import { NewTodo, Todo } from "../types/Todo.types"
 
@@ -20,9 +21,13 @@ const app = initializeApp(firebaseConfig)
 
 export const db = getFirestore(app)
 
+export const auth = getAuth(app)
+
 const createCollection = <T = DocumentData>(collectionName: string) => {
 	return collection(db, collectionName) as CollectionReference<T>
 }
 
 export const todosCol = createCollection<Todo>('todos')
 export const newTodosCol = createCollection<NewTodo>('todos')
+
+export default app

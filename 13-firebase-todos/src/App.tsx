@@ -8,6 +8,8 @@ import NotFound from './pages/NotFound'
 import TodoPage from './pages/TodoPage'
 import TodosPage from './pages/TodosPage'
 import './assets/scss/App.scss'
+import SignUpPage from './pages/SignUpPage'
+import LoginPage from './pages/LoginPage'
 
 const App = () => {
 	return (
@@ -23,6 +25,9 @@ const App = () => {
 						<Route path=":id" element={<TodoPage />} />
 						<Route path=":id/edit" element={<EditTodoPage />} />
 					</Route>
+
+					<Route path="/login" element={<LoginPage />} />
+					<Route path="/signup" element={<SignUpPage />} />
 
 					<Route path="*" element={<NotFound />} />
 				</Routes>
