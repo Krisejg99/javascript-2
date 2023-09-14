@@ -7,21 +7,22 @@ import Row from 'react-bootstrap/Row'
 import Alert from 'react-bootstrap/Alert'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Link } from 'react-router-dom'
-import { UpdateProfileSchema } from '../schemas/UpdateProfileSchema'
+import { UpdateProfileFormData } from '../types/User.types'
 import useAuth from '../hooks/useAuth'
 import { FirebaseError } from 'firebase/app'
 import Container from 'react-bootstrap/Container'
 import { toast } from 'react-toastify'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { storage } from '../services/firebase'
 
 const UpdateProfilePage = () => {
 	const { currentUser, setDisplayName, setPhotoURL, setPassword, setEmail, reloadUser } = useAuth()
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
-	const { register, handleSubmit, formState: { errors }, watch } = useForm<UpdateProfileSchema>({
+	const { register, handleSubmit, formState: { errors }, watch } = useForm<UpdateProfileFormData>({
 		// resolver: zodResolver(updateProfileSchema),
 		defaultValues: {
 			displayName: currentUser?.displayName ?? '',
-			photoURL: currentUser?.photoURL ?? '',
 			email: currentUser?.email ?? '',
 		}
 	})
@@ -29,7 +30,12 @@ const UpdateProfilePage = () => {
 	const passwordRef = useRef('')
 	passwordRef.current = watch('password')
 
-	const onUpdateProfile: SubmitHandler<UpdateProfileSchema> = async (data: UpdateProfileSchema) => {
+	const photoFileRef = useRef<FileList | null>(null)
+	photoFileRef.current = watch("photoFile")
+
+	if (!currentUser) return <p>Error, error, error...</p>
+
+	const onUpdateProfile: SubmitHandler<UpdateProfileFormData> = async (data: UpdateProfileFormData) => {
 		setErrorMessage(null)
 		setLoading(true)
 
@@ -37,12 +43,25 @@ const UpdateProfilePage = () => {
 			if (currentUser?.displayName !== data.displayName) {
 				await setDisplayName(data.displayName)
 			}
-			if (currentUser?.photoURL !== data.photoURL) {
-				await setPhotoURL(data.photoURL)
+
+			if (data.photoFile.length) {
+				const photo = data.photoFile[0]
+				const fileRef = ref(storage, `photos/${currentUser.uid}/${photo.name}`)
+
+				try {
+					const uploadResult = await uploadBytes(fileRef, photo)
+					const photoURL = await getDownloadURL(uploadResult.ref)
+					await setPhotoURL(photoURL)
+				}
+				catch (error) {
+					setErrorMessage("Upload failed!")
+				}
 			}
+
 			if (currentUser?.email !== data.email) {
 				await setEmail(data.email)
 			}
+
 			if (data.password) {
 				await setPassword(data.password)
 			}
@@ -62,7 +81,7 @@ const UpdateProfilePage = () => {
 	return (
 		<Container className='py-3 center-y'>
 			<Row>
-				<Col md={{ span: 6, offset: 3 }}>
+				<Col md={{ span: 8, offset: 2 }}>
 					<Card className='mb-3'>
 						<Card.Body>
 							<Card.Title className='mb-3'>Update Profile</Card.Title>
@@ -86,16 +105,25 @@ const UpdateProfilePage = () => {
 									{errors.displayName && <span className='text-danger'>{errors.displayName.message || 'Invalid email'}</span>}
 								</Form.Group>
 
-								<Form.Group controlId='photoURL'>
+								<Form.Group controlId='photoFile'>
 									<Form.Label>Profile Image</Form.Label>
 									<Form.Control
-										type='url'
-										placeholder='https://www.profile-image.jpg'
-										autoComplete='off'
-										{...register('photoURL')}
+										type='file'
+										accept="image/gif,image/jpeg,image/png,image/webp"
+										{...register('photoFile')}
 									/>
 
-									{errors.photoURL && <span className='text-danger'>{errors.photoURL.message || 'Invalid image link'}</span>}
+									{errors.photoFile && <span className='text-danger'>{errors.photoFile.message || 'Invalid photo file'}</span>}
+
+									<Form.Text>
+										{photoFileRef.current && photoFileRef.current.length > 0 && (
+											<span>
+												{photoFileRef.current[0].name}
+												{' '}
+												({Math.round(photoFileRef.current[0].size / 1024)} kB)
+											</span>
+										)}
+									</Form.Text>
 								</Form.Group>
 
 								<Form.Group controlId='email'>
@@ -103,9 +131,7 @@ const UpdateProfilePage = () => {
 									<Form.Control
 										type='email'
 										placeholder='email@gmail.com'
-										{...register('email', {
-											required: true
-										})}
+										{...register('email')}
 									/>
 
 									{errors.email && <span className='text-danger'>{errors.email.message || 'Invalid email'}</span>}
