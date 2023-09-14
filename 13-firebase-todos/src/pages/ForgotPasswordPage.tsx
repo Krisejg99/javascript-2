@@ -25,9 +25,9 @@ const ForgotPasswordPage = () => {
 	const onResetPassword: SubmitHandler<ResetPasswordSchema> = async (data: ResetPasswordSchema) => {
 		setErrorMessage(null)
 		setSuccess(null)
+		setLoading(true)
 
 		try {
-			setLoading(true)
 			await resetPassword(data.email)
 			setSuccess(true)
 		}
@@ -38,9 +38,9 @@ const ForgotPasswordPage = () => {
 			else {
 				setErrorMessage('Something went wrong. Have you tried turning it off and back on again?')
 			}
-
-			setLoading(false)
 		}
+
+		setLoading(false)
 	}
 
 	return (
@@ -53,43 +53,35 @@ const ForgotPasswordPage = () => {
 
 							{errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}
 
-							{success
-								? <>
+							{success &&
+								<Alert variant='success'>
 									<p>Email sent to reset password.</p>
-
-									<p>
-										1. Follow the instructions in the email.<br />
-										2. Log in with your new password.
-									</p>
-
-									<Link to='/login'>
-										<Button>Log in</Button>
-									</Link>
-								</>
-
-								: (
-									<Form onSubmit={handleSubmit(onResetPassword)}>
-										<Form.Group controlId='email'>
-											<Form.Label>Email</Form.Label>
-											<Form.Control
-												type='email'
-												placeholder='example@gmail.com'
-												{...register('email')}
-											/>
-
-											{errors.email && <span className='text-danger'>{errors.email.message || 'Invalid email'}</span>}
-										</Form.Group>
-
-										<Button
-											type='submit'
-											disabled={loading}
-											className='mt-3'
-										>
-											{loading ? 'Resetting...' : 'Reset'}
-										</Button>
-									</Form>
-								)
+									<p>1. Follow the instructions in the email to reset your password. Check your spam folder if you haven't recieved the email within a few minutes</p>
+									<p>2. <Link to='/login'>Log in</Link> with your new password.</p>
+								</Alert>
 							}
+
+							<Form onSubmit={handleSubmit(onResetPassword)}>
+								<Form.Group controlId='email'>
+									<Form.Label>Email</Form.Label>
+									<Form.Control
+										type='email'
+										placeholder='example@gmail.com'
+										{...register('email')}
+									/>
+
+									{errors.email && <span className='text-danger'>{errors.email.message || 'Invalid email'}</span>}
+								</Form.Group>
+
+								<Button
+									type='submit'
+									disabled={loading}
+									className='mt-3'
+								>
+									{loading ? 'Resetting...' : 'Reset'}
+								</Button>
+							</Form>
+
 						</Card.Body>
 					</Card>
 				</Col>
