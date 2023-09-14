@@ -4,6 +4,7 @@ export type Todo = {
 	_id: string
 	title: string
 	completed: boolean
+	uid: string
 	created_at: Timestamp
 	updated_at: Timestamp
 }

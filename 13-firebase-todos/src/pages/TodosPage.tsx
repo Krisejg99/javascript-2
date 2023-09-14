@@ -8,15 +8,18 @@ import { TodoSchema } from "../schemas/TodoSchema"
 import TodoForm from "../components/TodoForm"
 import { dateToYmdHms, firebaseTimestampToDate } from '../helpers/time'
 import Container from 'react-bootstrap/Container'
+import useAuth from "../hooks/useAuth"
 
 const TodosPage = () => {
-	const { data: todos, loading } = useGetTodos()
+	const { currentUser } = useAuth()
+	const { data: todos, loading } = useGetTodos(currentUser?.uid)
 
 	const addTodo = async (data: TodoSchema) => {
 		const docRef = doc(newTodosCol)
 
 		await setDoc(docRef, {
 			...data,
+			uid: currentUser?.uid,
 			created_at: serverTimestamp(),
 			updated_at: serverTimestamp(),
 		})

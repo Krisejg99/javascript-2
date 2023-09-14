@@ -22,7 +22,7 @@ type AuthContextType = {
 	signUp: (email: string, password: string) => Promise<UserCredential>
 	logIn: (email: string, password: string) => Promise<UserCredential>
 	logOut: () => Promise<void>
-	reloadUser: () => Promise<void>
+	reloadUser: () => Promise<boolean>
 	resetPassword: (email: string) => Promise<void>
 	setEmail: (email: string) => Promise<void>
 	setPassword: (password: string) => Promise<void>
@@ -55,9 +55,14 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return signOut(auth)
 	}
 
-	const reloadUser = () => {
-		if (!currentUser) throw new Error('Uhm... No current user...')
-		return currentUser.reload()
+	const reloadUser = async () => {
+		if (!currentUser) return false
+
+		setUserDisplayName(currentUser.displayName)
+		setUserPhotoURL(currentUser.photoURL)
+		setUserEmail(currentUser.email)
+
+		return true
 	}
 
 	const resetPassword = (email: string) => {
@@ -89,6 +94,9 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
 			setCurrentUser(user)
+
+			setUserDisplayName(user?.displayName ?? null)
+			setUserPhotoURL(user?.photoURL ?? null)
 			setUserEmail(user?.email ?? null)
 
 			setLoading(false)

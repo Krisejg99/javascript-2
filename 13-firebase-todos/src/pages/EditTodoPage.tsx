@@ -8,6 +8,7 @@ import { todosCol } from '../services/firebase'
 import { toast } from 'react-toastify'
 import TodoForm from '../components/TodoForm'
 import Container from 'react-bootstrap/Container'
+import useAuth from '../hooks/useAuth'
 
 const EditTodoPage = () => {
 	const navigate = useNavigate()
@@ -15,6 +16,7 @@ const EditTodoPage = () => {
 	const todoId = id as string
 
 	const { data: todo, loading, error } = useGetTodo(todoId)
+	const { currentUser } = useAuth()
 
 	const submitData = async (data: TodoSchema) => {
 		const docRef = doc(todosCol, todoId)
@@ -29,10 +31,18 @@ const EditTodoPage = () => {
 		})
 	}
 
+	if (todo && todo.uid != currentUser?.uid) {
+		return (
+			<Container>
+				<h2>Access Denied</h2>
+			</Container>
+		)
+	}
+
+	if (loading || !todo) return <p>Loading...</p>
+
 	return (
 		<Container className='py-3 center-y'>
-			{loading && <p>Loading...</p>}
-
 			{error && <p>Error occured while updating the todo.</p>}
 
 			{todo && <>

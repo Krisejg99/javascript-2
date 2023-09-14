@@ -14,7 +14,7 @@ import Container from 'react-bootstrap/Container'
 import { toast } from 'react-toastify'
 
 const UpdateProfilePage = () => {
-	const { currentUser, setDisplayName, setPhotoURL, setPassword, setEmail } = useAuth()
+	const { currentUser, setDisplayName, setPhotoURL, setPassword, setEmail, reloadUser } = useAuth()
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
 	const { register, handleSubmit, formState: { errors }, watch } = useForm<UpdateProfileSchema>({
@@ -46,6 +46,8 @@ const UpdateProfilePage = () => {
 			if (data.password) {
 				await setPassword(data.password)
 			}
+
+			await reloadUser()
 
 			toast.success('Profile successfully updated')
 		}
