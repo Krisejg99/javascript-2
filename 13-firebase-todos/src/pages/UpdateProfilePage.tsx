@@ -11,38 +11,50 @@ import { UpdateProfileSchema } from '../schemas/UpdateProfileSchema'
 import useAuth from '../hooks/useAuth'
 import { FirebaseError } from 'firebase/app'
 import Container from 'react-bootstrap/Container'
+import { toast } from 'react-toastify'
 
 const UpdateProfilePage = () => {
+	const { currentUser, setDisplayName, setPhotoURL, setPassword, setEmail } = useAuth()
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
 	const { register, handleSubmit, formState: { errors }, watch } = useForm<UpdateProfileSchema>({
-		// resolver: zodResolver(updateProfileSchema)
+		// resolver: zodResolver(updateProfileSchema),
+		defaultValues: {
+			displayName: currentUser?.displayName ?? '',
+			photoURL: currentUser?.photoURL ?? '',
+			email: currentUser?.email ?? '',
+		}
 	})
-
-	const { signUp } = useAuth()
-
 
 	const passwordRef = useRef('')
 	passwordRef.current = watch('password')
 
 	const onUpdateProfile: SubmitHandler<UpdateProfileSchema> = async (data: UpdateProfileSchema) => {
 		setErrorMessage(null)
+		setLoading(true)
 
 		try {
-			setLoading(true)
-			await signUp(data.email, data.password)
+			if (currentUser?.displayName !== data.displayName) {
+				await setDisplayName(data.displayName)
+			}
+			if (currentUser?.photoURL !== data.photoURL) {
+				await setPhotoURL(data.photoURL)
+			}
+			if (currentUser?.email !== data.email) {
+				await setEmail(data.email)
+			}
+			if (data.password) {
+				await setPassword(data.password)
+			}
 
+			toast.success('Profile successfully updated')
 		}
 		catch (error) {
-			if (error instanceof FirebaseError) {
-				setErrorMessage(error.message)
-			}
-			else {
-				setErrorMessage('Something went wrong. Have you tried turning it off and back on again?')
-			}
-
-			setLoading(false)
+			if (error instanceof FirebaseError) setErrorMessage(error.message)
+			else setErrorMessage('Something went wrong. Have you tried turning it off and back on again?')
 		}
+
+		setLoading(false)
 	}
 
 	return (
@@ -61,22 +73,27 @@ const UpdateProfilePage = () => {
 									<Form.Control
 										type='text'
 										placeholder='Sean Banan'
-										{...register('displayName')}
+										{...register('displayName', {
+											minLength: {
+												value: 3,
+												message: "If you have a name, it has to be at least 3 characters long"
+											}
+										})}
 									/>
 
 									{errors.displayName && <span className='text-danger'>{errors.displayName.message || 'Invalid email'}</span>}
 								</Form.Group>
 
-								<Form.Group controlId='profileImage'>
+								<Form.Group controlId='photoURL'>
 									<Form.Label>Profile Image</Form.Label>
 									<Form.Control
 										type='url'
 										placeholder='https://www.profile-image.jpg'
 										autoComplete='off'
-										{...register('profileImage')}
+										{...register('photoURL')}
 									/>
 
-									{errors.profileImage && <span className='text-danger'>{errors.profileImage.message || 'Invalid image link'}</span>}
+									{errors.photoURL && <span className='text-danger'>{errors.photoURL.message || 'Invalid image link'}</span>}
 								</Form.Group>
 
 								<Form.Group controlId='email'>
@@ -84,7 +101,9 @@ const UpdateProfilePage = () => {
 									<Form.Control
 										type='email'
 										placeholder='email@gmail.com'
-										{...register('email')}
+										{...register('email', {
+											required: true
+										})}
 									/>
 
 									{errors.email && <span className='text-danger'>{errors.email.message || 'Invalid email'}</span>}
@@ -108,6 +127,7 @@ const UpdateProfilePage = () => {
 										autoComplete='off'
 										{...register('confirmPassword', {
 											validate: (value) => {
+												if (!value && !passwordRef.current) return
 												return value === passwordRef.current || "Passwords don't match"
 											},
 										})}

@@ -7,6 +7,9 @@ export const updateProfileSchema = z
 			.min(3, { message: 'Minimun length of 3 characters' })
 			.max(40, { message: 'Maximum length of 40 characters' }),
 
+		photoURL: z
+			.string(),
+
 		email: z
 			.string()
 			.min(5, { message: 'Minimun length of 5 characters' })
@@ -21,9 +24,6 @@ export const updateProfileSchema = z
 			.string()
 			.min(8, { message: 'Minimun length of 8 characters' })
 			.max(30, { message: 'Maximum length of 40 characters' }),
-
-		profileImage: z
-			.string()
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		message: "Passwords do not match",

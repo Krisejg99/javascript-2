@@ -5,7 +5,10 @@ import {
 	onAuthStateChanged,
 	sendPasswordResetEmail,
 	signInWithEmailAndPassword,
-	signOut
+	signOut,
+	updateEmail,
+	updatePassword,
+	updateProfile
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
 import { auth } from '../services/firebase'
@@ -13,16 +16,18 @@ import { SyncLoader } from 'react-spinners'
 
 type AuthContextType = {
 	currentUser: User | null
+	userDisplayName: string | null
+	userPhotoURL: string | null
 	userEmail: string | null
 	signUp: (email: string, password: string) => Promise<UserCredential>
 	logIn: (email: string, password: string) => Promise<UserCredential>
 	logOut: () => Promise<void>
-	// reloadUser:
+	reloadUser: () => Promise<void>
 	resetPassword: (email: string) => Promise<void>
-	// setEmail:
-	// setPassword:
-	// setDisplayName:
-	// setPhotoUrl:
+	setEmail: (email: string) => Promise<void>
+	setPassword: (password: string) => Promise<void>
+	setDisplayName: (name: string) => Promise<void>
+	setPhotoURL: (url: string) => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)
@@ -32,9 +37,11 @@ type AuthContextProps = {
 }
 
 const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
+	const [loading, setLoading] = useState(true)
 	const [currentUser, setCurrentUser] = useState<User | null>(null)
 	const [userEmail, setUserEmail] = useState<string | null>(null)
-	const [loading, setLoading] = useState(true)
+	const [userDisplayName, setUserDisplayName] = useState<string | null>(null)
+	const [userPhotoURL, setUserPhotoURL] = useState<string | null>(null)
 
 	const signUp = (email: string, password: string) => {
 		return createUserWithEmailAndPassword(auth, email, password)
@@ -48,24 +55,36 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return signOut(auth)
 	}
 
-	// const reloadUser = () => {
-	// }
-
-	const resetPassword = (email: string) => {
-		return sendPasswordResetEmail(auth, email)
+	const reloadUser = () => {
+		if (!currentUser) throw new Error('Uhm... No current user...')
+		return currentUser.reload()
 	}
 
-	// const setEmail = (email: string) => {
-	// }
+	const resetPassword = (email: string) => {
+		return sendPasswordResetEmail(auth, email, {
+			url: window.location.origin + '/login'
+		})
+	}
 
-	// const setPassword = (password: string) => {
-	// }
+	const setEmail = (email: string) => {
+		if (!currentUser) throw new Error('Uhm... No current user...')
+		return updateEmail(currentUser, email)
+	}
 
-	// const setDisplayName = (name: string) => {
-	// }
+	const setPassword = (password: string) => {
+		if (!currentUser) throw new Error('Uhm... No current user...')
+		return updatePassword(currentUser, password)
+	}
 
-	// const setPhotoUrl = (url: string) => {
-	// }
+	const setDisplayName = (name: string) => {
+		if (!currentUser) throw new Error('Uhm... No current user...')
+		return updateProfile(currentUser, { displayName: name })
+	}
+
+	const setPhotoURL = (url: string) => {
+		if (!currentUser) throw new Error('Uhm... No current user...')
+		return updateProfile(currentUser, { photoURL: url })
+	}
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -81,16 +100,18 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 	return (
 		<AuthContext.Provider value={{
 			currentUser,
-			userEmail,
 			signUp,
 			logIn,
 			logOut,
-			// reloadUser,
+			reloadUser,
+			setPassword,
 			resetPassword,
-			// setEmail,
-			// setPassword,
-			// setDisplayName,
-			// setPhotoUrl,
+			userEmail,
+			setEmail,
+			userDisplayName,
+			setDisplayName,
+			userPhotoURL,
+			setPhotoURL,
 		}}>
 			{loading
 				? <div id='initial-loader'>
