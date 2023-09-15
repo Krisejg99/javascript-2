@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Alert from 'react-bootstrap/Alert'
+import Image from 'react-bootstrap/Image'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { UpdateProfileFormData } from '../types/User.types'
@@ -78,13 +79,37 @@ const UpdateProfilePage = () => {
 		setLoading(false)
 	}
 
+	const handleDeletePhoto = async () => {
+		await setPhotoURL('')
+		await reloadUser()
+
+		toast.success('Deleted Photo!')
+	}
+
 	return (
 		<Container className='py-3 center-y'>
 			<Row>
 				<Col md={{ span: 8, offset: 2 }}>
 					<Card className='mb-3'>
+						<Card.Header className='h5 py-3'>Update Profile</Card.Header>
+
 						<Card.Body>
-							<Card.Title className='mb-3'>Update Profile</Card.Title>
+							<div className="d-flex flex-column align-items-center justify-content-center my-3">
+								<Image
+									src={currentUser.photoURL || 'https://www.ndmx.se/image/cache/catalog/journal3/placeholder-250x250.png.webp'}
+									roundedCircle
+									className='w-75 mb-2 image-square object-position-top'
+									fluid
+								/>
+
+								<Button
+									variant='secondary'
+									size='sm'
+									onClick={handleDeletePhoto}
+								>
+									Delete Photo
+								</Button>
+							</div>
 
 							{errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}
 

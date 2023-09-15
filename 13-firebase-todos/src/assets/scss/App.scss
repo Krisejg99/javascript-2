@@ -30,6 +30,28 @@ h1, h2, h3, h4, h5, h6 {
 	flex-grow: 1;
 }
 
+.image-square {
+	aspect-ratio: 1;
+	object-fit: cover;
+	max-width: 250px;
+}
+
+.object-position-top {
+	object-position: top;
+}
+
+.object-position-right {
+	object-position: right;
+}
+
+.object-position-bottom {
+	object-position: bottom;
+}
+
+.object-position-left {
+	object-position: left;
+}
+
 .todolist {
 	.done {
 		color: $success;
