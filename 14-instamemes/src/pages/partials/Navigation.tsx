@@ -12,14 +12,14 @@ const Navigation = () => {
 	return (
 		<Navbar bg="dark" variant="dark" expand="sm">
 			<Container>
-				<Navbar.Brand as={Link} to="/">🔥 Firebase Todos</Navbar.Brand>
+				<Navbar.Brand as={Link} to="/">🤣 InstaMemes</Navbar.Brand>
 
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="ms-auto">
 						{currentUser
 							? <>
-								<Nav.Link as={NavLink} end to="/todos">Todos</Nav.Link>
+								{/* <Nav.Link as={NavLink} end to="/">Home</Nav.Link> */}
 
 								<NavDropdown title={userPhotoURL
 									? <Image
@@ -28,6 +28,7 @@ const Navigation = () => {
 										width={30}
 										title={(userDisplayName || userEmail) ?? ''}
 										roundedCircle
+										className='image-square object-position-top'
 									/>
 
 									: userDisplayName || userEmail}

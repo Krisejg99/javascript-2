@@ -1,6 +1,7 @@
 @import "bootstrap/scss/bootstrap";
 @import "react-toastify/scss/main";
 @import "toastify";
+@import "./dropzone";
 
 h1, h2, h3, h4, h5, h6 {
 	margin-bottom: 0.75em;
@@ -50,23 +51,4 @@ h1, h2, h3, h4, h5, h6 {
 
 .object-position-left {
 	object-position: left;
-}
-
-.todolist {
-	.done {
-		color: $success;
-		font-style: italic;
-		text-decoration: line-through;
-	}
-
-	.list-group-item {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-
-		.created {
-			color: $text-muted;
-			font-size: small;
-		}
-	}
 }
