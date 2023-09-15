@@ -64,6 +64,7 @@ const App = () => {
 
 			<ToastContainer
 				theme='colored'
+				position='bottom-right'
 			/>
 		</div>
 	)

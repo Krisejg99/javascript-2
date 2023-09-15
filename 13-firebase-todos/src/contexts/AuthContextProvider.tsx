@@ -88,6 +88,8 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 
 	const setPhotoURL = (url: string) => {
 		if (!currentUser) throw new Error('Uhm... No current user...')
+		setUserPhotoURL(url)
+
 		return updateProfile(currentUser, { photoURL: url })
 	}
 

@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Alert from 'react-bootstrap/Alert'
 import Image from 'react-bootstrap/Image'
+import ProgressBar from 'react-bootstrap/ProgressBar'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { UpdateProfileFormData } from '../types/User.types'
@@ -13,13 +14,15 @@ import useAuth from '../hooks/useAuth'
 import { FirebaseError } from 'firebase/app'
 import Container from 'react-bootstrap/Container'
 import { toast } from 'react-toastify'
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { storage } from '../services/firebase'
 
 const UpdateProfilePage = () => {
-	const { currentUser, setDisplayName, setPhotoURL, setPassword, setEmail, reloadUser } = useAuth()
+	const { currentUser, setDisplayName, setPhotoURL, setPassword, setEmail, reloadUser, userPhotoURL } = useAuth()
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
+	const [uploadProgress, setUploadProgress] = useState<number | null>(null)
+
 	const { register, handleSubmit, formState: { errors }, watch } = useForm<UpdateProfileFormData>({
 		// resolver: zodResolver(updateProfileSchema),
 		defaultValues: {
@@ -47,16 +50,27 @@ const UpdateProfilePage = () => {
 
 			if (data.photoFile.length) {
 				const photo = data.photoFile[0]
+
 				const fileRef = ref(storage, `photos/${currentUser.uid}/${photo.name}`)
 
-				try {
-					const uploadResult = await uploadBytes(fileRef, photo)
-					const photoURL = await getDownloadURL(uploadResult.ref)
-					await setPhotoURL(photoURL)
-				}
-				catch (error) {
+				const uploadTask = uploadBytesResumable(fileRef, photo)
+
+				uploadTask.on('state_changed', (snapshot) => {
+					setUploadProgress(Math.round(snapshot.bytesTransferred / snapshot.totalBytes * 1000) / 10)
+
+				}, (err) => {
+					console.log('upload failed!', err)
 					setErrorMessage("Upload failed!")
-				}
+
+				}, async () => {
+					console.log('Success!!!')
+
+					const photoURL = await getDownloadURL((await uploadTask).ref)
+
+					await setPhotoURL(photoURL)
+
+					setUploadProgress(null)
+				})
 			}
 
 			if (currentUser?.email !== data.email) {
@@ -96,7 +110,7 @@ const UpdateProfilePage = () => {
 						<Card.Body>
 							<div className="d-flex flex-column align-items-center justify-content-center my-3">
 								<Image
-									src={currentUser.photoURL || 'https://www.ndmx.se/image/cache/catalog/journal3/placeholder-250x250.png.webp'}
+									src={userPhotoURL || 'https://www.ndmx.se/image/cache/catalog/journal3/placeholder-250x250.png.webp'}
 									roundedCircle
 									className='w-75 mb-2 image-square object-position-top'
 									fluid
@@ -141,13 +155,22 @@ const UpdateProfilePage = () => {
 									{errors.photoFile && <span className='text-danger'>{errors.photoFile.message || 'Invalid photo file'}</span>}
 
 									<Form.Text>
-										{photoFileRef.current && photoFileRef.current.length > 0 && (
-											<span>
-												{photoFileRef.current[0].name}
-												{' '}
-												({Math.round(photoFileRef.current[0].size / 1024)} kB)
-											</span>
-										)}
+										{uploadProgress !== null
+											? <ProgressBar
+												now={uploadProgress}
+												label={uploadProgress + '%'}
+												animated
+												variant='success'
+											/>
+
+											: photoFileRef.current && photoFileRef.current.length > 0 && (
+												<span>
+													{photoFileRef.current[0].name}
+													{' '}
+													({Math.round(photoFileRef.current[0].size / 1024)} kB)
+												</span>
+											)
+										}
 									</Form.Text>
 								</Form.Group>
 
