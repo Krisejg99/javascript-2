@@ -161,6 +161,7 @@ const UpdateProfilePage = () => {
 												label={uploadProgress + '%'}
 												animated
 												variant='success'
+												className='mt-1'
 											/>
 
 											: photoFileRef.current && photoFileRef.current.length > 0 && (
