@@ -28,6 +28,7 @@ const Navigation = () => {
 										width={30}
 										title={(userDisplayName || userEmail) ?? ''}
 										roundedCircle
+										className='image-square object-position-top'
 									/>
 
 									: userDisplayName || userEmail}
