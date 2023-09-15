@@ -2,13 +2,19 @@ import classNames from 'classnames'
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'react-toastify'
+import useUploadMeme from '../hooks/useUploadMeme'
+import { Alert, ProgressBar } from 'react-bootstrap'
 
 const UploadMeme = () => {
-	const onDrop = useCallback((acceptedFiles: File[]) => {
-		if (!acceptedFiles.length) return toast.error("I don't like you anymore...")
+	const uploadMeme = useUploadMeme()
 
-		console.log('acceptedFiles', acceptedFiles)
-	}, [])
+	const onDrop = useCallback((acceptedFiles: File[]) => {
+		if (!acceptedFiles.length) {
+			return toast.error("I don't like you anymore...")
+		}
+
+		uploadMeme.upload(acceptedFiles[0])
+	}, [uploadMeme])
 
 	const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
 		onDrop: onDrop,
@@ -27,7 +33,7 @@ const UploadMeme = () => {
 		'drag-reject': isDragReject,
 	})
 
-	return (
+	return <>
 		<div {...getRootProps()} id='dropzone-wrapper' className={dropzoneWrapperClasses}>
 			<input {...getInputProps()} />
 
@@ -40,7 +46,20 @@ const UploadMeme = () => {
 				}
 			</div>
 		</div>
-	)
+
+		{uploadMeme.progress !== null && (
+			<ProgressBar
+				now={uploadMeme.progress}
+				variant='success'
+				animated
+				label={`${uploadMeme.progress}%`}
+			/>
+		)}
+
+		{uploadMeme.isError && <Alert variant="danger">😳 {uploadMeme.error}</Alert>}
+		{uploadMeme.isSuccess && <Alert variant="success">😂 that was a funny meme!</Alert>}
+
+	</>
 }
 
 export default UploadMeme

@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
 import { getStorage } from 'firebase/storage'
 import { CollectionReference, DocumentData, collection, getFirestore } from "firebase/firestore"
-import { NewTodo, Todo } from "../types/Todo.types"
+import { Meme } from "../types/Meme.types"
 
 const env = import.meta.env
 
@@ -28,7 +28,6 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 	return collection(db, collectionName) as CollectionReference<T>
 }
 
-export const todosCol = createCollection<Todo>('todos')
-export const newTodosCol = createCollection<NewTodo>('todos')
+export const memesCol = createCollection<Meme>('memes')
 
 export default app
