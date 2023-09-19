@@ -67,7 +67,6 @@ const increasePoints = (amount?: number) => {
 const resetPoints = () => {
 	return {
 		type: PointsActionTypes.RESET,
-		value: initialState.points,
 	}
 }
 
