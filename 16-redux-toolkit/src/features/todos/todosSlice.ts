@@ -23,6 +23,9 @@ const todosSlice = createSlice({
 			todo.completed = !todo.completed
 		},
 		remove: (state, action: PayloadAction<string>) => {
+			// return state.filter(todo => todo.id !== action.payload)
+
+			// or filter like above
 			const todoIndex = state.findIndex(todo => todo.id === action.payload)
 
 			if (todoIndex === -1) {
