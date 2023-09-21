@@ -20,8 +20,6 @@ const todosSlice = createSlice({
 				return
 			}
 
-			console.log(todo)
-
 			todo.completed = !todo.completed
 		},
 		remove: (state, action: PayloadAction<string>) => {

@@ -13,7 +13,7 @@ const TodosPage = () => {
 	const todos = useAppSelector((state) => state.todos)
 	const dispatch = useAppDispatch()
 
-	const handleAddTodo = async (data: TodoFormData) => {
+	const handleAddTodo = (data: TodoFormData) => {
 		console.log("handleAddTodo", data)
 
 		dispatch(add({ ...data, id: uuid() }))
@@ -22,7 +22,7 @@ const TodosPage = () => {
 		toast.success("Yay, even MORE stuff to do... 😁")
 	}
 
-	const handleToggle = async (id: string) => {
+	const handleToggle = (id: string) => {
 		console.log("handleToggle", id)
 
 		dispatch(toggle(id))
@@ -31,7 +31,7 @@ const TodosPage = () => {
 		toast.success("Yay, you did something... 😁")
 	}
 
-	const handleDelete = async (id: string) => {
+	const handleDelete = (id: string) => {
 		console.log("handleDelete", id)
 
 		dispatch(remove(id))

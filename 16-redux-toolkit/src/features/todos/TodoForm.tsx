@@ -6,7 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { TodoFormData } from "../../types/Todo.types"
 
 interface IProps {
-	onSave: (data: TodoFormData) => Promise<void>
+	onSave: (data: TodoFormData) => void
 	initialValues?: TodoFormData
 }
 
