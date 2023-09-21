@@ -9,10 +9,10 @@ const todosSlice = createSlice({
 	name: 'todos',
 	initialState,
 	reducers: {
-		addTodo: (state, action: PayloadAction<Todo>) => {
+		add: (state, action: PayloadAction<Todo>) => {
 			state.unshift(action.payload)
 		},
-		toggleTodo: (state, action: PayloadAction<string>) => {
+		toggle: (state, action: PayloadAction<string>) => {
 			const todo = state.find(todo => todo.id === action.payload)
 
 			if (!todo) {
@@ -24,11 +24,11 @@ const todosSlice = createSlice({
 
 			todo.completed = !todo.completed
 		},
-		deleteTodo: (state, action: PayloadAction<string>) => {
+		remove: (state, action: PayloadAction<string>) => {
 			const todoIndex = state.findIndex(todo => todo.id === action.payload)
 
 			if (todoIndex === -1) {
-				toast.warning('Could not find todo to delete')
+				toast.warning('Could not find todo to remove')
 				return
 			}
 
@@ -37,6 +37,6 @@ const todosSlice = createSlice({
 	}
 })
 
-export const { addTodo, toggleTodo, deleteTodo } = todosSlice.actions
+export const { add, toggle, remove } = todosSlice.actions
 
 export default todosSlice.reducer
