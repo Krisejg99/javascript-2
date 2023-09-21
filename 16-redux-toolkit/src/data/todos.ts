@@ -8,7 +8,7 @@ export const dummyTodos: Todo[] = [
 	},
 	{
 		id: "d3329c34-dc67-4c39-aa7c-1f4e11c2e797",
-		title: "Learn React Toolkit",
+		title: "Learn Redux Toolkit",
 		completed: false,
 	},
 	{
