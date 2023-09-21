@@ -10,7 +10,7 @@ const todosSlice = createSlice({
 	initialState,
 	reducers: {
 		addTodo: (state, action: PayloadAction<Todo>) => {
-			state.push(action.payload)
+			state.unshift(action.payload)
 		},
 		toggleTodo: (state, action: PayloadAction<string>) => {
 			const todo = state.find(todo => todo.id === action.payload)
