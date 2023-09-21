@@ -16,12 +16,12 @@ const AccountPage = () => {
 
 			<div className="d-flex justify-content-around">
 				<div className="text-center">
-					<p>AccountButtons 1</p>
+					<p>Widthdraw - Deposit</p>
 					<AccountButtons />
 				</div>
 
 				<div className="text-center">
-					<p>AccountButtons 2</p>
+					<p>Widthdraw - Deposit</p>
 					<AccountButtons />
 				</div>
 			</div>
