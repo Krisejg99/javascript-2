@@ -5,11 +5,18 @@ import ListGroup from "react-bootstrap/ListGroup"
 import { TodoFormData } from "../../types/Todo.types"
 import { toast } from "react-toastify"
 import TodoForm from "./TodoForm"
-import { dummyTodos as todos } from "../../data/todos"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { addTodo } from "./todosSlice"
+import { v4 as uuid } from 'uuid'
 
 const TodosPage = () => {
+	const todosState = useAppSelector((state) => state.todos)
+	const dispatch = useAppDispatch()
+
 	const handleAddTodo = async (data: TodoFormData) => {
 		console.log("handleAddTodo", data)
+
+		dispatch(addTodo({ ...data, id: uuid() }))
 
 		// 🥂
 		toast.success("Yay, even MORE stuff to do... 😁")
@@ -37,9 +44,9 @@ const TodosPage = () => {
 
 			<TodoForm onSave={handleAddTodo} />
 
-			{todos && todos.length > 0 && (
+			{todosState && todosState.length > 0 && (
 				<ListGroup className="todolist">
-					{todos.map((todo) => (
+					{todosState.map((todo) => (
 						<ListGroup.Item
 							key={todo.id}
 							className={todo.completed ? "done" : ""}
@@ -66,7 +73,7 @@ const TodosPage = () => {
 				</ListGroup>
 			)}
 
-			{todos && todos.length === 0 && (
+			{todosState && todosState.length === 0 && (
 				<p>Yayyy, you have 0 todos to do</p>
 			)}
 		</Container>
