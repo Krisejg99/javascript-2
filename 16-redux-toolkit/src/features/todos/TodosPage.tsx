@@ -10,7 +10,7 @@ import { addTodo, toggleTodo, deleteTodo } from "./todosSlice"
 import { v4 as uuid } from 'uuid'
 
 const TodosPage = () => {
-	const todosState = useAppSelector((state) => state.todos)
+	const todos = useAppSelector((state) => state.todos)
 	const dispatch = useAppDispatch()
 
 	const handleAddTodo = async (data: TodoFormData) => {
@@ -48,9 +48,9 @@ const TodosPage = () => {
 
 			<TodoForm onSave={handleAddTodo} />
 
-			{todosState && todosState.length > 0 && (
+			{todos && todos.length > 0 && (
 				<ListGroup className="todolist">
-					{todosState.map((todo) => (
+					{todos.map((todo) => (
 						<ListGroup.Item
 							key={todo.id}
 							className={todo.completed ? "done" : ""}
@@ -77,7 +77,7 @@ const TodosPage = () => {
 				</ListGroup>
 			)}
 
-			{todosState && todosState.length === 0 && (
+			{todos && todos.length === 0 && (
 				<p>Yayyy, you have 0 todos to do</p>
 			)}
 		</Container>
