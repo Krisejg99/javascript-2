@@ -6,7 +6,7 @@ import { TodoFormData } from "../../types/Todo.types"
 import { toast } from "react-toastify"
 import TodoForm from "./TodoForm"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { addTodo } from "./todosSlice"
+import { addTodo, toggleTodo } from "./todosSlice"
 import { v4 as uuid } from 'uuid'
 
 const TodosPage = () => {
@@ -24,6 +24,8 @@ const TodosPage = () => {
 
 	const handleToggle = async (id: string) => {
 		console.log("handleToggle", id)
+
+		dispatch(toggleTodo(id))
 
 		// 🥂
 		toast.success("Yay, you did something... 😁")
