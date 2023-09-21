@@ -3,7 +3,7 @@ import { dummyTodos } from '../../data/todos'
 import { Todo } from '../../types/Todo.types'
 import { toast } from 'react-toastify'
 
-const initialState = dummyTodos
+const initialState: Todo[] = dummyTodos
 
 const todosSlice = createSlice({
 	name: 'todos',
