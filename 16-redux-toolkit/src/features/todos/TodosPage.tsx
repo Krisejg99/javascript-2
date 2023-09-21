@@ -14,29 +14,20 @@ const TodosPage = () => {
 	const dispatch = useAppDispatch()
 
 	const handleAddTodo = (data: TodoFormData) => {
-		console.log("handleAddTodo", data)
-
 		dispatch(add({ ...data, id: uuid() }))
 
-		// 🥂
 		toast.success("Yay, even MORE stuff to do... 😁")
 	}
 
 	const handleToggle = (id: string) => {
-		console.log("handleToggle", id)
-
 		dispatch(toggle(id))
 
-		// 🥂
 		toast.success("Yay, you did something... 😁")
 	}
 
 	const handleDelete = (id: string) => {
-		console.log("handleDelete", id)
-
 		dispatch(remove(id))
 
-		// 🥂
 		toast.success("Deleting stuff instead of doing them still counts... 🏆")
 	}
 
