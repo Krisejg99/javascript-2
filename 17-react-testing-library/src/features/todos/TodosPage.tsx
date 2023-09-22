@@ -8,6 +8,7 @@ import TodoForm from "./TodoForm"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { add, toggle, remove } from "./todosSlice"
 import { v4 as uuid } from 'uuid'
+import TodoCounter from "./TodoCounter"
 
 const TodosPage = () => {
 	const todos = useAppSelector((state) => state.todos)
@@ -68,9 +69,7 @@ const TodosPage = () => {
 				</ListGroup>
 			)}
 
-			{todos && todos.length === 0 && (
-				<p>Yayyy, you have 0 todos to do</p>
-			)}
+			{todos && <TodoCounter count={todos.filter(todo => !todo.completed).length} />}
 		</Container>
 	)
 }
