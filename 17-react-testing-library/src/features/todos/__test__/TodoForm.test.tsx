@@ -61,3 +61,40 @@ describe("Todo Form", () => {
 		expect(inputElement).toHaveValue('')
 	})
 })
+
+
+describe("Todo Form validation", () => {
+	it('Shows validation error if input is empty', async () => {
+		const { user } = renderWithUserInteraction(<TodoForm onSave={fakeOnSave} />)
+
+		const inputElement: HTMLInputElement = screen.getByRole('textbox')
+
+		await user.type(inputElement, '{Enter}')
+		const errorMsgElement = screen.getByText(/write something at least/i || /Invalid value/i)
+
+		expect(errorMsgElement).toBeInTheDocument()
+	})
+
+	it('Does not show validation error if input is valid', async () => {
+		const { user } = renderWithUserInteraction(<TodoForm onSave={fakeOnSave} />)
+
+		const inputElement: HTMLInputElement = screen.getByRole('textbox')
+
+		await user.type(inputElement, 'LOL')
+		await user.type(inputElement, '{Enter}')
+		const errorMsgElement = screen.getByText(/too short/i || /Invalid value/i)
+
+		expect(errorMsgElement).toBeInTheDocument()
+	})
+
+	it('Does not show validation error if input is valid', async () => {
+		const { user } = renderWithUserInteraction(<TodoForm onSave={fakeOnSave} />)
+
+		const inputElement = screen.getByRole('textbox')
+
+		await user.type(inputElement, '{Enter}')
+		const validationErrorElement = screen.queryByText(/too short/i || /Invalid value/i)
+
+		expect(validationErrorElement).not.toBeInTheDocument()
+	})
+})
