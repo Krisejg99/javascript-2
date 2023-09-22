@@ -1,23 +1,13 @@
 import { render, screen } from "@testing-library/react"
 import TodoForm from "../TodoForm"
 import { describe, it, expect } from "vitest"
-import userEvent from "@testing-library/user-event"
+import { renderWithUserInteraction } from "../../../tests/helpers"
 
 const fakeOnSave = async () => {
 	return
 }
 
 const todoTitle = "This is my todo title"
-
-const renderWithUserInteraction = (
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	component: React.ReactElement<any, string | React.JSXElementConstructor<any>>
-) => {
-	return {
-		user: userEvent.setup(),
-		...render(component)
-	}
-}
 
 describe("Todo Form", () => {
 	it('Renders input field initially empty', () => {
