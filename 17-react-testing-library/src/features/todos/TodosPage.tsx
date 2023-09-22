@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { add, toggle, remove } from "./todosSlice"
 import { v4 as uuid } from 'uuid'
 import TodoCounter from "./TodoCounter"
+import TodoList from "./TodoList"
 
 const TodosPage = () => {
 	const todos = useAppSelector((state) => state.todos)
@@ -41,32 +42,11 @@ const TodosPage = () => {
 			<TodoForm onSave={handleAddTodo} />
 
 			{todos && todos.length > 0 && (
-				<ListGroup className="todolist">
-					{todos.map((todo) => (
-						<ListGroup.Item
-							key={todo.id}
-							className={todo.completed ? "done" : ""}
-						>
-							<span className="todo-title">{todo.title}</span>
-							<ButtonGroup>
-								<Button
-									variant="outline-success"
-									size="sm"
-									onClick={() => handleToggle(todo.id)}
-								>
-									{todo.completed ? "Undo" : "Done"}
-								</Button>
-								<Button
-									variant="outline-danger"
-									size="sm"
-									onClick={() => handleDelete(todo.id)}
-								>
-									Delete
-								</Button>
-							</ButtonGroup>
-						</ListGroup.Item>
-					))}
-				</ListGroup>
+				<TodoList
+					todos={todos}
+					onToggle={handleToggle}
+					onDelete={handleDelete}
+				/>
 			)}
 
 			{todos && <TodoCounter count={todos.filter(todo => !todo.completed).length} />}
