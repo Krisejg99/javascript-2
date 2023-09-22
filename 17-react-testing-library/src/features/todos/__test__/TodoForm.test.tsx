@@ -35,4 +35,29 @@ describe("Todo Form", () => {
 
 		expect(inputElement).toHaveValue(todoTitle)
 	})
+
+	it("Empties input field after clicking on the 'Save' button", async () => {
+		const { user } = renderWithUserInteraction(<TodoForm onSave={fakeOnSave} />)
+
+		const inputElement: HTMLInputElement = screen.getByRole('textbox')
+		const btnSaveElement: HTMLInputElement = screen.getByRole('button', {
+			name: /save/i,
+		})
+
+		await user.type(inputElement, todoTitle)
+		await user.click(btnSaveElement)
+
+		expect(inputElement).toHaveValue('')
+	})
+
+	it("Empties input field after pressing enter", async () => {
+		const { user } = renderWithUserInteraction(<TodoForm onSave={fakeOnSave} />)
+
+		const inputElement: HTMLInputElement = screen.getByRole('textbox')
+
+		await user.type(inputElement, todoTitle)
+		await user.type(inputElement, '{Enter}')
+
+		expect(inputElement).toHaveValue('')
+	})
 })
