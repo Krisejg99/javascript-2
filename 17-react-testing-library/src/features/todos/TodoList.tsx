@@ -16,11 +16,12 @@ const TodoList: React.FC<TodoListProps> = ({
 	todos,
 }) => {
 	return (
-		<ListGroup className="todolist">
+		<ListGroup className="todolist" role='list'>
 			{todos.map((todo) => (
 				<ListGroup.Item
 					key={todo.id}
 					className={todo.completed ? "done" : ""}
+					role='listitem'
 				>
 					<span className="todo-title">{todo.title}</span>
 					<ButtonGroup>
